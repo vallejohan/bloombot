@@ -1,0 +1,36 @@
+type: custom:floraflow-card
+title: FloraFlow Irrigation Control
+columns: 3
+relays:
+  - id: 1
+    name: Tomato Patch
+    icon: tomato
+    icon_color: "#ef4444"
+  - id: 2
+    name: Cucumber Trellis
+    icon: cucumber
+    icon_color: "#22c55e"
+  - id: 3
+    name: Carrot Bed
+    icon: carrot
+    icon_color: "#f97316"
+  - id: 4
+    name: Sweet Corn Row
+    icon: corn
+    icon_color: "#eab308"
+  - id: 5
+    name: Chili Peppers
+    icon: chili
+    icon_color: "#dc2626"
+  - id: 6
+    name: Sprouting Seeds
+    icon: sprout
+    icon_color: "#86efac"
+  - id: 7
+    name: Potted Herbs
+    icon: pot
+    icon_color: "#a16207"
+  - id: 8
+    name: General Lawn
+    icon: sprinkler
+    icon_color: "#38bdf8"

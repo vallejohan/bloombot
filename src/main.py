@@ -1,0 +1,301 @@
+import json
+import logging
+import os
+import signal
+import sys
+import time
+from datetime import datetime
+
+import config
+from dht_sensor import DHTSensorManager
+from gpio_manager import GPIOManager
+from mqtt_handler import MQTTHandler
+from scheduler import GardenScheduler
+
+# Configure Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger("Main")
+
+
+class GardenControllerApp:
+    def __init__(self):
+        self.schedules = {}
+        self.gpio_mgr = None
+        self.mqtt_handler = None
+        self.scheduler = None
+        self.dht_sensor = None
+        self.last_dht_read_time = 0
+        self.running = False
+        self.num_relays = self.count_relays()
+
+        self.load_schedules()
+
+    def count_relays(self):
+        if len(config.RELAY_PINS) == 0:
+            logger.error("No relay pins configured!")
+            sys.exit(1)
+        return len(config.RELAY_PINS)
+
+    def load_schedules(self):
+        """Load schedules from schedules.json, or initialize with defaults if not found."""
+        if os.path.exists(config.PERSISTENCE_FILE):
+            try:
+                with open(config.PERSISTENCE_FILE, "r") as f:
+                    self.schedules = json.load(f)
+                logger.info(f"Loaded existing schedules from {config.PERSISTENCE_FILE}")
+            except Exception as e:
+                logger.error(
+                    f"Error loading {config.PERSISTENCE_FILE}: {e}. Initializing defaults."
+                )
+                self.initialize_default_schedules()
+        else:
+            logger.info(f"No schedules file found. Initializing defaults.")
+            self.initialize_default_schedules()
+
+        # Ensure all relays exist in schedules
+        for i in range(1, self.num_relays + 1):
+            key = f"relay_{i}"
+            if key not in self.schedules:
+                self.schedules[key] = {
+                    "schedule_enabled": False,
+                    "start_time": "08:00:00",
+                    "duration": 10,
+                }
+        self.save_schedules()
+
+    def initialize_default_schedules(self):
+        """Create a default schedule configuration for all relays."""
+        self.schedules = {}
+        for i in range(1, self.num_relays + 1):
+            self.schedules[f"relay_{i}"] = {
+                "schedule_enabled": False,
+                "start_time": f"08:00:00",
+                "duration": 10,
+            }
+
+    def save_schedules(self):
+        """Write current schedules to schedules.json file."""
+        try:
+            with open(config.PERSISTENCE_FILE, "w") as f:
+                json.dump(self.schedules, f, indent=4)
+            logger.debug("Schedules saved to file.")
+        except Exception as e:
+            logger.error(f"Failed to save schedules: {e}")
+
+    def on_relay_toggle(self, relay_num, state):
+        """Callback for manual relay toggle from MQTT."""
+        logger.info(
+            f"Manual override command received: Relay {relay_num} -> {'ON' if state else 'OFF'}"
+        )
+
+        # Action the GPIO
+        if state:
+            self.gpio_mgr.turn_on(relay_num)
+        else:
+            self.gpio_mgr.turn_off(relay_num)
+            # Cancel active scheduler run if manual OFF command is received
+            self.scheduler.cancel_active_run(relay_num)
+
+        # Publish current state back
+        self.mqtt_handler.publish_relay_state(relay_num, state)
+
+    def on_schedule_toggle(self, relay_num, enabled):
+        """Callback for schedule enabled state change."""
+        key = f"relay_{relay_num}"
+        logger.info(
+            f"Schedule toggle command received: Relay {relay_num} schedule -> {'ENABLED' if enabled else 'DISABLED'}"
+        )
+
+        self.schedules[key]["schedule_enabled"] = enabled
+        self.save_schedules()
+
+        # Publish schedule status back
+        self.mqtt_handler.publish_schedule_enabled(relay_num, enabled)
+
+    def on_start_time_change(self, relay_num, time_str):
+        """Callback for schedule start time change."""
+        # Simple format validation (HH:MM or HH:MM:SS)
+        try:
+            parts = time_str.split(":")
+            if len(parts) in (2, 3):
+                h = int(parts[0])
+                m = int(parts[1])
+                if 0 <= h < 24 and 0 <= m < 60:
+                    # Pad seconds if not present
+                    if len(parts) == 2:
+                        time_str = f"{h:02d}:{m:02d}:00"
+
+                    key = f"relay_{relay_num}"
+                    logger.info(
+                        f"Schedule start time change: Relay {relay_num} -> {time_str}"
+                    )
+                    self.schedules[key]["start_time"] = time_str
+                    self.save_schedules()
+
+                    # Publish back verified state
+                    self.mqtt_handler.publish_start_time(relay_num, time_str)
+                    return
+            raise ValueError()
+        except Exception:
+            logger.error(
+                f"Invalid time format received for relay {relay_num}: {time_str}"
+            )
+            # Re-publish old state to keep UI synchronized
+            key = f"relay_{relay_num}"
+            self.mqtt_handler.publish_start_time(
+                relay_num, self.schedules[key]["start_time"]
+            )
+
+    def on_duration_change(self, relay_num, duration):
+        """Callback for schedule watering duration change."""
+        key = f"relay_{relay_num}"
+
+        # Constrain duration to a reasonable limit (e.g. 1 to 180 minutes)
+        duration = max(1, min(180, duration))
+        logger.info(
+            f"Schedule duration change: Relay {relay_num} -> {duration} minutes"
+        )
+
+        self.schedules[key]["duration"] = duration
+        self.save_schedules()
+
+        # Publish duration back
+        self.mqtt_handler.publish_duration(relay_num, duration)
+
+    def toggle_relay_from_scheduler(self, relay_num, state, is_scheduled=True):
+        """Callback invoked by the scheduler when it starts or stops watering."""
+        logger.info(
+            f"[SCHEDULER ACTION] Relay {relay_num} -> {'ON' if state else 'OFF'}"
+        )
+
+        if state:
+            self.gpio_mgr.turn_on(relay_num)
+        else:
+            self.gpio_mgr.turn_off(relay_num)
+
+        # Update Home Assistant
+        self.mqtt_handler.publish_relay_state(relay_num, state)
+
+    def publish_initial_states(self):
+        """Publish current system configurations and relay states to Home Assistant."""
+        logger.info("Synchronizing initial state with Home Assistant...")
+        for i in range(1, self.num_relays + 1):
+            key = f"relay_{i}"
+            sched = self.schedules[key]
+
+            # Initial relay state is OFF when daemon starts
+            self.mqtt_handler.publish_relay_state(i, False)
+            self.mqtt_handler.publish_schedule_enabled(i, sched["schedule_enabled"])
+            self.mqtt_handler.publish_start_time(i, sched["start_time"])
+            self.mqtt_handler.publish_duration(i, sched["duration"])
+
+    def run(self):
+        self.running = True
+
+        # 1. Initialize GPIO
+        self.gpio_mgr = GPIOManager(config.RELAY_PINS, config.ACTIVE_LOW)
+
+        # 2. Initialize Scheduler
+        self.scheduler = GardenScheduler(
+            self.schedules, self.toggle_relay_from_scheduler
+        )
+        self.scheduler.start()
+
+        # 3. Initialize DHT Sensor
+        self.dht_sensor = DHTSensorManager(config.DHT_PIN)
+
+        # 4. Initialize MQTT Client
+        self.mqtt_handler = MQTTHandler(
+            on_relay_toggle=self.on_relay_toggle,
+            on_schedule_toggle=self.on_schedule_toggle,
+            on_start_time_change=self.on_start_time_change,
+            on_duration_change=self.on_duration_change,
+        )
+        self.mqtt_handler.connect()
+
+        # Wait a brief moment for MQTT connection to complete, then push initial state
+        time.sleep(2.0)
+        self.publish_initial_states()
+
+        # Heartbeat loop
+        logger.info("Relay Controller Daemon is running. Press Ctrl+C to exit.")
+        last_heartbeat_time = 0.0
+        while self.running:
+            try:
+                now = time.time()
+
+                # Publish heartbeat online state periodically
+                if now - last_heartbeat_time >= config.HEARTBEAT_INTERVAL:
+                    self.mqtt_handler.publish_heartbeat()
+                    last_heartbeat_time = now
+
+                # Read and publish DHT sensor data periodically
+                if now - self.last_dht_read_time >= config.DHT_INTERVAL:
+                    self.read_and_publish_dht()
+                    self.last_dht_read_time = now
+
+                time.sleep(1)
+            except KeyboardInterrupt:
+                break
+
+        self.shutdown()
+
+    def read_and_publish_dht(self):
+        """Reads temperature and humidity from the DHT22 sensor and publishes to Home Assistant."""
+        if self.dht_sensor:
+            logger.info("Reading DHT22 sensor data...")
+            temp, hum = self.dht_sensor.read()
+            if temp is not None or hum is not None:
+                self.mqtt_handler.publish_sensor_data(temp, hum)
+            else:
+                logger.warning("Failed to read data from DHT22 sensor")
+
+    def shutdown(self):
+        logger.info("Shutting down cleanly...")
+        self.running = False
+
+        # Stop scheduler
+        if self.scheduler:
+            self.scheduler.stop()
+
+        # Disconnect MQTT (will publish offline availability topic)
+        if self.mqtt_handler:
+            self.mqtt_handler.disconnect()
+
+        # Clean up DHT sensor
+        if self.dht_sensor:
+            self.dht_sensor.cleanup()
+
+        # Turn off all physical/mock relays for safety
+        if self.gpio_mgr:
+            logger.info("Turning off all relays for safety.")
+            for i in range(1, self.num_relays + 1):
+                try:
+                    self.gpio_mgr.turn_off(i)
+                except Exception:
+                    pass
+            self.gpio_mgr.cleanup()
+
+        logger.info("Shutdown complete.")
+
+
+def main():
+    app = GardenControllerApp()
+
+    # Handle OS termination signals
+    def signal_handler(signum, frame):
+        logger.info(f"Received system signal {signum}")
+        app.running = False
+
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    app.run()
+
+
+if __name__ == "__main__":
+    main()
