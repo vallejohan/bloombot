@@ -20,8 +20,7 @@ class DHTSensorManager:
             pin_name = f"D{pin}"
             if hasattr(board, pin_name):
                 board_pin = getattr(board, pin_name)
-                print(f"board.D{pin} = {board_pin}")
-                self.sensor = adafruit_dht.DHT22(board_pin)
+                self.sensor = adafruit_dht.DHT22(board_pin, use_pulseio=False)
                 logger.info(
                     f"Using physical DHT22 sensor on BCM pin {pin} (board.{pin_name})"
                 )
