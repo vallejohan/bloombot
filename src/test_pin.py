@@ -1,15 +1,16 @@
 import time
 from gpiozero import OutputDevice
-from gpiozero.devices import device
+from gpiozero.devices import Device
 
 print("=" * 50)
-print(f"Active gpiozero Pin Factory: {device.pin_factory.__class__.__name__}")
+print(f"Active gpiozero Pin Factory: {Device.pin_factory.__class__.__name__}")
 print("=" * 50)
 
 # Initialize BCM GPIO 5 as active-low (active_high=False)
 try:
     print("Initializing BCM GPIO 5 (Physical Pin 29)...")
     relay = OutputDevice(5, active_high=False, initial_value=False)
+    print(f"Active gpiozero Pin Factory after init: {Device.pin_factory.__class__.__name__}")
     
     print("\nState: OFF (Inactive)")
     print("Physical voltage on BCM 5 should be: 3.3V")
