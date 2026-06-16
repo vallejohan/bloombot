@@ -1,5 +1,4 @@
 paho-mqtt==2.1.0
-adafruit-circuitpython-dht==4.0.12
 lgpio; platform_system == 'Linux'
 black==26.5.1
 isort==8.0.1
