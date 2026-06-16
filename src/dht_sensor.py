@@ -26,9 +26,11 @@ class DHTSensorManager:
                     break
         except Exception as e:
             logger.debug(f"Failed to search for kernel IIO driver paths: {e}")
-        
+
         if not self.iio_path:
-            logger.warning("Linux Kernel IIO driver not found. Falling back to simulated/MOCK DHT22.")
+            logger.warning(
+                "Linux Kernel IIO driver not found. Falling back to simulated/MOCK DHT22."
+            )
             self.is_mock = True
 
     def read(self):
