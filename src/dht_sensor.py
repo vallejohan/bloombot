@@ -44,7 +44,10 @@ class DHTSensorManager:
             return temp, humidity
 
         import time
-        max_retries = 3
+        import adafruit_dht
+        import board
+
+        max_retries = 15
         for attempt in range(1, max_retries + 1):
             try:
                 # Read from adafruit_dht sensor
@@ -58,6 +61,20 @@ class DHTSensorManager:
                 logger.warning(
                     f"Error reading from physical DHT22 sensor (attempt {attempt}/{max_retries}): {e}"
                 )
+                
+                # If reading keeps failing, try resetting/recreating the sensor object to clear C-level gpiod locks
+                if attempt % 5 == 0:
+                    logger.info("Attempting to reset/recreate the DHT22 sensor instance...")
+                    try:
+                        self.sensor.exit()
+                    except Exception:
+                        pass
+                    try:
+                        pin_name = f"D{self.pin}"
+                        board_pin = getattr(board, pin_name)
+                        self.sensor = adafruit_dht.DHT22(board_pin, use_pulseio=False)
+                    except Exception as reset_err:
+                        logger.error(f"Failed to recreate DHT22 sensor: {reset_err}")
             
             if attempt < max_retries:
                 time.sleep(2.0)

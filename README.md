@@ -91,12 +91,15 @@ Before starting the setup of this project there are some limitations with this h
 
 ### 1. Install System Dependencies
 
-Open a terminal on your Raspberry Pi and ensure Python 3 is installed:
+Open a terminal on your Raspberry Pi (or Ubuntu/Debian board) and ensure all required system utilities and build tools are installed:
 
 ```bash
 sudo apt update
-sudo apt install -y python3 python3-pip python3-venv python3-gpiozero
+sudo apt install -y python3 python3-pip python3-venv python3-gpiozero swig liblgpio-dev python3-dev build-essential
 ```
+
+> [!NOTE]
+> * **Relay Control:** On modern Debian/Ubuntu environments (such as RPi OS Bookworm), legacy GPIO interfaces are deprecated. To control pins correctly, the application compiles `lgpio` in the virtual environment via the modern `/dev/gpiochip*` API, requiring the compilation dependencies (`swig`, `liblgpio-dev`, `python3-dev`, `build-essential`).
 
 ### 2. Clone and Prepare the Script
 
