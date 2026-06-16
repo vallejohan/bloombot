@@ -1,34 +1,35 @@
+import glob
 import logging
+import os
 import random
+import time
 
 logger = logging.getLogger(__name__)
 
 
 class DHTSensorManager:
-    """Manages reading from a physical DHT22 sensor, falling back to mock values on non-Pi platforms."""
+    """Manages reading from a physical DHT22 sensor via the Linux kernel IIO driver, falling back to mock values."""
 
     def __init__(self, pin: int):
         self.pin = pin
-        self.sensor = None
         self.is_mock = False
+        self.iio_path = None
 
         try:
-            import adafruit_dht
-            import board
+            iio_devices = glob.glob("/sys/bus/iio/devices/iio:device*")
+            for dev_path in iio_devices:
+                temp_file = os.path.join(dev_path, "in_temp_input")
+                hum_file = os.path.join(dev_path, "in_humidityrelative_input")
+                if os.path.exists(temp_file) and os.path.exists(hum_file):
+                    self.iio_path = dev_path
+                    logger.info(f"Using Linux Kernel IIO driver at {self.iio_path}")
+                    break
+        except Exception as e:
+            logger.debug(f"Failed to search for kernel IIO driver paths: {e}")
 
-            # Map pin number to board Pin object (e.g. 4 -> board.D4)
-            pin_name = f"D{pin}"
-            if hasattr(board, pin_name):
-                board_pin = getattr(board, pin_name)
-                self.sensor = adafruit_dht.DHT22(board_pin)
-                logger.info(
-                    f"Using physical DHT22 sensor on BCM pin {pin} (board.{pin_name})"
-                )
-            else:
-                raise ValueError(f"Pin '{pin_name}' not found on board module")
-        except (ImportError, RuntimeError, ValueError, AttributeError) as e:
+        if not self.iio_path:
             logger.warning(
-                f"Could not load physical DHT22 sensor library ({e}). Falling back to simulated/MOCK DHT22."
+                "Linux Kernel IIO driver not found. Falling back to simulated/MOCK DHT22."
             )
             self.is_mock = True
 
@@ -36,30 +37,32 @@ class DHTSensorManager:
         """Reads temperature and humidity. Returns (temperature, humidity) tuple or (None, None) on failure."""
         if self.is_mock:
             # Generate realistic fluctuating weather data:
-            # Temp: around 21°C +/- 2°C
-            # Humidity: around 55% +/- 5%
             temp = round(random.uniform(19.0, 23.0), 1)
             humidity = round(random.uniform(50.0, 60.0), 1)
             logger.debug(f"[DHT-MOCK] Read temperature={temp}°C, humidity={humidity}%")
             return temp, humidity
 
-        try:
-            # Read from adafruit_dht sensor
-            temp = self.sensor.temperature
-            humidity = self.sensor.humidity
-            if temp is not None and humidity is not None:
-                return round(float(temp), 1), round(float(humidity), 1)
-            else:
-                logger.warning("DHT22 returned empty reading")
-        except Exception as e:
-            logger.warning(f"Error reading from physical DHT22 sensor: {e}")
-        return None, None
+        # Read via Linux Kernel IIO Driver
+        if self.iio_path:
+            for attempt in range(1, 4):
+                try:
+                    temp_file = os.path.join(self.iio_path, "in_temp_input")
+                    hum_file = os.path.join(self.iio_path, "in_humidityrelative_input")
+
+                    with open(temp_file, "r") as f:
+                        temp = float(f.read().strip()) / 1000.0
+                    with open(hum_file, "r") as f:
+                        humidity = float(f.read().strip()) / 1000.0
+
+                    return round(temp, 1), round(humidity, 1)
+                except Exception as e:
+                    logger.warning(
+                        f"Error reading from Linux Kernel IIO driver (attempt {attempt}/3): {e}"
+                    )
+                    if attempt < 3:
+                        time.sleep(1.0)
+            return None, None
 
     def cleanup(self):
-        """Releases physical sensor hardware resources."""
-        if not self.is_mock and self.sensor is not None:
-            logger.info("Cleaning up DHT22 sensor resources.")
-            try:
-                self.sensor.exit()
-            except Exception as e:
-                logger.error(f"Failed to exit DHT22 sensor: {e}")
+        """Releases sensor hardware resources (no-op for kernel driver)."""
+        pass

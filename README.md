@@ -91,12 +91,15 @@ Before starting the setup of this project there are some limitations with this h
 
 ### 1. Install System Dependencies
 
-Open a terminal on your Raspberry Pi and ensure Python 3 is installed:
+Open a terminal on your Raspberry Pi and ensure all required system utilities and build tools are installed:
 
 ```bash
 sudo apt update
-sudo apt install -y python3 python3-pip python3-venv python3-gpiozero
+sudo apt install -y python3 python3-pip python3-venv python3-gpiozero swig liblgpio-dev python3-dev build-essential
 ```
+
+> [!NOTE]
+> * **Relay Control:** On modern Debian/Ubuntu environments (such as RPi OS Bookworm), legacy GPIO interfaces are deprecated. To control pins correctly, the application compiles `lgpio` in the virtual environment via the modern `/dev/gpiochip*` API, requiring the compilation dependencies (`swig`, `liblgpio-dev`, `python3-dev`, `build-essential`).
 
 ### 2. Clone and Prepare the Script
 
@@ -109,7 +112,27 @@ source venv/bin/activate
 pip install -r src/requirements.txt
 ```
 
-### 3. Configuration
+### 3. Enable Linux Kernel DHT Overlay (Required for DHT22 Sensor)
+
+Python-based user-space bit-banging is highly sensitive to CPU scheduling jitter (especially on single-core devices like the Raspberry Pi Zero W). To achieve stable readings, this application relies on the built-in **Linux Kernel Driver**. The kernel handles timing-sensitive pulse measurements asynchronously via hardware interrupts.
+
+To enable the kernel driver:
+
+1. Open the Raspberry Pi firmware configuration file:
+   ```bash
+   sudo nano /boot/firmware/config.txt
+   ```
+2. Scroll to the bottom of the file and add the following lines (under the `[all]` block if present):
+   ```text
+   [all]
+   dtoverlay=dht11,dht22,gpiopin=4
+   ```
+3. Save the file and reboot your Raspberry Pi:
+   ```bash
+   sudo reboot
+   ```
+
+### 4. Configuration
 
 Open `config.py` and adjust the variables to fit your network:
 - `MQTT_HOST`: Set your Home Assistant broker IP (defaults to `homeassistant.local`).
