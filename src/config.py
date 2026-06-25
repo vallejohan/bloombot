@@ -18,7 +18,7 @@ DEVICE_ID = "floraflow"
 DISCOVERY_PREFIX = os.getenv("MQTT_DISCOVERY_PREFIX", "homeassistant")
 
 # Relay Configuration
-RELAY_PINS = [5, 6, 13, 16, 19, 20, 21, 26]
+RELAY_PINS = [5, 6, 13, 19, 26, 16, 20, 21]
 
 # Set to True for Active-Low relays (common 5V 8-channel relay boards turn ON when pin is pulled LOW)
 # Set to False for Active-High relays (turn ON when pin is driven HIGH)
