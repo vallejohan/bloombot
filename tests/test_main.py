@@ -29,7 +29,9 @@ class TestGardenControllerApp(unittest.TestCase):
             self.assertIn(key, self.app.schedules)
             self.assertFalse(self.app.schedules[key]["schedule_enabled"])
             self.assertEqual(len(self.app.schedules[key]["start_times"]), 1)
-            self.assertEqual(self.app.schedules[key]["start_times"][0]["time"], "08:00:00")
+            self.assertEqual(
+                self.app.schedules[key]["start_times"][0]["time"], "08:00:00"
+            )
             self.assertTrue(self.app.schedules[key]["start_times"][0]["enabled"])
             self.assertEqual(self.app.schedules[key]["duration"], 10)
 
@@ -80,20 +82,21 @@ class TestGardenControllerApp(unittest.TestCase):
     @patch("main.open", new_callable=mock_open)
     def test_on_start_times_change_valid(self, mock_file):
         """Test that schedule start times changes with valid payloads are saved and published."""
-        valid_payload = json.dumps([
-            {"time": "14:15", "enabled": True},
-            {"time": "22:30:15", "enabled": False}
-        ])
+        valid_payload = json.dumps(
+            [{"time": "14:15", "enabled": True}, {"time": "22:30:15", "enabled": False}]
+        )
         for i in range(1, self.app.num_relays + 1):
             self.app.mqtt_handler.publish_start_times.reset_mock()
 
             self.app.on_start_times_change(i, valid_payload)
             expected = [
                 {"time": "14:15:00", "enabled": True},
-                {"time": "22:30:15", "enabled": False}
+                {"time": "22:30:15", "enabled": False},
             ]
             self.assertEqual(self.app.schedules[f"relay_{i}"]["start_times"], expected)
-            self.app.mqtt_handler.publish_start_times.assert_called_once_with(i, expected)
+            self.app.mqtt_handler.publish_start_times.assert_called_once_with(
+                i, expected
+            )
 
     @patch("main.open", new_callable=mock_open)
     def test_on_start_times_change_invalid(self, mock_file):
@@ -105,16 +108,22 @@ class TestGardenControllerApp(unittest.TestCase):
 
             # Empty list (invalid since at least one is required)
             self.app.on_start_times_change(i, json.dumps([]))
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_times"], initial_state)
+            self.assertEqual(
+                self.app.schedules[f"relay_{i}"]["start_times"], initial_state
+            )
 
             # Not a list
             self.app.on_start_times_change(i, json.dumps({"time": "12:00:00"}))
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_times"], initial_state)
+            self.assertEqual(
+                self.app.schedules[f"relay_{i}"]["start_times"], initial_state
+            )
 
             # Invalid time format
             invalid_payload = json.dumps([{"time": "25:00", "enabled": True}])
             self.app.on_start_times_change(i, invalid_payload)
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_times"], initial_state)
+            self.assertEqual(
+                self.app.schedules[f"relay_{i}"]["start_times"], initial_state
+            )
 
     @patch("main.open", new_callable=mock_open)
     def test_on_duration_change(self, mock_file):

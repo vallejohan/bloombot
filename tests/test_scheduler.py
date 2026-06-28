@@ -40,7 +40,9 @@ class TestGardenScheduler(unittest.TestCase):
     @patch("scheduler.time.sleep")
     @patch("scheduler.time.time")
     @patch("scheduler.datetime")
-    def test_run_loop_triggers_schedule_1_hms(self, mock_datetime, mock_time, mock_sleep):
+    def test_run_loop_triggers_schedule_1_hms(
+        self, mock_datetime, mock_time, mock_sleep
+    ):
         """Test that the scheduler loop triggers scheduled watering when the system time matches a HH:MM:SS format start_times time."""
         mock_now = MagicMock()
         mock_now.strftime.side_effect = lambda fmt: {
@@ -60,9 +62,7 @@ class TestGardenScheduler(unittest.TestCase):
         schedules = {
             "relay_1": {
                 "schedule_enabled": True,
-                "start_times": [
-                    {"time": "08:00:00", "enabled": True}
-                ],
+                "start_times": [{"time": "08:00:00", "enabled": True}],
                 "duration": 5,
             }
         }
@@ -78,7 +78,9 @@ class TestGardenScheduler(unittest.TestCase):
     @patch("scheduler.time.sleep")
     @patch("scheduler.time.time")
     @patch("scheduler.datetime")
-    def test_run_loop_triggers_schedule_2_hms(self, mock_datetime, mock_time, mock_sleep):
+    def test_run_loop_triggers_schedule_2_hms(
+        self, mock_datetime, mock_time, mock_sleep
+    ):
         """Test that the scheduler loop triggers scheduled watering for secondary time when enabled."""
         mock_now = MagicMock()
         mock_now.strftime.side_effect = lambda fmt: {
@@ -100,7 +102,7 @@ class TestGardenScheduler(unittest.TestCase):
                 "schedule_enabled": True,
                 "start_times": [
                     {"time": "08:00:00", "enabled": False},
-                    {"time": "20:00:00", "enabled": True}
+                    {"time": "20:00:00", "enabled": True},
                 ],
                 "duration": 5,
             }
@@ -137,10 +139,8 @@ class TestGardenScheduler(unittest.TestCase):
         schedules = {
             "relay_2": {
                 "schedule_enabled": True,
-                "start_times": [
-                    {"time": "08:00", "enabled": True}
-                ],
-                "duration": 10
+                "start_times": [{"time": "08:00", "enabled": True}],
+                "duration": 10,
             }
         }
 
@@ -176,9 +176,7 @@ class TestGardenScheduler(unittest.TestCase):
         schedules = {
             "relay_1": {
                 "schedule_enabled": False,
-                "start_times": [
-                    {"time": "08:00:00", "enabled": True}
-                ],
+                "start_times": [{"time": "08:00:00", "enabled": True}],
                 "duration": 5,
             }
         }
@@ -215,9 +213,7 @@ class TestGardenScheduler(unittest.TestCase):
         schedules = {
             "relay_1": {
                 "schedule_enabled": True,
-                "start_times": [
-                    {"time": "08:00:00", "enabled": False}
-                ],
+                "start_times": [{"time": "08:00:00", "enabled": False}],
                 "duration": 5,
             }
         }
