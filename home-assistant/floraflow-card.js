@@ -453,6 +453,11 @@ class FloraFlowCardSecondary extends HTMLElement {
                     background: var(--secondary-background-color, rgba(140, 140, 140, 0.08));
                 }
 
+                .time-input:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+
                 .slider-container {
                     display: flex;
                     align-items: center;
@@ -554,9 +559,16 @@ class FloraFlowCardSecondary extends HTMLElement {
                                 <ha-switch id="modal-schedule-switch"></ha-switch>
                             </div>
                             
-                            <div class="control-row">
-                                <span class="control-label">Start Time</span>
-                                <input type="time" class="time-input" id="modal-time-input" step="60">
+                            <div class="control-row" style="flex-direction: column; align-items: stretch; gap: 8px; border-bottom: none;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="control-label">Start Times</span>
+                                    <ha-icon-button id="modal-add-time-btn" icon="mdi:plus" style="color: var(--primary-color, #0ea5e9); --mdc-icon-button-size: 32px;">
+                                        <ha-icon icon="mdi:plus"></ha-icon>
+                                    </ha-icon-button>
+                                </div>
+                                <div id="start-times-container" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <!-- Dynamic rows inserted here -->
+                                </div>
                             </div>
                             
                             <div class="control-row">
@@ -615,11 +627,17 @@ class FloraFlowCardSecondary extends HTMLElement {
             });
         }
 
-        const timeInput = this.shadowRoot.getElementById('modal-time-input');
-        if (timeInput) {
-            timeInput.addEventListener('change', (e) => {
+        const addTimeBtn = this.shadowRoot.getElementById('modal-add-time-btn');
+        if (addTimeBtn) {
+            addTimeBtn.addEventListener('click', () => {
                 if (this.activeRelayId !== null) {
-                    this.handleTimeChange(this.activeRelayId, e);
+                    if (!this._tempStartTimes) {
+                        this._tempStartTimes = [{"time": "12:00:00", "enabled": true}];
+                    } else {
+                        this._tempStartTimes.push({ "time": "12:00:00", "enabled": true });
+                    }
+                    this.renderStartTimesList(this.activeRelayId, this._tempStartTimes);
+                    this.saveStartTimes(this.activeRelayId);
                 }
             });
         }
@@ -681,6 +699,19 @@ class FloraFlowCardSecondary extends HTMLElement {
             modal.classList.add('active');
         }
 
+        // Fetch current start times from HA state and render
+        const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.floraflow_relay_${id}_start_times`);
+        const startTimesStateObj = this._hass.states[startTimesEnt];
+        let startTimes = [{ "time": "08:00:00", "enabled": true }];
+        if (startTimesStateObj && startTimesStateObj.state && startTimesStateObj.state !== 'unknown' && startTimesStateObj.state !== 'unavailable') {
+            try {
+                startTimes = JSON.parse(startTimesStateObj.state);
+            } catch (e) {
+                console.error("Error parsing start times state", e);
+            }
+        }
+        this.renderStartTimesList(id, startTimes);
+
         // Immediately update status and input values in the dialog
         this.updateState();
     }
@@ -711,16 +742,108 @@ class FloraFlowCardSecondary extends HTMLElement {
         this._hass.callService('switch', service, { entity_id: entity });
     }
 
-    handleTimeChange(id, event) {
-        const entity = this.getEntityName(id, 'start_time_entity', `time.floraflow_relay_${id}_start_time`);
-        let timeValue = event.target.value;
-        if (timeValue && timeValue.split(':').length === 2) {
-            timeValue = `${timeValue}:00`; // Append seconds
-        }
-        this._hass.callService('time', 'set_value', {
-            entity_id: entity,
-            time: timeValue
+    renderStartTimesList(id, startTimes) {
+        const container = this.shadowRoot.getElementById('start-times-container');
+        if (!container) return;
+
+        this._tempStartTimes = JSON.parse(JSON.stringify(startTimes));
+
+        container.innerHTML = this._tempStartTimes.map((item, index) => {
+            const timeVal = item.time.substring(0, 5); // Format HH:MM
+            return `
+                <div class="control-row" style="padding: 4px 0; border-bottom: none;" data-index="${index}">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <ha-switch class="time-enabled-switch"></ha-switch>
+                        <span class="control-label" style="font-size: 13px;">Time ${index + 1}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="time" class="time-input list-time-input" value="${timeVal}" step="60">
+                        <ha-icon-button class="time-delete-btn" icon="mdi:delete" style="color: #ef4444; --mdc-icon-button-size: 32px;">
+                            <ha-icon icon="mdi:delete"></ha-icon>
+                        </ha-icon-button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        // Register dynamic event listeners and set initial properties
+        const rows = container.querySelectorAll('.control-row');
+        rows.forEach((row) => {
+            const index = parseInt(row.getAttribute('data-index'));
+            const item = this._tempStartTimes[index];
+            
+            const switchEl = row.querySelector('.time-enabled-switch');
+            if (switchEl) {
+                switchEl.checked = item.enabled;
+                switchEl.addEventListener('change', (e) => {
+                    this._tempStartTimes[index].enabled = e.target.checked;
+                    const timeInput = row.querySelector('.list-time-input');
+                    if (timeInput) timeInput.disabled = !e.target.checked;
+                    this.saveStartTimes(id);
+                });
+            }
+
+            const inputEl = row.querySelector('.list-time-input');
+            if (inputEl) {
+                inputEl.disabled = !item.enabled;
+                inputEl.addEventListener('change', (e) => {
+                    let val = e.target.value;
+                    if (val && val.split(':').length === 2) {
+                        val = `${val}:00`;
+                    }
+                    this._tempStartTimes[index].time = val;
+                    this.saveStartTimes(id);
+                });
+            }
+
+            const deleteBtn = row.querySelector('.time-delete-btn');
+            if (deleteBtn) {
+                const isOnlyOne = this._tempStartTimes.length === 1;
+                deleteBtn.disabled = isOnlyOne;
+                if (!isOnlyOne) {
+                    deleteBtn.addEventListener('click', () => {
+                        this._tempStartTimes.splice(index, 1);
+                        this.renderStartTimesList(id, this._tempStartTimes);
+                        this.saveStartTimes(id);
+                    });
+                }
+            }
         });
+    }
+
+    saveStartTimes(id) {
+        const payload = JSON.stringify(this._tempStartTimes);
+        this._hass.callService('mqtt', 'publish', {
+            topic: `garden/relay/${id}/start_times/set`,
+            payload: payload
+        });
+    }
+
+    getNextStartTime(startTimes) {
+        const activeTimes = startTimes.filter(item => item.enabled);
+        if (activeTimes.length === 0) return null;
+
+        const now = new Date();
+        const currentMin = now.getHours() * 60 + now.getMinutes();
+
+        const parseToMin = (tStr) => {
+            const parts = tStr.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        };
+
+        let nextTime = null;
+        let minDiff = 2880;
+
+        activeTimes.forEach(item => {
+            const min = parseToMin(item.time);
+            const diff = (min - currentMin + 1440) % 1440;
+            if (diff < minDiff) {
+                minDiff = diff;
+                nextTime = item.time.substring(0, 5);
+            }
+        });
+
+        return nextTime;
     }
 
     handleDurationChange(id, event) {
@@ -748,13 +871,13 @@ class FloraFlowCardSecondary extends HTMLElement {
             // Resolve actual entity IDs
             const relayEnt = this.getEntityName(id, 'relay_entity', `switch.floraflow_relay_${id}`);
             const schedEnt = this.getEntityName(id, 'schedule_enabled_entity', `switch.floraflow_relay_${id}_schedule_enabled`);
-            const timeEnt = this.getEntityName(id, 'start_time_entity', `time.floraflow_relay_${id}_start_time`);
+            const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.floraflow_relay_${id}_start_times`);
             const durEnt = this.getEntityName(id, 'duration_entity', `number.floraflow_relay_${id}_duration`);
 
             // Read states from HA db
             const relayStateObj = this._hass.states[relayEnt];
             const schedStateObj = this._hass.states[schedEnt];
-            const timeStateObj = this._hass.states[timeEnt];
+            const startTimesStateObj = this._hass.states[startTimesEnt];
             const durStateObj = this._hass.states[durEnt];
 
             // If at least one entity is available and not in "unavailable" state, consider system online
@@ -772,12 +895,13 @@ class FloraFlowCardSecondary extends HTMLElement {
                 this.manualWateringStarted[id] = false;
             }
 
-            // Format start time display
-            let startT = "08:00";
-            if (timeStateObj && timeStateObj.state && timeStateObj.state !== 'unknown' && timeStateObj.state !== 'unavailable') {
-                const parts = timeStateObj.state.split(':');
-                if (parts.length >= 2) {
-                    startT = `${parts[0]}:${parts[1]}`;
+            // Parse start times list
+            let startTimes = [{ "time": "08:00:00", "enabled": true }];
+            if (startTimesStateObj && startTimesStateObj.state && startTimesStateObj.state !== 'unknown' && startTimesStateObj.state !== 'unavailable') {
+                try {
+                    startTimes = JSON.parse(startTimesStateObj.state);
+                } catch (e) {
+                    console.error("Error parsing start times state", e);
                 }
             }
 
@@ -806,7 +930,8 @@ class FloraFlowCardSecondary extends HTMLElement {
             const statusLabel = this.shadowRoot.getElementById(`status-text-${id}`);
             if (statusLabel) {
                 if (isOn) {
-                    const isScheduledActive = schedEnabled && !this.manualWateringStarted[id] && this.isScheduledWateringActive(startT, durVal);
+                    const isScheduledActive = schedEnabled && !this.manualWateringStarted[id] &&
+                        startTimes.some(item => item.enabled && this.isScheduledWateringActive(item.time.substring(0, 5), durVal));
                     if (isScheduledActive) {
                         statusLabel.textContent = `Watering (${durVal} m)`;
                     } else {
@@ -814,8 +939,14 @@ class FloraFlowCardSecondary extends HTMLElement {
                     }
                     statusLabel.style.color = '#38bdf8'; // Sky blue
                 } else if (schedEnabled) {
-                    statusLabel.textContent = `At ${startT}`;
-                    statusLabel.style.color = '#34d399'; // Mint green
+                    const nextTime = this.getNextStartTime(startTimes);
+                    if (nextTime) {
+                        statusLabel.textContent = `At ${nextTime}`;
+                        statusLabel.style.color = '#34d399'; // Mint green
+                    } else {
+                        statusLabel.textContent = "No Schedule Time";
+                        statusLabel.style.color = '#cbd5e1';
+                    }
                 } else {
                     statusLabel.textContent = "Manual";
                     statusLabel.style.color = '#94a3b8'; // Slate grey
@@ -836,11 +967,8 @@ class FloraFlowCardSecondary extends HTMLElement {
                     schedSwitch.disabled = !schedStateObj || schedStateObj.state === 'unavailable';
                 }
 
-                const timeInput = this.shadowRoot.getElementById('modal-time-input');
-                if (timeInput && document.activeElement !== timeInput) {
-                    timeInput.value = startT;
-                    timeInput.disabled = !timeStateObj || timeStateObj.state === 'unavailable';
-                }
+                // Start times list is rendered once when the modal is opened, or updated locally on actions.
+                // We do not overwrite it here to avoid race conditions with HA states.
 
                 const durationSlider = this.shadowRoot.getElementById('modal-duration-slider');
                 const durationValue = this.shadowRoot.getElementById('modal-duration-value');

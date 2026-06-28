@@ -65,33 +65,39 @@ class GardenScheduler:
                         if not sched.get("schedule_enabled", False):
                             continue
 
-                        # Normalize start time from config
-                        start_time = sched.get("start_time", "08:00:00")
+                        # Check all dynamic start times
+                        start_times_list = sched.get("start_times", [{"time": "08:00:00", "enabled": True}])
+                        times_to_check = [
+                            item["time"] for item in start_times_list
+                            if item.get("enabled", False)
+                        ]
 
-                        # Match HH:MM:SS or HH:MM
-                        is_match = False
-                        if len(start_time) == 5:  # HH:MM
-                            # Trigger at the 00th second of that minute
-                            is_match = current_time_hm == start_time and now.second == 0
-                        else:  # HH:MM:SS
-                            is_match = current_time_hms == start_time
+                        for start_time in times_to_check:
+                            # Match HH:MM:SS or HH:MM
+                            is_match = False
+                            if len(start_time) == 5:  # HH:MM
+                                # Trigger at the 00th second of that minute
+                                is_match = current_time_hm == start_time and now.second == 0
+                            else:  # HH:MM:SS
+                                is_match = current_time_hms == start_time
 
-                        if is_match:
-                            # Verify if already watering under a schedule
-                            if relay_num not in self.active_runs:
-                                duration_min = sched.get("duration", 10)
-                                duration_sec = duration_min * 60
+                            if is_match:
+                                # Verify if already watering under a schedule
+                                if relay_num not in self.active_runs:
+                                    duration_min = sched.get("duration", 10)
+                                    duration_sec = duration_min * 60
 
-                                # Start scheduled watering
-                                logger.info(
-                                    f"[SCHEDULER] Triggering schedule for Relay {relay_num} for {duration_min} minutes."
-                                )
-                                self.active_runs[relay_num] = (
-                                    current_epoch + duration_sec
-                                )
-                                self.toggle_relay_callback(
-                                    relay_num, True, is_scheduled=True
-                                )
+                                    # Start scheduled watering
+                                    logger.info(
+                                        f"[SCHEDULER] Triggering schedule for Relay {relay_num} at {start_time} for {duration_min} minutes."
+                                    )
+                                    self.active_runs[relay_num] = (
+                                        current_epoch + duration_sec
+                                    )
+                                    self.toggle_relay_callback(
+                                        relay_num, True, is_scheduled=True
+                                    )
+                                    break
 
                     # 2. Check if any active scheduled watering should stop
                     expired_relays = []
