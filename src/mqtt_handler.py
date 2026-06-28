@@ -95,7 +95,7 @@ class MQTTHandler:
             # Expected topic formats:
             # 1. garden/relay/<relay_num>/set
             # 2. garden/relay/<relay_num>/schedule/set
-            # 3. garden/relay/<relay_num>/start_time/set
+            # 3. garden/relay/<relay_num>/start_times/set
             # 4. garden/relay/<relay_num>/duration/set
 
             if len(parts) < 4:

@@ -70,19 +70,9 @@ class GardenControllerApp:
             else:
                 sched = self.schedules[key]
                 if "start_times" not in sched:
-                    start_times = []
-                    if "start_time_1" in sched:
-                        start_times.append({"time": sched["start_time_1"], "enabled": sched.get("start_time_1_enabled", True)})
-                    if "start_time_2" in sched:
-                        start_times.append({"time": sched["start_time_2"], "enabled": sched.get("start_time_2_enabled", False)})
-                    
-                    if not start_times:
-                        start_times.append({"time": "08:00:00", "enabled": True})
-                    sched["start_times"] = start_times
-
-                # Clean up old single/numbered keys if present
-                for old_key in ["start_time", "start_time_enabled", "start_time_1", "start_time_1_enabled", "start_time_2", "start_time_2_enabled"]:
-                    sched.pop(old_key, None)
+                    sched["start_times"] = [
+                        {"time": "08:00:00", "enabled": True}
+                    ]
         self.save_schedules()
 
     def initialize_default_schedules(self):
