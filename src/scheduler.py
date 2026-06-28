@@ -66,9 +66,12 @@ class GardenScheduler:
                             continue
 
                         # Check all dynamic start times
-                        start_times_list = sched.get("start_times", [{"time": "08:00:00", "enabled": True}])
+                        start_times_list = sched.get(
+                            "start_times", [{"time": "08:00:00", "enabled": True}]
+                        )
                         times_to_check = [
-                            item["time"] for item in start_times_list
+                            item["time"]
+                            for item in start_times_list
                             if item.get("enabled", False)
                         ]
 
@@ -77,7 +80,9 @@ class GardenScheduler:
                             is_match = False
                             if len(start_time) == 5:  # HH:MM
                                 # Trigger at the 00th second of that minute
-                                is_match = current_time_hm == start_time and now.second == 0
+                                is_match = (
+                                    current_time_hm == start_time and now.second == 0
+                                )
                             else:  # HH:MM:SS
                                 is_match = current_time_hms == start_time
 

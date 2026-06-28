@@ -62,17 +62,13 @@ class GardenControllerApp:
             if key not in self.schedules:
                 self.schedules[key] = {
                     "schedule_enabled": False,
-                    "start_times": [
-                        {"time": "08:00:00", "enabled": True}
-                    ],
+                    "start_times": [{"time": "08:00:00", "enabled": True}],
                     "duration": 10,
                 }
             else:
                 sched = self.schedules[key]
                 if "start_times" not in sched:
-                    sched["start_times"] = [
-                        {"time": "08:00:00", "enabled": True}
-                    ]
+                    sched["start_times"] = [{"time": "08:00:00", "enabled": True}]
         self.save_schedules()
 
     def initialize_default_schedules(self):
@@ -81,9 +77,7 @@ class GardenControllerApp:
         for i in range(1, self.num_relays + 1):
             self.schedules[f"relay_{i}"] = {
                 "schedule_enabled": False,
-                "start_times": [
-                    {"time": "08:00:00", "enabled": True}
-                ],
+                "start_times": [{"time": "08:00:00", "enabled": True}],
                 "duration": 10,
             }
 
