@@ -62,9 +62,13 @@ class GardenControllerApp:
             if key not in self.schedules:
                 self.schedules[key] = {
                     "schedule_enabled": False,
-                    "start_time": "08:00:00",
+                    "start_times": [{"time": "08:00:00", "enabled": True}],
                     "duration": 10,
                 }
+            else:
+                sched = self.schedules[key]
+                if "start_times" not in sched:
+                    sched["start_times"] = [{"time": "08:00:00", "enabled": True}]
         self.save_schedules()
 
     def initialize_default_schedules(self):
@@ -73,7 +77,7 @@ class GardenControllerApp:
         for i in range(1, self.num_relays + 1):
             self.schedules[f"relay_{i}"] = {
                 "schedule_enabled": False,
-                "start_time": f"08:00:00",
+                "start_times": [{"time": "08:00:00", "enabled": True}],
                 "duration": 10,
             }
 
@@ -116,38 +120,49 @@ class GardenControllerApp:
         # Publish schedule status back
         self.mqtt_handler.publish_schedule_enabled(relay_num, enabled)
 
-    def on_start_time_change(self, relay_num, time_str):
-        """Callback for schedule start time change."""
-        # Simple format validation (HH:MM or HH:MM:SS)
+    def on_start_times_change(self, relay_num, payload_str):
+        """Callback for schedule start times JSON change."""
         try:
-            parts = time_str.split(":")
-            if len(parts) in (2, 3):
-                h = int(parts[0])
-                m = int(parts[1])
-                if 0 <= h < 24 and 0 <= m < 60:
-                    # Pad seconds if not present
-                    if len(parts) == 2:
-                        time_str = f"{h:02d}:{m:02d}:00"
+            items = json.loads(payload_str)
+            if not isinstance(items, list) or len(items) == 0:
+                raise ValueError("Start times must be a non-empty list")
 
-                    key = f"relay_{relay_num}"
-                    logger.info(
-                        f"Schedule start time change: Relay {relay_num} -> {time_str}"
-                    )
-                    self.schedules[key]["start_time"] = time_str
-                    self.save_schedules()
+            valid_items = []
+            for item in items:
+                if not isinstance(item, dict) or "time" not in item:
+                    continue
+                time_str = item["time"].strip()
+                # Validate format (expect HH:MM or HH:MM:SS)
+                parts = time_str.split(":")
+                if len(parts) in (2, 3):
+                    h = int(parts[0])
+                    m = int(parts[1])
+                    if 0 <= h < 24 and 0 <= m < 60:
+                        if len(parts) == 2:
+                            time_str = f"{h:02d}:{m:02d}:00"
+                        enabled = bool(item.get("enabled", False))
+                        valid_items.append({"time": time_str, "enabled": enabled})
 
-                    # Publish back verified state
-                    self.mqtt_handler.publish_start_time(relay_num, time_str)
-                    return
-            raise ValueError()
-        except Exception:
-            logger.error(
-                f"Invalid time format received for relay {relay_num}: {time_str}"
-            )
-            # Re-publish old state to keep UI synchronized
+            if len(valid_items) == 0:
+                raise ValueError("No valid start times provided")
+
             key = f"relay_{relay_num}"
-            self.mqtt_handler.publish_start_time(
-                relay_num, self.schedules[key]["start_time"]
+            logger.info(
+                f"Schedule start times change: Relay {relay_num} -> {valid_items}"
+            )
+            self.schedules[key]["start_times"] = valid_items
+            self.save_schedules()
+
+            # Publish back verified state
+            self.mqtt_handler.publish_start_times(relay_num, valid_items)
+
+        except Exception as e:
+            logger.error(
+                f"Invalid start times payload received for relay {relay_num}: {payload_str}. Error: {e}"
+            )
+            key = f"relay_{relay_num}"
+            self.mqtt_handler.publish_start_times(
+                relay_num, self.schedules[key]["start_times"]
             )
 
     def on_duration_change(self, relay_num, duration):
@@ -190,7 +205,7 @@ class GardenControllerApp:
             # Initial relay state is OFF when daemon starts
             self.mqtt_handler.publish_relay_state(i, False)
             self.mqtt_handler.publish_schedule_enabled(i, sched["schedule_enabled"])
-            self.mqtt_handler.publish_start_time(i, sched["start_time"])
+            self.mqtt_handler.publish_start_times(i, sched["start_times"])
             self.mqtt_handler.publish_duration(i, sched["duration"])
 
     def run(self):
@@ -212,7 +227,7 @@ class GardenControllerApp:
         self.mqtt_handler = MQTTHandler(
             on_relay_toggle=self.on_relay_toggle,
             on_schedule_toggle=self.on_schedule_toggle,
-            on_start_time_change=self.on_start_time_change,
+            on_start_times_change=self.on_start_times_change,
             on_duration_change=self.on_duration_change,
         )
         self.mqtt_handler.connect()

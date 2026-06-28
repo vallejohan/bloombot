@@ -15,7 +15,7 @@ class MQTTHandler:
         self,
         on_relay_toggle,
         on_schedule_toggle,
-        on_start_time_change,
+        on_start_times_change,
         on_duration_change,
     ):
 
@@ -25,7 +25,7 @@ class MQTTHandler:
         # Callbacks
         self.on_relay_toggle = on_relay_toggle
         self.on_schedule_toggle = on_schedule_toggle
-        self.on_start_time_change = on_start_time_change
+        self.on_start_times_change = on_start_times_change
         self.on_duration_change = on_duration_change
 
     def connect(self):
@@ -71,13 +71,9 @@ class MQTTHandler:
             self.client.publish("garden/availability", "online", retain=True)
 
             # Subscribe to all command topics
-            # garden/relay/+/set (Manual Relay State Control)
-            # garden/relay/+/schedule/set (Schedule Enabled Toggle)
-            # garden/relay/+/start_time/set (Schedule Start Time)
-            # garden/relay/+/duration/set (Schedule Duration)
             self.client.subscribe("garden/relay/+/set", qos=1)
             self.client.subscribe("garden/relay/+/schedule/set", qos=1)
-            self.client.subscribe("garden/relay/+/start_time/set", qos=1)
+            self.client.subscribe("garden/relay/+/start_times/set", qos=1)
             self.client.subscribe("garden/relay/+/duration/set", qos=1)
 
             # Register Home Assistant entities via Auto-Discovery
@@ -99,7 +95,7 @@ class MQTTHandler:
             # Expected topic formats:
             # 1. garden/relay/<relay_num>/set
             # 2. garden/relay/<relay_num>/schedule/set
-            # 3. garden/relay/<relay_num>/start_time/set
+            # 3. garden/relay/<relay_num>/start_times/set
             # 4. garden/relay/<relay_num>/duration/set
 
             if len(parts) < 4:
@@ -122,11 +118,10 @@ class MQTTHandler:
                 enabled = payload.upper() == "ON"
                 self.on_schedule_toggle(relay_num, enabled)
 
-            elif action_type == "start_time" and parts[4] == "set":
-                # Start time command (expected "HH:MM:SS" or "HH:MM")
-                self.on_start_time_change(relay_num, payload)
+            elif action_type == "start_times" and len(parts) == 5 and parts[4] == "set":
+                self.on_start_times_change(relay_num, payload)
 
-            elif action_type == "duration" and parts[4] == "set":
+            elif action_type == "duration" and len(parts) == 5 and parts[4] == "set":
                 # Duration command (expected integer in minutes)
                 duration = int(float(payload))
                 self.on_duration_change(relay_num, duration)
@@ -191,20 +186,19 @@ class MQTTHandler:
                 retain=True,
             )
 
-            # 3. Schedule Start Time (Time Picker)
-            start_time_config = {
-                "name": f"Relay {i} Start Time",
-                "unique_id": f"{config.DEVICE_ID}_relay_{i}_start_time",
-                "state_topic": f"garden/relay/{i}/start_time/state",
-                "command_topic": f"garden/relay/{i}/start_time/set",
+            # 3. Schedule Start Times JSON Sensor
+            start_times_config = {
+                "name": f"Relay {i} Start Times",
+                "unique_id": f"{config.DEVICE_ID}_relay_{i}_start_times",
+                "state_topic": f"garden/relay/{i}/start_times/state",
                 "availability_topic": availability_topic,
                 "device": device_info,
-                "icon": "mdi:clock-start",
+                "icon": "mdi:clock-multiple",
                 "has_entity_name": True,
             }
             self.client.publish(
-                f"{config.DISCOVERY_PREFIX}/time/{config.DEVICE_ID}/relay_{i}_start_time/config",
-                payload=json.dumps(start_time_config),
+                f"{config.DISCOVERY_PREFIX}/sensor/{config.DEVICE_ID}/relay_{i}_start_times/config",
+                payload=json.dumps(start_times_config),
                 qos=1,
                 retain=True,
             )
@@ -298,12 +292,12 @@ class MQTTHandler:
         if self.client and self.connected:
             self.client.publish(topic, payload, qos=1, retain=True)
 
-    def publish_start_time(self, relay_num, time_str):
-        """Publish the schedule start time (HH:MM:SS) to HA."""
-        topic = f"garden/relay/{relay_num}/start_time/state"
+    def publish_start_times(self, relay_num, start_times_list):
+        """Publish the schedule start times list as a JSON string to HA."""
+        topic = f"garden/relay/{relay_num}/start_times/state"
         if self.client and self.connected:
-            # Home Assistant expects format "HH:MM:SS" or "HH:MM"
-            self.client.publish(topic, time_str, qos=1, retain=True)
+            payload = json.dumps(start_times_list)
+            self.client.publish(topic, payload, qos=1, retain=True)
 
     def publish_duration(self, relay_num, duration: int):
         """Publish the schedule duration (minutes) to HA."""

@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import unittest
@@ -27,6 +28,11 @@ class TestGardenControllerApp(unittest.TestCase):
             key = f"relay_{i}"
             self.assertIn(key, self.app.schedules)
             self.assertFalse(self.app.schedules[key]["schedule_enabled"])
+            self.assertEqual(len(self.app.schedules[key]["start_times"]), 1)
+            self.assertEqual(
+                self.app.schedules[key]["start_times"][0]["time"], "08:00:00"
+            )
+            self.assertTrue(self.app.schedules[key]["start_times"][0]["enabled"])
             self.assertEqual(self.app.schedules[key]["duration"], 10)
 
     @patch("main.open", new_callable=mock_open)
@@ -74,35 +80,50 @@ class TestGardenControllerApp(unittest.TestCase):
             self.app.mqtt_handler.publish_schedule_enabled.assert_called_with(i, False)
 
     @patch("main.open", new_callable=mock_open)
-    def test_on_start_time_change_valid(self, mock_file):
-        """Test that schedule start time modifications with valid formats (HH:MM or HH:MM:SS) are correctly processed and saved."""
+    def test_on_start_times_change_valid(self, mock_file):
+        """Test that schedule start times changes with valid payloads are saved and published."""
+        valid_payload = json.dumps(
+            [{"time": "14:15", "enabled": True}, {"time": "22:30:15", "enabled": False}]
+        )
         for i in range(1, self.app.num_relays + 1):
-            self.app.mqtt_handler.publish_start_time.reset_mock()
+            self.app.mqtt_handler.publish_start_times.reset_mock()
 
-            self.app.on_start_time_change(i, "14:15")
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_time"], "14:15:00")
-            self.app.mqtt_handler.publish_start_time.assert_called_once_with(
-                i, "14:15:00"
+            self.app.on_start_times_change(i, valid_payload)
+            expected = [
+                {"time": "14:15:00", "enabled": True},
+                {"time": "22:30:15", "enabled": False},
+            ]
+            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_times"], expected)
+            self.app.mqtt_handler.publish_start_times.assert_called_once_with(
+                i, expected
             )
 
-            self.app.on_start_time_change(i, "23:59:59")
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_time"], "23:59:59")
-            self.app.mqtt_handler.publish_start_time.assert_called_with(i, "23:59:59")
-
     @patch("main.open", new_callable=mock_open)
-    def test_on_start_time_change_invalid(self, mock_file):
-        """Test that schedule start time changes with invalid inputs are rejected and the previous valid time is preserved."""
+    def test_on_start_times_change_invalid(self, mock_file):
+        """Test that schedule start times changes with invalid payloads preserve previous state."""
         for i in range(1, self.app.num_relays + 1):
-            self.app.schedules[f"relay_{i}"]["start_time"] = "08:00:00"
+            initial_state = [{"time": "08:00:00", "enabled": True}]
+            self.app.schedules[f"relay_{i}"]["start_times"] = initial_state
+            self.app.mqtt_handler.publish_start_times.reset_mock()
 
-            self.app.on_start_time_change(i, "25:00")  # Invalid hour
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_time"], "08:00:00")
+            # Empty list (invalid since at least one is required)
+            self.app.on_start_times_change(i, json.dumps([]))
+            self.assertEqual(
+                self.app.schedules[f"relay_{i}"]["start_times"], initial_state
+            )
 
-            self.app.on_start_time_change(i, "12:60")  # Invalid minute
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_time"], "08:00:00")
+            # Not a list
+            self.app.on_start_times_change(i, json.dumps({"time": "12:00:00"}))
+            self.assertEqual(
+                self.app.schedules[f"relay_{i}"]["start_times"], initial_state
+            )
 
-            self.app.on_start_time_change(i, "not-a-time")  # Invalid format
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["start_time"], "08:00:00")
+            # Invalid time format
+            invalid_payload = json.dumps([{"time": "25:00", "enabled": True}])
+            self.app.on_start_times_change(i, invalid_payload)
+            self.assertEqual(
+                self.app.schedules[f"relay_{i}"]["start_times"], initial_state
+            )
 
     @patch("main.open", new_callable=mock_open)
     def test_on_duration_change(self, mock_file):
@@ -144,7 +165,7 @@ class TestGardenControllerApp(unittest.TestCase):
             self.app.num_relays,
         )
         self.assertEqual(
-            self.app.mqtt_handler.publish_start_time.call_count, self.app.num_relays
+            self.app.mqtt_handler.publish_start_times.call_count, self.app.num_relays
         )
         self.assertEqual(
             self.app.mqtt_handler.publish_duration.call_count, self.app.num_relays
