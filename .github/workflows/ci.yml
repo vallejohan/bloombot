@@ -18,31 +18,32 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: "uv.lock"
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-        cache: 'pip'
-        cache-dependency-path: |
-          src/requirements.txt
-          src/requirements-dev.txt
 
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r src/requirements.txt -r src/requirements-dev.txt
+        uv sync --frozen
 
     - name: Run Import Sort Check (isort)
       run: |
-        isort --check .
+        uv run isort --check src tests
 
     - name: Run Code Style Check (black)
       run: |
-        black --check .
+        uv run black --check src tests
 
     - name: Run Unit Tests
       run: |
-        python -m unittest discover -s tests
+        uv run python -m unittest discover -s tests
 
   release:
     name: Create GitHub Release
