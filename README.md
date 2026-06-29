@@ -227,6 +227,23 @@ If you are developing or testing on a laptop/desktop computer (e.g. Windows/Mac)
 
 ---
 
+## Home Assistant Dashboard Setup
+
+This project includes a Lovelace card designed to control scheduled and manual irrigation valves with configuration dialogs.
+
+### Installation via HACS (Home Assistant Community Store)
+
+1. Go to **HACS** in your Home Assistant dashboard.
+2. Select **Lovelace** (or search all categories).
+3. Search for **FloraFlow Card**.
+4. Click **Download** in the bottom right corner.
+
+### Dashboard Configuration
+
+Once installed, you can add the card to your dashboard using the Custom UI card selector. See [garden-relay-card-example.yaml](home-assistant/dashboard-examples/garden-relay-card-example.yaml) for an example on how the card is set up in Home Assistant.
+
+---
+
 ## Local Unit Testing & Formatting Checks
 
 To verify code functionality and format compliance locally:

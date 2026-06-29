@@ -1033,6 +1033,7 @@ class FloraFlowCardSecondary extends HTMLElement {
 }
 
 customElements.define("floraflow-card-secondary", FloraFlowCardSecondary);
+customElements.define("floraflow-card", class extends FloraFlowCardSecondary {});
 
 // Add preview information in Home Assistant custom card selector
 window.customCards = window.customCards || [];
@@ -1040,5 +1041,11 @@ window.customCards.push({
     type: "floraflow-card-secondary",
     name: "FloraFlow Irrigation Card (Grid Layout)",
     description: "A premium grid-based dashboard card to control scheduled and manual irrigation valves with configuration dialogs.",
+    preview: false,
+});
+window.customCards.push({
+    type: "floraflow-card",
+    name: "FloraFlow Irrigation Card (Grid Layout) Alias",
+    description: "Alias for FloraFlow Irrigation Card.",
     preview: false,
 });
