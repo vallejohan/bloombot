@@ -32,58 +32,52 @@ A lightweight garden and greenhouse irrigation controller running on a **Raspber
 
 ---
 
-## Hardware Setup
-The hardware consists of a Raspberry Pi Zero W, 8-channel relay board, humidity and temperature sensor (DHT22), water valves, and a home assistant server. It's fully possible to pick any number of relays to control (as long as there are available GPIO pins on the Raspberry Pi), since the number of relays are configured in [config.py](src/config.py). The flowchart below illustrates a rough overview of how the various hardware (and software) are connected. The power source is from an 230V outlet, which has a 230V-12V switched power supply inbetween to get the correct voltage for the 12V water valves. For the Raspberry Pi and relay board there is an additional 12V-5V DC converter to get the correct voltage.
-
-One thing that is good to mention is the water source and water valve, since these can change depending on your conditions. Some might have a water barrel available instead of a water faucet that can contiuosly supply water. In this case the usage of water pumps would work just as well.
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/assets/images/floraflow-flowchart-dark-theme.png">
-  <img alt="FloraFlow Architecture Diagram" src="/assets/images/floraflow-flowchart-light-theme.png">
-</picture>
-
-
-### Wiring
-
-The default GPIO pin connections used to control the relays are defined in [config.py](src/config.py):
-
-| Relay Channel | GPIO Pin | Connection Notes |
-| :---: | :---: | :--- |
-| **Relay 1** | GPIO 5 | Valve / Zone 1 |
-| **Relay 2** | GPIO 6 | Valve / Zone 2 |
-| **Relay 3** | GPIO 13 | Valve / Zone 3 |
-| **Relay 4** | GPIO 16 | Valve / Zone 4 |
-| **Relay 5** | GPIO 19 | Valve / Zone 5 |
-| **Relay 6** | GPIO 20 | Valve / Zone 6 |
-| **Relay 7** | GPIO 21 | Valve / Zone 7 |
-| **Relay 8** | GPIO 26 | Valve / Zone 8 |
-
-- **Active-Low vs. Active-High:** Most common 8-channel relay boards are *Active-Low* (relays switch ON when the control pin is pulled to GND). This is configured via `ACTIVE_LOW = True` in [config.py](src/config.py).
-- **Isolation (JD-VCC):** To isolate the Raspberry Pi from relay noise and ensure the 5V relay coils have sufficient power, remove the VCC/JD-VCC jumper on the relay board:
-  - Connect **JD-VCC** to an external 5V power supply's positive terminal.
-  - Connect **GND** of the external power supply to the relay board GND (and keep it isolated from the Pi GND if you want full opto-isolation).
-  - Connect **VCC** on the relay board to the Pi's **3.3V pin** (so the optocouplers are driven by the Pi's 3.3V logic).
-
----
-
 ## Limitations & Considerations
 
-Before starting the setup of this project there are some limitations with this hardware that are good to consider: 
+Before starting there are some limitations with this hardware that are good to consider: 
 
-- **WiFi Range Outdoors:** The onboard PCB antenna of the Raspberry Pi Zero W has limited range, which is further reduced when placed inside a weatherproof enclosure. If the Pi is far from your router, you may experience intermittent MQTT disconnections.
-   * *Tip:* Consider placing a WiFi extender closer to the garden, or using a Raspberry Pi model with an external antenna connector.
+- **WiFi Range Outdoors:** The onboard PCB antenna of the Raspberry Pi Zero W has limited range, which is further reduced when placed inside an enclosure. If the Pi is far from your router, you may experience intermittent MQTT disconnections.
+   * *Tip:* Consider planning where the hardware should be placed and if any additional WiFi range extenders are needed.
 - **Power Consumption:** Unlike low-power microcontrollers (such as the ESP32) which can enter deep-sleep mode and draw microamps, a Raspberry Pi Zero W consumes quite substantially more power.
-  * *Tip:* Running FloraFlow purely on batteries is impractical unless you plan for a substantial solar panel setup (e.g., 10W+ solar panel, 12V LiFePO4 battery, and a step-down converter). A mains-powered supply is highly recommended.
-- **No Native Analog Inputs:** The Raspberry Pi lacks analog-to-digital converters (ADC). 
-   * *Tip:* If you plan to expand the hardware to read analog soil moisture sensors, you will need to add an external ADC chip.
+  * *Tip:* Running FloraFlow purely on batteries is doable, but much less efficient compared to for example an ESP32 device. One option could be to use a larger solar panel setup (e.g., 10W+ solar panel, with a larger 12V LiFePO4 battery, and a step-down converter). A mains-powered supply is highly recommended, if possible.
+- **No Native Analog Inputs:** The Raspberry Pi lacks analog-to-digital converters (ADC), in case that you'd like to add analog devices. 
+   * *Tip:* If you plan to expand the hardware to read analog soil moisture sensors, or utilize other sensors, you will need to add an external ADC device.
 
 > [!NOTE]
 > **Design Philosophy & Hardware Selection**
 > 
 > This project was originally planned around an ESP32 microcontroller. While an ESP32 would be more optimal on several fronts, such as low power consumption, native ADC support, and support for wireless protocols like Zigbee or Thread, a Raspberry Pi was chosen for a few key reasons:
 > - **Power & Proximity:** The greenhouse is close to the main house with a direct power line, which minimizes power consumption constraints.
-> - **Extensibility & Easy Updates:** Running a full Linux environment allows for trivial Over-the-Air (OTA) updates and leaves the door open to run other companion services on the same device in the future.
+> - **Extensibility & Easy Updates:** Running a full Linux environment allows for trivial Over-the-Air (OTA) updates and leaves the door open to run other companion services on the same device in the future. That being said, there are also options for OTA updates on ESP32 devices as well.
 > - **Hardware Reuse:** It was a good opportunity to put a spare Raspberry Pi board I had lying around to good use.
+
+
+---
+
+## Hardware Setup
+The hardware consists of a Raspberry Pi Zero W, 8-channel relay board, humidity and temperature sensor (DHT22), water valves, and a home assistant server. It's fully possible to pick any number of relays to control (as long as there are available GPIO pins on the Raspberry Pi), since the number of relays are configured in [config.py](src/config.py). The flowchart below gives a rough overview of how the various parts are connected.
+
+> [!NOTE]
+> The hardware components for this project are highly flexible. You are not restricted to the specific models listed. For instance:
+> - **Microcomputer:** You can use any Raspberry Pi model with a 40-pin GPIO header (e.g. Raspberry Pi 3, 4, 5, or Zero 2 W) instead of the Zero W.
+> - **Irrigation Load:** You can use 12V solenoid valves, 24V AC valves, or 5V/12V DC water pumps as long as your power supply matches the load voltage.
+> - **Relay Board:** Any standard 5V or 3.3V relay module (from 1 to 8 channels) will work by configuring `RELAY_PINS` in [config.py](src/config.py).
+> - **Sensors:** While a DHT22 is configured by default, you can substitute a DHT11 or other sensors (or disable sensor reading in code if not needed).
+
+<picture>
+  <img alt="FloraFlow Architecture Diagram" src="/assets/images/floraflow-flowchart.jpg">
+</picture>
+
+### Wiring
+
+The wiring schematic image below shows how the hardware components can be wired together. Some good points to take into consideration when setting up this system:
+
+- **Active-Low vs. Active-High:** Most common 8-channel relay boards are *Active-Low* (relays switch ON when the control pin is pulled to GND). This is configured via `ACTIVE_LOW = True` in [config.py](src/config.py).
+- **Isolating power to relay and Rpi:** To isolate the Raspberry Pi from relay noise and ensure the 5V relay coils have sufficient power, the usage of two 5V DC-DC converters is recommended (as shown in the schematic). However, using a single 5V DC-DC converter is fully functional as well.
+
+<picture>
+  <img alt="FloraFlow wiring schematic" src="/assets/images/floraflow-wiring.jpg">
+</picture>
 
 ---
 
@@ -108,6 +102,9 @@ First, install **uv** if it isn't already installed:
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+> [!TIP]
+> After the installer completes, you may need to restart your terminal session or run `source $HOME/.local/bin/env` (for bash/zsh) to add `uv` to your `PATH` variable.
 
 Navigate to your workspace directory and synchronize the dependencies to set up a virtual environment:
 
@@ -176,7 +173,7 @@ To run the daemon automatically when the Pi boots and ensure it restarts on cras
    sudo nano /etc/systemd/system/floraflow.service
    ```
 
-2. Paste the following configuration (replace paths and users with your actual Pi configuration):
+2. Paste the following configuration:
    ```ini
    [Unit]
    Description=FloraFlow Irrigation Controller Daemon
@@ -193,6 +190,9 @@ To run the daemon automatically when the Pi boots and ensure it restarts on cras
    [Install]
    WantedBy=multi-user.target
    ```
+
+   > [!IMPORTANT]
+   > Replace `User=pi`, `/home/pi/` and paths in the service file above with the actual username and directory path of your Raspberry Pi user if your username is not `pi` (modern Raspberry Pi OS installations require a custom username).
 
    *(Note: The daemon will automatically load the configuration variables from the `.env` file located in the configured `WorkingDirectory`.)*
 
@@ -235,8 +235,24 @@ This project includes a Lovelace card designed to control scheduled and manual i
   <img src="/assets/gifs/floraflow-ha-card-example.gif" alt="FloraFlow Home Assistant Card Preview" width="600"/>
 </p>
 
+### New to Home Assistant?
+
+If you do not have a Home Assistant instance running yet, follow these steps to get started:
+1. **Installation:** Refer to the official [Home Assistant Installation Guide](https://www.home-assistant.io/installation/) to learn how to install Home Assistant OS or Core on a Raspberry Pi 4/5, dedicated computer, or virtual machine.
+2. **HACS Installation:** To install the FloraFlow card directly, you need the **Home Assistant Community Store (HACS)**. Follow the official [HACS Download & Setup Guide](https://hacs.xyz/docs/setup/prerequisites) to enable HACS on your instance.
+
 ### Installation via HACS (Home Assistant Community Store)
 
+#### Option A: Manual Installation (As a Custom Repository)
+Before the integration is officially merged into the HACS default store, or for beta testing new releases:
+1. Go to **HACS** in your Home Assistant dashboard.
+2. Click the **three dots** in the top right corner and select **Custom repositories**.
+3. Add the repository URL: `https://github.com/vallejohan/floraflow`
+4. Select the category **Lovelace** and click **Add**.
+5. The **FloraFlow Card** will now appear in your list. Click **Download** in the bottom right corner.
+
+#### Option B: Default Installation (Once Merged)
+Once the repository is officially included in the HACS default index:
 1. Go to **HACS** in your Home Assistant dashboard.
 2. Select **Lovelace** (or search all categories).
 3. Search for **FloraFlow Card**.
