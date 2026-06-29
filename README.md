@@ -37,7 +37,7 @@ A lightweight garden and greenhouse irrigation controller running on a **Raspber
 
 ## Limitations & Considerations
 
-Before starting there are some limitations with this hardware that are good to consider: 
+Before starting there are some limitations with this project that are good to consider: 
 
 - **WiFi Range Outdoors:** The onboard PCB antenna of the Raspberry Pi Zero W has limited range, which is further reduced when placed inside an enclosure. If the Pi is far from your router, you may experience intermittent MQTT disconnections.
    * *Tip:* Consider planning where the hardware should be placed and if any additional WiFi range extenders are needed.
@@ -55,21 +55,36 @@ Before starting there are some limitations with this hardware that are good to c
 > - **Hardware Reuse:** It was a good opportunity to put a spare Raspberry Pi board I had lying around to good use.
 
 
----
+## System Architecture
 
-## Hardware Setup
-The hardware consists of a Raspberry Pi Zero W, 8-channel relay board, humidity and temperature sensor (DHT22), water valves, and a home assistant server. It's fully possible to pick any number of relays to control (as long as there are available GPIO pins on the Raspberry Pi), since the number of relays are configured in [config.py](src/config.py). The flowchart below gives a rough overview of how the various parts are connected.
+FloraFlow uses a modular architecture to bridge physical hardware with Home Assistant over an MQTT interface. The main components are detailed below, followed by a system diagram showing how they connect.
 
-> [!NOTE]
-> The hardware components for this project are highly flexible. You are not restricted to the specific models listed. For instance:
-> - **Microcomputer:** You can use any Raspberry Pi model with a 40-pin GPIO header (e.g. Raspberry Pi 3, 4, 5, or Zero 2 W) instead of the Zero W.
-> - **Irrigation Load:** You can use 12V solenoid valves, 24V AC valves, or 5V/12V DC water pumps as long as your power supply matches the load voltage.
-> - **Relay Board:** Any standard 5V or 3.3V relay module (from 1 to 8 channels) will work by configuring `RELAY_PINS` in [config.py](src/config.py).
-> - **Sensors:** While a DHT22 is configured by default, you can substitute a DHT11 or other sensors (or disable sensor reading in code if not needed).
+1. **FloraFlow Core (Raspberry Pi):** A Python application running as a system service. It reads ambient temperature and humidity sensors (via a Linux kernel overlay driver) and manages GPIO outputs to trigger relays.
+2. **Local Scheduler & Persistence:** The scheduler runs directly on the Pi and relies on a local JSON file (`schedules.json`) for persistence, ensuring that schedules persist and trigger even during network outages.
+3. **MQTT Discovery Layer:** On startup, the script registers all switches, sensors, numbers, and system status configuration topics to the Home Assistant MQTT broker automatically.
+4. **Home Assistant Control:** A custom companion frontend card (`floraflow-card`) displays status information and allows the user to easily configure watering schedules, durations, and trigger manual overrides.
 
 <picture>
   <img alt="FloraFlow Architecture Diagram" src="/assets/images/floraflow-flowchart.jpg">
 </picture>
+
+---
+
+## Hardware Setup
+
+To build the FloraFlow controller, you will need the hardware components listed in the Bill of Materials section below. The setup is not restricted to the specific models listed, you can choose various components and scale the number of relays (valves) as needed to fit your garden zones.
+
+### Bill of Materials (BOM)
+
+| Component | Description | Quantity | Notes |
+| :--- | :--- | :---: | :--- |
+| **Raspberry Pi** | Raspberry Pi Zero W (or Zero 2 W, RPi 3/4/5) with SD Card | 1 | Any model with a 40-pin GPIO header will work. |
+| **Relay Board** | 5V or 3.3V active-low relay module (1 to 8 channels) | 1 | Configure the pins in [config.py](src/config.py) based on your board. |
+| **DHT22 / DHT11** | Temperature and humidity sensor | 1 | Optional. Used for monitoring climate; can be disabled in configuration. |
+| **Water Valves / Pumps** | 12V solenoid valves (or 24V AC valves / 5V DC pumps) | 1 - 8 | Match the quantity to your garden zones and ensure matching power supply. |
+| **Power Supplies** | 5V power supply & step-down DC-DC converters | 1 - 2 | Separate power supply for relay coils is recommended to isolate noise. |
+| **Enclosure** | 3D-printable enclosure | 1 | Optional. Helps protect components outdoors (see [Enclosure box](#enclosure-box)). |
+| **Misc** | Jumper wires, terminal blocks, mounting hardware | - | For connecting and mounting the hardware. |
 
 ### Wiring
 
@@ -81,6 +96,10 @@ The wiring schematic image below shows how the hardware components can be wired 
 <picture>
   <img alt="FloraFlow wiring schematic" src="/assets/images/floraflow-wiring.jpg">
 </picture>
+
+### Enclosure box
+
+There is an optional enclosure box that can be 3d-printed to fit the hardware components, which can be found [here](#).
 
 ---
 
