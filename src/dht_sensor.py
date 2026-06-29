@@ -55,7 +55,7 @@ class DHTSensorManager:
                         temp = float(f.read().strip()) / 1000.0
                     with open(hum_file, "r") as f:
                         humidity = float(f.read().strip()) / 1000.0
-                    
+
                     temp_c = round(temp, 1)
                     humidity_pct = round(humidity, 1)
 
