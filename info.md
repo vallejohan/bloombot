@@ -2,6 +2,8 @@
 
 A Lovelace card for Home Assistant to control scheduled and manual irrigation valves with configuration dialogs.
 
+![FloraFlow Home Assistant Card Preview](assets/gifs/floraflow-ha-card-example.gif)
+
 ## Features
 - **Vibrant & Responsive Grid Layout**: Sleek card interface designed to control multiple watering zones (relays).
 - **Visual Status Indicators**: Instant active/inactive states with color-coded status elements (active/manual/schedule details).

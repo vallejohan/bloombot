@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/img/floraflow-logo.png" width="200"/>
+  <img src="/assets/img/floraflow-logo.png" width="200"/>
 </p>
 
 <h1 align="center">FloraFlow</h1>
@@ -38,8 +38,8 @@ The hardware consists of a Raspberry Pi Zero W, 8-channel relay board, humidity 
 One thing that is good to mention is the water source and water valve, since these can change depending on your conditions. Some might have a water barrel available instead of a water faucet that can contiuosly supply water. In this case the usage of water pumps would work just as well.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/img/floraflow-flowchart-dark-theme.png">
-  <img alt="FloraFlow Architecture Diagram" src="/img/floraflow-flowchart-light-theme.png">
+  <source media="(prefers-color-scheme: dark)" srcset="/assets/img/floraflow-flowchart-dark-theme.png">
+  <img alt="FloraFlow Architecture Diagram" src="/assets/img/floraflow-flowchart-light-theme.png">
 </picture>
 
 
@@ -230,6 +230,10 @@ If you are developing or testing on a laptop/desktop computer (e.g. Windows/Mac)
 ## Home Assistant Dashboard Setup
 
 This project includes a Lovelace card designed to control scheduled and manual irrigation valves with configuration dialogs.
+
+<p align="center">
+  <img src="/assets/gifs/floraflow-ha-card-example.gif" alt="FloraFlow Home Assistant Card Preview" width="600"/>
+</p>
 
 ### Installation via HACS (Home Assistant Community Store)
 
