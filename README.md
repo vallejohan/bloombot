@@ -13,6 +13,9 @@
   <a href="https://github.com/vallejohan/floraflow/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="MIT License" />
   </a>
+  <a href="https://github.com/vallejohan/floraflow/releases">
+    <img src="https://img.shields.io/github/v/release/vallejohan/floraflow?style=flat-square" alt="Latest Release" />
+  </a>
 </p>
 
 ---
