@@ -64,9 +64,50 @@ FloraFlow uses a modular architecture to bridge physical hardware with Home Assi
 3. **MQTT Discovery Layer:** On startup, the script registers all switches, sensors, numbers, and system status configuration topics to the Home Assistant MQTT broker automatically.
 4. **Home Assistant Control:** A custom companion frontend card (`floraflow-card`) displays status information and allows the user to easily configure watering schedules, durations, and trigger manual overrides.
 
-<picture>
-  <img alt="FloraFlow Architecture Diagram" src="/assets/images/floraflow-flowchart.jpg">
-</picture>
+```mermaid
+graph TD
+    %% Styling Definitions
+    classDef haStyle fill:#03a9f4,stroke:#0288d1,stroke-width:2px,color:#fff;
+    classDef mqttStyle fill:#009688,stroke:#00796b,stroke-width:2px,color:#fff;
+    classDef rpiStyle fill:#c2185b,stroke:#880e4f,stroke-width:2px,color:#fff;
+    classDef hwStyle fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff;
+    classDef userStyle fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff;
+
+    %% Nodes
+    subgraph HA ["Home Assistant"]
+        Card["FloraFlow Lovelace Card"]:::haStyle
+        HASwitches["Entities (Switches, Sensors, Inputs)"]:::haStyle
+    end
+
+    subgraph Broker ["MQTT Broker"]
+        MQTT["Mosquitto / MQTT Broker"]:::mqttStyle
+    end
+
+    subgraph Pi ["Raspberry Pi Zero W"]
+        Core["FloraFlow App (main.py)"]:::rpiStyle
+        Sched["Scheduler & Persistence (schedules.json)"]:::rpiStyle
+        GPIO["GPIO Manager (gpio_manager.py)"]:::rpiStyle
+        DHT["DHT Sensor Module (dht_sensor.py)"]:::rpiStyle
+    end
+
+    subgraph HW ["Physical Hardware"]
+        DHTSensor["DHT22 Sensor"]:::hwStyle
+        Relays["8-Channel Relay Board"]:::hwStyle
+        Valves["Water Valves / Pumps"]:::hwStyle
+    end
+
+    %% Connections
+    User["User Interface / App"]:::userStyle --> Card
+    Card <-->|Control & Status| HASwitches
+    HASwitches <-->|MQTT Pub/Sub| MQTT
+    MQTT <-->|Discovery & Commands| Core
+    Core <-->|Saves/Reads Schedules| Sched
+    Core -->|Triggers Relays| GPIO
+    GPIO -->|GPIO Signals| Relays
+    Relays -->|Power Control| Valves
+    DHTSensor -->|Sensor Data| DHT
+    DHT -->|Readings| Core
+```
 
 ---
 
