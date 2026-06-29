@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/assets/img/floraflow-logo.png" width="200"/>
+  <img src="/assets/images/floraflow-logo.png" width="200"/>
 </p>
 
 <h1 align="center">FloraFlow</h1>
@@ -38,8 +38,8 @@ The hardware consists of a Raspberry Pi Zero W, 8-channel relay board, humidity 
 One thing that is good to mention is the water source and water valve, since these can change depending on your conditions. Some might have a water barrel available instead of a water faucet that can contiuosly supply water. In this case the usage of water pumps would work just as well.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/assets/img/floraflow-flowchart-dark-theme.png">
-  <img alt="FloraFlow Architecture Diagram" src="/assets/img/floraflow-flowchart-light-theme.png">
+  <source media="(prefers-color-scheme: dark)" srcset="/assets/images/floraflow-flowchart-dark-theme.png">
+  <img alt="FloraFlow Architecture Diagram" src="/assets/images/floraflow-flowchart-light-theme.png">
 </picture>
 
 
