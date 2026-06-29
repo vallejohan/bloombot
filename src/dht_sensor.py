@@ -14,6 +14,8 @@ class DHTSensorManager:
         self.pin = pin
         self.is_mock = False
         self.iio_path = None
+        self.last_valid_temp = None
+        self.last_valid_hum = None
 
         try:
             iio_devices = glob.glob("/sys/bus/iio/devices/iio:device*")
@@ -54,7 +56,40 @@ class DHTSensorManager:
                     with open(hum_file, "r") as f:
                         humidity = float(f.read().strip()) / 1000.0
 
-                    return round(temp, 1), round(humidity, 1)
+                    temp_c = round(temp, 1)
+                    humidity_pct = round(humidity, 1)
+
+                    # Hard boundary checks (-40°C to 80°C temperature, 0% to 100% humidity)
+                    if not (-40.0 <= temp_c <= 80.0 and 0.0 <= humidity_pct <= 100.0):
+                        logger.warning(
+                            f"Discarding out-of-bounds sensor reading (attempt {attempt}/3): temp={temp_c}°C, hum={humidity_pct}%"
+                        )
+                        if attempt < 3:
+                            time.sleep(1.0)
+                        continue
+
+                    # Rate-of-change spike check (max 10°C or 30% humidity jump)
+                    if self.last_valid_temp is not None:
+                        if abs(temp_c - self.last_valid_temp) > 10.0:
+                            logger.warning(
+                                f"Discarding temperature spike (attempt {attempt}/3): {temp_c}°C (previous: {self.last_valid_temp}°C)"
+                            )
+                            if attempt < 3:
+                                time.sleep(1.0)
+                            continue
+
+                    if self.last_valid_hum is not None:
+                        if abs(humidity_pct - self.last_valid_hum) > 30.0:
+                            logger.warning(
+                                f"Discarding humidity spike (attempt {attempt}/3): {humidity_pct}% (previous: {self.last_valid_hum}%)"
+                            )
+                            if attempt < 3:
+                                time.sleep(1.0)
+                            continue
+
+                    self.last_valid_temp = temp_c
+                    self.last_valid_hum = humidity_pct
+                    return temp_c, humidity_pct
                 except Exception as e:
                     logger.warning(
                         f"Error reading from Linux Kernel IIO driver (attempt {attempt}/3): {e}"

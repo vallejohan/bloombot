@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/img/floraflow-logo.png" width="200"/>
+  <img src="/assets/images/floraflow-logo.png" width="200"/>
 </p>
 
 <h1 align="center">FloraFlow</h1>
@@ -38,8 +38,8 @@ The hardware consists of a Raspberry Pi Zero W, 8-channel relay board, humidity 
 One thing that is good to mention is the water source and water valve, since these can change depending on your conditions. Some might have a water barrel available instead of a water faucet that can contiuosly supply water. In this case the usage of water pumps would work just as well.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/img/floraflow-flowchart-dark-theme.png">
-  <img alt="FloraFlow Architecture Diagram" src="/img/floraflow-flowchart-light-theme.png">
+  <source media="(prefers-color-scheme: dark)" srcset="/assets/images/floraflow-flowchart-dark-theme.png">
+  <img alt="FloraFlow Architecture Diagram" src="/assets/images/floraflow-flowchart-light-theme.png">
 </picture>
 
 
@@ -80,7 +80,7 @@ Before starting the setup of this project there are some limitations with this h
 > [!NOTE]
 > **Design Philosophy & Hardware Selection**
 > 
-> This project was originally planned around an ESP32 microcontroller. While an ESP32 would be more optimal on several fronts, such as low power consumption, native ADC support, and support for wireless protocols like Zigbee or Thread,a Raspberry Pi was chosen for a few key reasons:
+> This project was originally planned around an ESP32 microcontroller. While an ESP32 would be more optimal on several fronts, such as low power consumption, native ADC support, and support for wireless protocols like Zigbee or Thread, a Raspberry Pi was chosen for a few key reasons:
 > - **Power & Proximity:** The greenhouse is close to the main house with a direct power line, which minimizes power consumption constraints.
 > - **Extensibility & Easy Updates:** Running a full Linux environment allows for trivial Over-the-Air (OTA) updates and leaves the door open to run other companion services on the same device in the future.
 > - **Hardware Reuse:** It was a good opportunity to put a spare Raspberry Pi board I had lying around to good use.
@@ -103,13 +103,17 @@ sudo apt install -y python3 python3-pip python3-venv python3-gpiozero swig liblg
 
 ### 2. Clone and Prepare the Script
 
-Navigate to your workspace directory and set up a virtual environment:
+First, install **uv** if it isn't already installed:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Navigate to your workspace directory and synchronize the dependencies to set up a virtual environment:
 
 ```bash
 cd /path/to/your/workspace/floraflow
-python3 -m venv venv
-source venv/bin/activate
-pip install -r src/requirements.txt
+uv sync
 ```
 
 ### 3. Enable Linux Kernel DHT Overlay (Required for DHT22 Sensor)
@@ -134,11 +138,22 @@ To enable the kernel driver:
 
 ### 4. Configuration
 
-Open `config.py` and adjust the variables to fit your network:
+To configure FloraFlow, you can copy the `.env.example` template to `.env` and adjust the variables to fit your network and system:
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set the parameters:
 - `MQTT_HOST`: Set your Home Assistant broker IP (defaults to `homeassistant.local`).
+- `MQTT_PORT`: Port of the broker (defaults to `1883`).
 - `MQTT_USERNAME` / `MQTT_PASSWORD`: MQTT broker login credentials if enabled.
-- `ACTIVE_LOW`: Set to `True` (default) if your 8-channel relay board triggers ON when the pin is pulled LOW (GND). Set to `False` if it triggers ON when driven HIGH (3.3V).
-- `RELAY_PINS`: Modify the list of GPIO pins (BCM mapping) if you choose to wire the relays to different pins.
+- `MQTT_CLIENT_ID`: The client ID for the MQTT connection (defaults to `rpi_relay_controller`).
+- `PERSISTENCE_FILE`: File name to save schedules (defaults to `schedules.json`).
+- `DHT_PIN`: BCM pin number connected to the DHT sensor (defaults to `4`).
+- `DHT_INTERVAL`: Sensor reading and publishing frequency in seconds (defaults to `60`).
+
+*Note: For properties like `ACTIVE_LOW` and `RELAY_PINS`, you can modify their default values directly in [config.py](src/config.py).*
 
 ---
 
@@ -146,14 +161,10 @@ Open `config.py` and adjust the variables to fit your network:
 
 ### Running Manually (Testing/Development)
 
-You can run the daemon manually to verify the MQTT broker connection and check the terminal log outputs.
+You can run the daemon manually to verify the MQTT broker connection and check the terminal log outputs:
 
 ```bash
-# Activate virtualenv if not already done
-source venv/bin/activate
-
-# Start the application
-python main.py
+uv run python src/main.py
 ```
 
 ### Running as a Persistent System Service (`systemd`)
@@ -174,15 +185,16 @@ To run the daemon automatically when the Pi boots and ensure it restarts on cras
    [Service]
    Type=simple
    User=pi
-   WorkingDirectory=/home/pi/garden-controller/src/rpi_relay_controller
-   ExecStart=/home/pi/garden-controller/src/rpi_relay_controller/venv/bin/python main.py
+   WorkingDirectory=/home/pi/floraflow
+   ExecStart=/home/pi/floraflow/.venv/bin/python src/main.py
    Restart=always
    RestartSec=5
-   Environment=MQTT_HOST=192.168.1.100 MQTT_USERNAME=mqtt MQTT_PASSWORD=secret
 
    [Install]
    WantedBy=multi-user.target
    ```
+
+   *(Note: The daemon will automatically load the configuration variables from the `.env` file located in the configured `WorkingDirectory`.)*
 
 3. Enable and start the service:
    ```bash
@@ -202,17 +214,37 @@ To run the daemon automatically when the Pi boots and ensure it restarts on cras
 
 If you are developing or testing on a laptop/desktop computer (e.g. Windows/Mac):
 
-1. Install requirements:
+1. Synchronize the environment:
    ```bash
-   pip install -r src/requirements.txt
+   uv sync
    ```
-2. Run the application from the `src` directory:
+2. Run the application:
    ```bash
-   cd src
-   python main.py
+   uv run python src/main.py
    ```
 3. The daemon will print `[GPIO-MOCK]` lines showing what the physical pins *would* be doing when you toggle switches in Home Assistant.
 4. Use **MQTT Explorer** or the Home Assistant developer tools to verify that entities publish their states and commands are received correctly.
+
+---
+
+## Home Assistant Dashboard Setup
+
+This project includes a Lovelace card designed to control scheduled and manual irrigation valves with configuration dialogs.
+
+<p align="center">
+  <img src="/assets/gifs/floraflow-ha-card-example.gif" alt="FloraFlow Home Assistant Card Preview" width="600"/>
+</p>
+
+### Installation via HACS (Home Assistant Community Store)
+
+1. Go to **HACS** in your Home Assistant dashboard.
+2. Select **Lovelace** (or search all categories).
+3. Search for **FloraFlow Card**.
+4. Click **Download** in the bottom right corner.
+
+### Dashboard Configuration
+
+Once installed, you can add the card to your dashboard using the Custom UI card selector. See [garden-relay-card-example.yaml](home-assistant/dashboard-examples/garden-relay-card-example.yaml) for an example on how the card is set up in Home Assistant.
 
 ---
 
@@ -220,30 +252,26 @@ If you are developing or testing on a laptop/desktop computer (e.g. Windows/Mac)
 
 To verify code functionality and format compliance locally:
 
-### 1. Install Developer Dependencies
-Make sure you install the development requirements in your active virtual environment:
-```bash
-pip install -r src/requirements.txt -r src/requirements-dev.txt
-```
+### 1. Run Formatting & Import Checks
+FloraFlow uses `isort` and `black` to enforce style guidelines.
 
-### 2. Run Formatting & Import Checks
-FloraFlow uses `isort` and `black` to enforce style guidelines:
+To check without modifying files:
 ```bash
 # Check import sort ordering
-isort --check src tests
+uv run isort --check src tests
 
 # Check code style formatting
-black --check src tests
+uv run black --check src tests
 ```
 
 To automatically format the code and sort imports:
 ```bash
-isort .
-black .
+uv run isort .
+uv run black .
 ```
 
-### 3. Run the Unit Test Suite
-To run the full suite of 17 tests:
+### 2. Run the Unit Test Suite
+To run the full suite of tests:
 ```bash
-python -m unittest discover -s tests
+uv run python -m unittest discover -s tests
 ```

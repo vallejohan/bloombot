@@ -232,15 +232,15 @@ class GardenControllerApp:
         )
         self.mqtt_handler.connect()
 
-        # Wait a brief moment for MQTT connection to complete, then push initial state
-        time.sleep(2.0)
-        self.publish_initial_states()
+        try:
+            # Wait a brief moment for MQTT connection to complete, then push initial state
+            time.sleep(2.0)
+            self.publish_initial_states()
 
-        # Heartbeat loop
-        logger.info("Relay Controller Daemon is running. Press Ctrl+C to exit.")
-        last_heartbeat_time = 0.0
-        while self.running:
-            try:
+            # Heartbeat loop
+            logger.info("Relay Controller Daemon is running. Press Ctrl+C to exit.")
+            last_heartbeat_time = 0.0
+            while self.running:
                 now = time.time()
 
                 # Publish heartbeat online state periodically
@@ -254,10 +254,10 @@ class GardenControllerApp:
                     self.last_dht_read_time = now
 
                 time.sleep(1)
-            except KeyboardInterrupt:
-                break
-
-        self.shutdown()
+        except KeyboardInterrupt:
+            logger.info("KeyboardInterrupt received, stopping...")
+        finally:
+            self.shutdown()
 
     def read_and_publish_dht(self):
         """Reads temperature and humidity from the DHT22 sensor and publishes to Home Assistant."""

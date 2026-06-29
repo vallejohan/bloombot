@@ -1,5 +1,10 @@
 import os
 
+from dotenv import load_dotenv
+
+# Load .env file configurations if present
+load_dotenv()
+
 # MQTT Broker Settings
 MQTT_HOST = os.getenv("MQTT_HOST", "homeassistant.local")
 MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
