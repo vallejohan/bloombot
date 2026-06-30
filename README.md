@@ -135,12 +135,12 @@ The wiring schematic image below shows how the hardware components can be wired 
 - **Isolating power to relay and Rpi:** To isolate the Raspberry Pi from relay noise and ensure the 5V relay coils have sufficient power, the usage of two 5V DC-DC converters is recommended (as shown in the schematic). However, using a single 5V DC-DC converter is fully functional as well.
 
 <picture>
-  <img alt="FloraFlow wiring schematic" src="/assets/images/floraflow-wiring.jpg">
+  <img alt="FloraFlow wiring schematic" src="/assets/images/floraflow-schematic.svg">
 </picture>
 
 ### Enclosure box
 
-There is an optional enclosure box that can be 3d-printed to fit the hardware components, which can be found [here](#).
+There is an enclosure box that can be 3d-printed to fit the hardware components. The box has holdings for the Raspberry Pi, relay board, and DHT22 sensor, as well as hole for input power and water valve cables. STL files can be found [here](#).
 
 ---
 
