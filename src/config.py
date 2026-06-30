@@ -29,3 +29,4 @@ HEARTBEAT_INTERVAL = 30
 
 DHT_PIN = int(os.getenv("DHT_PIN", 4))
 DHT_INTERVAL = int(os.getenv("DHT_INTERVAL", 60))
+DHT_ENABLED = os.getenv("DHT_ENABLED", "True").lower() in ("true", "1", "yes")
