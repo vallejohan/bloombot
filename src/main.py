@@ -12,7 +12,6 @@ from gpio_manager import GPIOManager
 from mqtt_handler import MQTTHandler
 from scheduler import GardenScheduler
 
-# Configure Logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -96,15 +95,12 @@ class GardenControllerApp:
             f"Manual override command received: Relay {relay_num} -> {'ON' if state else 'OFF'}"
         )
 
-        # Action the GPIO
         if state:
             self.gpio_mgr.turn_on(relay_num)
         else:
             self.gpio_mgr.turn_off(relay_num)
-            # Cancel active scheduler run if manual OFF command is received
             self.scheduler.cancel_active_run(relay_num)
 
-        # Publish current state back
         self.mqtt_handler.publish_relay_state(relay_num, state)
 
     def on_schedule_toggle(self, relay_num, enabled):
@@ -117,7 +113,6 @@ class GardenControllerApp:
         self.schedules[key]["schedule_enabled"] = enabled
         self.save_schedules()
 
-        # Publish schedule status back
         self.mqtt_handler.publish_schedule_enabled(relay_num, enabled)
 
     def on_start_times_change(self, relay_num, payload_str):
@@ -153,7 +148,6 @@ class GardenControllerApp:
             self.schedules[key]["start_times"] = valid_items
             self.save_schedules()
 
-            # Publish back verified state
             self.mqtt_handler.publish_start_times(relay_num, valid_items)
 
         except Exception as e:
@@ -168,9 +162,7 @@ class GardenControllerApp:
     def on_duration_change(self, relay_num, duration):
         """Callback for schedule watering duration change."""
         key = f"relay_{relay_num}"
-
-        # Constrain duration to a reasonable limit (e.g. 1 to 180 minutes)
-        duration = max(1, min(180, duration))
+        duration = max(1, min(10, duration))
         logger.info(
             f"Schedule duration change: Relay {relay_num} -> {duration} minutes"
         )
@@ -178,7 +170,6 @@ class GardenControllerApp:
         self.schedules[key]["duration"] = duration
         self.save_schedules()
 
-        # Publish duration back
         self.mqtt_handler.publish_duration(relay_num, duration)
 
     def toggle_relay_from_scheduler(self, relay_num, state, is_scheduled=True):
@@ -192,7 +183,6 @@ class GardenControllerApp:
         else:
             self.gpio_mgr.turn_off(relay_num)
 
-        # Update Home Assistant
         self.mqtt_handler.publish_relay_state(relay_num, state)
 
     def publish_initial_states(self):
@@ -211,19 +201,15 @@ class GardenControllerApp:
     def run(self):
         self.running = True
 
-        # 1. Initialize GPIO
         self.gpio_mgr = GPIOManager(config.RELAY_PINS, config.ACTIVE_LOW)
 
-        # 2. Initialize Scheduler
         self.scheduler = GardenScheduler(
             self.schedules, self.toggle_relay_from_scheduler
         )
         self.scheduler.start()
 
-        # 3. Initialize DHT Sensor
         self.dht_sensor = DHTSensorManager(config.DHT_PIN)
 
-        # 4. Initialize MQTT Client
         self.mqtt_handler = MQTTHandler(
             on_relay_toggle=self.on_relay_toggle,
             on_schedule_toggle=self.on_schedule_toggle,
@@ -233,22 +219,18 @@ class GardenControllerApp:
         self.mqtt_handler.connect()
 
         try:
-            # Wait a brief moment for MQTT connection to complete, then push initial state
             time.sleep(2.0)
             self.publish_initial_states()
 
-            # Heartbeat loop
             logger.info("Relay Controller Daemon is running. Press Ctrl+C to exit.")
             last_heartbeat_time = 0.0
             while self.running:
                 now = time.time()
 
-                # Publish heartbeat online state periodically
                 if now - last_heartbeat_time >= config.HEARTBEAT_INTERVAL:
                     self.mqtt_handler.publish_heartbeat()
                     last_heartbeat_time = now
 
-                # Read and publish DHT sensor data periodically
                 if now - self.last_dht_read_time >= config.DHT_INTERVAL:
                     self.read_and_publish_dht()
                     self.last_dht_read_time = now
@@ -273,19 +255,12 @@ class GardenControllerApp:
         logger.info("Shutting down cleanly...")
         self.running = False
 
-        # Stop scheduler
         if self.scheduler:
             self.scheduler.stop()
 
-        # Disconnect MQTT (will publish offline availability topic)
         if self.mqtt_handler:
             self.mqtt_handler.disconnect()
 
-        # Clean up DHT sensor
-        if self.dht_sensor:
-            self.dht_sensor.cleanup()
-
-        # Turn off all physical/mock relays for safety
         if self.gpio_mgr:
             logger.info("Turning off all relays for safety.")
             for i in range(1, self.num_relays + 1):
@@ -301,7 +276,6 @@ class GardenControllerApp:
 def main():
     app = GardenControllerApp()
 
-    # Handle OS termination signals
     def signal_handler(signum, frame):
         logger.info(f"Received system signal {signum}")
         app.running = False

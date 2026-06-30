@@ -39,11 +39,8 @@ class GPIOManager:
         self.active_low = active_low
         self.devices = {}
         self.is_mock = False
-
-        # Determine which library to use (gpiozero preferred, Mock otherwise)
         active_high = not active_low
 
-        # Try gpiozero first
         try:
             from gpiozero import OutputDevice
 
@@ -57,7 +54,6 @@ class GPIOManager:
         except (ImportError, RuntimeError) as e:
             logger.warning(f"Could not load gpiozero: {e}. Falling back to MOCK GPIO.")
 
-        # Fallback to Mock
         self.is_mock = True
         for i, pin in enumerate(pins):
             self.devices[i + 1] = MockOutputDevice(

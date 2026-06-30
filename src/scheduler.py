@@ -12,13 +12,10 @@ class GardenScheduler:
     """Manages background checking of relay schedules and watering durations."""
 
     def __init__(self, schedules, toggle_relay_callback):
-        self.schedules = schedules  # Shared schedules dict
+        self.schedules = schedules
         self.toggle_relay_callback = toggle_relay_callback
-
-        # Tracks active schedule runs: {relay_num: end_epoch_timestamp}
         self.active_runs = {}
 
-        # Thread control
         self._running = False
         self._thread = None
         self._lock = threading.Lock()
@@ -52,7 +49,6 @@ class GardenScheduler:
                 now = datetime.now()
                 current_epoch = time.time()
 
-                # Formats for comparison
                 current_time_hms = now.strftime("%H:%M:%S")
                 current_time_hm = now.strftime("%H:%M")
 
@@ -65,7 +61,6 @@ class GardenScheduler:
                         if not sched.get("schedule_enabled", False):
                             continue
 
-                        # Check all dynamic start times
                         start_times_list = sched.get(
                             "start_times", [{"time": "08:00:00", "enabled": True}]
                         )
@@ -87,12 +82,10 @@ class GardenScheduler:
                                 is_match = current_time_hms == start_time
 
                             if is_match:
-                                # Verify if already watering under a schedule
                                 if relay_num not in self.active_runs:
                                     duration_min = sched.get("duration", 10)
                                     duration_sec = duration_min * 60
 
-                                    # Start scheduled watering
                                     logger.info(
                                         f"[SCHEDULER] Triggering schedule for Relay {relay_num} at {start_time} for {duration_min} minutes."
                                     )
@@ -104,7 +97,6 @@ class GardenScheduler:
                                     )
                                     break
 
-                    # 2. Check if any active scheduled watering should stop
                     expired_relays = []
                     for relay_num, end_time in self.active_runs.items():
                         if current_epoch >= end_time:
