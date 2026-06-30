@@ -208,7 +208,8 @@ class GardenControllerApp:
         )
         self.scheduler.start()
 
-        self.dht_sensor = DHTSensorManager(config.DHT_PIN)
+        if config.DHT_ENABLED:
+            self.dht_sensor = DHTSensorManager(config.DHT_PIN)
 
         self.mqtt_handler = MQTTHandler(
             on_relay_toggle=self.on_relay_toggle,

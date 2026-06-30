@@ -213,41 +213,42 @@ class MQTTHandler:
                 retain=True,
             )
 
-        temp_config = {
-            "name": "Temperature",
-            "unique_id": f"{config.DEVICE_ID}_temperature",
-            "state_topic": "garden/sensor/temperature",
-            "unit_of_measurement": "°C",
-            "device_class": "temperature",
-            "state_class": "measurement",
-            "availability_topic": availability_topic,
-            "device": device_info,
-            "has_entity_name": True,
-        }
-        self.client.publish(
-            f"{config.DISCOVERY_PREFIX}/sensor/{config.DEVICE_ID}/temperature/config",
-            payload=json.dumps(temp_config),
-            qos=1,
-            retain=True,
-        )
+        if config.DHT_ENABLED:
+            temp_config = {
+                "name": "Temperature",
+                "unique_id": f"{config.DEVICE_ID}_temperature",
+                "state_topic": "garden/sensor/temperature",
+                "unit_of_measurement": "°C",
+                "device_class": "temperature",
+                "state_class": "measurement",
+                "availability_topic": availability_topic,
+                "device": device_info,
+                "has_entity_name": True,
+            }
+            self.client.publish(
+                f"{config.DISCOVERY_PREFIX}/sensor/{config.DEVICE_ID}/temperature/config",
+                payload=json.dumps(temp_config),
+                qos=1,
+                retain=True,
+            )
 
-        humidity_config = {
-            "name": "Humidity",
-            "unique_id": f"{config.DEVICE_ID}_humidity",
-            "state_topic": "garden/sensor/humidity",
-            "unit_of_measurement": "%",
-            "device_class": "humidity",
-            "state_class": "measurement",
-            "availability_topic": availability_topic,
-            "device": device_info,
-            "has_entity_name": True,
-        }
-        self.client.publish(
-            f"{config.DISCOVERY_PREFIX}/sensor/{config.DEVICE_ID}/humidity/config",
-            payload=json.dumps(humidity_config),
-            qos=1,
-            retain=True,
-        )
+            humidity_config = {
+                "name": "Humidity",
+                "unique_id": f"{config.DEVICE_ID}_humidity",
+                "state_topic": "garden/sensor/humidity",
+                "unit_of_measurement": "%",
+                "device_class": "humidity",
+                "state_class": "measurement",
+                "availability_topic": availability_topic,
+                "device": device_info,
+                "has_entity_name": True,
+            }
+            self.client.publish(
+                f"{config.DISCOVERY_PREFIX}/sensor/{config.DEVICE_ID}/humidity/config",
+                payload=json.dumps(humidity_config),
+                qos=1,
+                retain=True,
+            )
 
     def publish_sensor_data(self, temperature, humidity):
         """Publish DHT22 temperature and humidity sensor readings to Home Assistant."""

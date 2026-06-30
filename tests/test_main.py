@@ -199,6 +199,68 @@ class TestGardenControllerApp(unittest.TestCase):
 
         self.app.mqtt_handler.publish_sensor_data.assert_not_called()
 
+    @patch("main.config")
+    @patch("main.GPIOManager")
+    @patch("main.GardenScheduler")
+    @patch("main.DHTSensorManager")
+    @patch("main.MQTTHandler")
+    @patch("main.time.sleep")
+    def test_run_initialization_dht_enabled(
+        self,
+        mock_sleep,
+        mock_mqtt_class,
+        mock_dht_class,
+        mock_scheduler_class,
+        mock_gpio_class,
+        mock_config,
+    ):
+        """Test that DHTSensorManager is initialized when DHT_ENABLED is True."""
+        mock_config.DHT_ENABLED = True
+        mock_config.DHT_PIN = 4
+        mock_config.RELAY_PINS = [5, 6, 13, 19, 26, 16, 20, 21]
+        mock_config.ACTIVE_LOW = True
+        mock_config.HEARTBEAT_INTERVAL = 30
+        mock_config.DHT_INTERVAL = 60
+
+        def stop_loop(*args, **kwargs):
+            self.app.running = False
+
+        mock_sleep.side_effect = stop_loop
+
+        self.app.run()
+        mock_dht_class.assert_called_once_with(4)
+
+    @patch("main.config")
+    @patch("main.GPIOManager")
+    @patch("main.GardenScheduler")
+    @patch("main.DHTSensorManager")
+    @patch("main.MQTTHandler")
+    @patch("main.time.sleep")
+    def test_run_initialization_dht_disabled(
+        self,
+        mock_sleep,
+        mock_mqtt_class,
+        mock_dht_class,
+        mock_scheduler_class,
+        mock_gpio_class,
+        mock_config,
+    ):
+        """Test that DHTSensorManager is not initialized when DHT_ENABLED is False."""
+        mock_config.DHT_ENABLED = False
+        mock_config.DHT_PIN = 4
+        mock_config.RELAY_PINS = [5, 6, 13, 19, 26, 16, 20, 21]
+        mock_config.ACTIVE_LOW = True
+        mock_config.HEARTBEAT_INTERVAL = 30
+        mock_config.DHT_INTERVAL = 60
+
+        def stop_loop(*args, **kwargs):
+            self.app.running = False
+
+        mock_sleep.side_effect = stop_loop
+
+        self.app.run()
+        mock_dht_class.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
