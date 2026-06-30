@@ -117,15 +117,15 @@ To build the FloraFlow controller, you will need the hardware components listed 
 
 ### Bill of Materials (BOM)
 
-| Component | Description | Quantity | Notes |
-| :--- | :--- | :---: | :--- |
-| **Raspberry Pi** | Raspberry Pi Zero W (or Zero 2 W, RPi 3/4/5) with SD Card | 1 | Any model with a 40-pin GPIO header will work. |
-| **Relay Board** | 5V or 3.3V active-low relay module (1 to 8 channels) | 1 | Configure the pins in [config.py](src/config.py) based on your board. |
-| **DHT22 / DHT11** | Temperature and humidity sensor | 1 | Optional. Used for monitoring climate; can be disabled in configuration. |
-| **Water Valves / Pumps** | 12V solenoid valves (or 24V AC valves / 5V DC pumps) | 1 - 8 | Match the quantity to your garden zones and ensure matching power supply. |
-| **Power Supplies** | 5V power supply & step-down DC-DC converters | 1 - 2 | Separate power supply for relay coils is recommended to isolate noise. |
-| **Enclosure** | 3D-printable enclosure | 1 | Optional. Helps protect components outdoors (see [Enclosure box](#enclosure-box)). |
-| **Misc** | Jumper wires, terminal blocks, mounting hardware | - | For connecting and mounting the hardware. |
+| Component | Description | Quantity | Example | Notes |
+| :--- | :--- | :---: | :--- | :--- |
+| **Raspberry Pi** | Raspberry Pi Zero W (or Zero 2 W, RPi 3/4/5) with SD Card | 1 | Raspberry Pi Zero 2 W | Any model with a 40-pin GPIO header will work. |
+| **Relay Board** | 5V or 3.3V active-low relay module (1 to 8 channels) | 1 | Elegoo 8-Channel Relay Module | Configure the pins in [config.py](src/config.py) based on your board. |
+| **DHT22 / DHT11** | Temperature and humidity sensor | 1 | DHT22 (AM2302) | Optional. Used for monitoring climate; can be disabled in configuration. |
+| **Water Valves / Pumps** | 12V solenoid valves (or 24V AC valves / 5V DC pumps) | 1 - 8 | Generic 12V Solenoid Valve | Match the quantity to your garden zones and ensure matching power supply. |
+| **Power Supplies** | 12V switching PSU & step-down DC-DC converters | 1 - 2 | Meanwell switching 12V PSU & LM2596 Buck Converter | Separate power supply for relay coils is recommended to isolate noise. |
+| **Enclosure** | 3D-printable enclosure | 1 | Custom 3D-printed case | Optional. Helps protect components outdoors (see [Enclosure box](#enclosure-box)). |
+| **Misc** | Jumper wires, terminal blocks, mounting hardware | - | Dupont jumper wires, Wago 221 connectors | For connecting and mounting the hardware. |
 
 ### Wiring
 

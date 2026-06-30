@@ -5869,7 +5869,7 @@
 				)
 			)
 		)
-		(property "Value" "12V-5V DC-DC converter"
+		(property "Value" "LM2596"
 			(at 46.99 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6597,7 +6597,7 @@
 				)
 			)
 		)
-		(property "Value" "12V-5V DC-DC converter"
+		(property "Value" "LM2596"
 			(at 46.99 111.76 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7815,7 +7815,7 @@
 				)
 			)
 		)
-		(property "Value" "230VAC-12VDC switched PSU"
+		(property "Value" "Meanwell LRS-75-12"
 			(at 48.26 33.02 0)
 			(show_name no)
 			(do_not_autoplace no)
