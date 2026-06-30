@@ -35,11 +35,9 @@ class MQTTHandler:
         )
         self.client = mqtt.Client(client_id=config.CLIENT_ID)
 
-        # Configure username and password if provided
-        if config.MQTT_USERNAME:
+        if config.MQTT_USERNAME and config.MQTT_PASSWORD:
             self.client.username_pw_set(config.MQTT_USERNAME, config.MQTT_PASSWORD)
 
-        # Set Last Will and Testament (LWT)
         availability_topic = f"garden/availability"
         self.client.will_set(availability_topic, payload="offline", qos=1, retain=True)
 
@@ -57,7 +55,6 @@ class MQTTHandler:
         """Disconnect the MQTT client."""
         if self.client:
             logger.info("Disconnecting MQTT client...")
-            # Publish offline before disconnecting cleanly
             self.client.publish("garden/availability", "offline", retain=True)
             self.client.loop_stop()
             self.client.disconnect()
@@ -67,16 +64,13 @@ class MQTTHandler:
             logger.info("MQTT client connected successfully.")
             self.connected = True
 
-            # Publish birth message (online availability)
             self.client.publish("garden/availability", "online", retain=True)
 
-            # Subscribe to all command topics
             self.client.subscribe("garden/relay/+/set", qos=1)
             self.client.subscribe("garden/relay/+/schedule/set", qos=1)
             self.client.subscribe("garden/relay/+/start_times/set", qos=1)
             self.client.subscribe("garden/relay/+/duration/set", qos=1)
 
-            # Register Home Assistant entities via Auto-Discovery
             self.publish_discovery()
         else:
             logger.error(f"MQTT connection failed with code {rc}")
@@ -109,12 +103,10 @@ class MQTTHandler:
             action_type = parts[3]
 
             if action_type == "set":
-                # Manual toggle command
                 state = payload.upper() == "ON"
                 self.on_relay_toggle(relay_num, state)
 
             elif action_type == "schedule" and len(parts) == 5 and parts[4] == "set":
-                # Schedule enabled command
                 enabled = payload.upper() == "ON"
                 self.on_schedule_toggle(relay_num, enabled)
 
@@ -122,7 +114,6 @@ class MQTTHandler:
                 self.on_start_times_change(relay_num, payload)
 
             elif action_type == "duration" and len(parts) == 5 and parts[4] == "set":
-                # Duration command (expected integer in minutes)
                 duration = int(float(payload))
                 self.on_duration_change(relay_num, duration)
 
@@ -130,7 +121,7 @@ class MQTTHandler:
             logger.error(f"Error handling message on {topic}: {e}")
 
     def publish_discovery(self):
-        """Publish discovery configurations for all 8 relays to Home Assistant."""
+        """Publish discovery configurations for all relays to Home Assistant."""
         logger.info("Publishing Home Assistant Auto-Discovery configs...")
 
         device_info = {
@@ -146,7 +137,6 @@ class MQTTHandler:
         for i in range(1, len(config.RELAY_PINS) + 1):
             base_node = f"relay_{i}"
 
-            # 1. Manual Relay Switch
             relay_config = {
                 "name": f"Relay {i}",
                 "unique_id": f"{config.DEVICE_ID}_relay_{i}",
@@ -166,7 +156,6 @@ class MQTTHandler:
                 retain=True,
             )
 
-            # 2. Schedule Enabled Switch
             schedule_config = {
                 "name": f"Relay {i} Schedule Enabled",
                 "unique_id": f"{config.DEVICE_ID}_relay_{i}_schedule_enabled",
@@ -186,7 +175,6 @@ class MQTTHandler:
                 retain=True,
             )
 
-            # 3. Schedule Start Times JSON Sensor
             start_times_config = {
                 "name": f"Relay {i} Start Times",
                 "unique_id": f"{config.DEVICE_ID}_relay_{i}_start_times",
@@ -203,7 +191,6 @@ class MQTTHandler:
                 retain=True,
             )
 
-            # 4. Schedule Duration (Number Input/Slider)
             duration_config = {
                 "name": f"Relay {i} Duration",
                 "unique_id": f"{config.DEVICE_ID}_relay_{i}_duration",
@@ -226,7 +213,6 @@ class MQTTHandler:
                 retain=True,
             )
 
-        # 5. Temperature Sensor
         temp_config = {
             "name": "Temperature",
             "unique_id": f"{config.DEVICE_ID}_temperature",
@@ -245,7 +231,6 @@ class MQTTHandler:
             retain=True,
         )
 
-        # 6. Humidity Sensor
         humidity_config = {
             "name": "Humidity",
             "unique_id": f"{config.DEVICE_ID}_humidity",

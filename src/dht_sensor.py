@@ -38,7 +38,6 @@ class DHTSensorManager:
     def read(self):
         """Reads temperature and humidity. Returns (temperature, humidity) tuple or (None, None) on failure."""
         if self.is_mock:
-            # Generate realistic fluctuating weather data:
             temp = round(random.uniform(19.0, 23.0), 1)
             humidity = round(random.uniform(50.0, 60.0), 1)
             logger.debug(f"[DHT-MOCK] Read temperature={temp}°C, humidity={humidity}%")
@@ -59,7 +58,6 @@ class DHTSensorManager:
                     temp_c = round(temp, 1)
                     humidity_pct = round(humidity, 1)
 
-                    # Hard boundary checks (-40°C to 80°C temperature, 0% to 100% humidity)
                     if not (-40.0 <= temp_c <= 80.0 and 0.0 <= humidity_pct <= 100.0):
                         logger.warning(
                             f"Discarding out-of-bounds sensor reading (attempt {attempt}/3): temp={temp_c}°C, hum={humidity_pct}%"
@@ -68,7 +66,6 @@ class DHTSensorManager:
                             time.sleep(1.0)
                         continue
 
-                    # Rate-of-change spike check (max 10°C or 30% humidity jump)
                     if self.last_valid_temp is not None:
                         if abs(temp_c - self.last_valid_temp) > 10.0:
                             logger.warning(
@@ -97,7 +94,3 @@ class DHTSensorManager:
                     if attempt < 3:
                         time.sleep(1.0)
             return None, None
-
-    def cleanup(self):
-        """Releases sensor hardware resources (no-op for kernel driver)."""
-        pass
