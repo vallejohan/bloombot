@@ -131,16 +131,16 @@ class TestGardenControllerApp(unittest.TestCase):
         for i in range(1, self.app.num_relays + 1):
             self.app.mqtt_handler.publish_duration.reset_mock()
 
-            self.app.on_duration_change(i, 45)
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["duration"], 45)
-            self.app.mqtt_handler.publish_duration.assert_called_once_with(i, 45)
+            self.app.on_duration_change(i, 5)
+            self.assertEqual(self.app.schedules[f"relay_{i}"]["duration"], 5)
+            self.app.mqtt_handler.publish_duration.assert_called_once_with(i, 5)
 
-            # Testing boundary constraints (1 to 180 mins)
+            # Testing boundary constraints (1 to 10 mins)
             self.app.on_duration_change(i, 0)
             self.assertEqual(self.app.schedules[f"relay_{i}"]["duration"], 1)
 
-            self.app.on_duration_change(i, 200)
-            self.assertEqual(self.app.schedules[f"relay_{i}"]["duration"], 180)
+            self.app.on_duration_change(i, 20)
+            self.assertEqual(self.app.schedules[f"relay_{i}"]["duration"], 10)
 
     @patch("main.open", new_callable=mock_open)
     def test_toggle_relay_from_scheduler(self, mock_file):
