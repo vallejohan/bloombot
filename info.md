@@ -69,3 +69,15 @@ relays:
 | `schedule_enabled_entity` | string | Optional | Switch entity to toggle scheduling on/off (e.g., `switch.floraflow_relay_<id>_schedule_enabled`). | `switch.floraflow_relay_<id>_schedule_enabled` |
 | `start_times_entity` | string | Optional | Sensor entity containing the schedules array (e.g., `sensor.floraflow_relay_<id>_start_times`). | `sensor.floraflow_relay_<id>_start_times` |
 | `duration_entity` | string | Optional | Number input entity for configuring duration in minutes (e.g., `number.floraflow_relay_<id>_duration`). | `number.floraflow_relay_<id>_duration` |
+| `icon` | string | Optional | Icon name for the relay (can be a [built-in custom icon name](#built-in-custom-svg-icons) or any standard `mdi:<name>`). | `mdi:water-pump` |
+| `icon_color` | string | Optional | CSS color for the active/configured relay icon (e.g., `#ef4444` or `green`). Can also use `color` as an alias. | |
+
+### Built-in Custom SVG Icons
+
+The card includes built-in custom SVG icons for various plants and garden elements. To use one of the custom icons, set the `icon` field of a relay in your dashboard configuration to any of the following names:
+
+* **Vegetables**: `tomato`, `cucumber`, `carrot`, `corn`, `chili`, `pepper`, `pumpkin`, `squash`, `potato`, `eggplant`, `broccoli`, `pea`, `radish`, `cabbage`, `onion`, `garlic`, `mushroom`
+* **Fruits**: `apple`, `banana`, `cherry` (or `cherries`), `grape` (or `grapes`), `strawberry`, `pear`, `citrus` (or `orange`, `lemon`), `pineapple`, `watermelon`, `melon`, `berry` (or `berries`)
+* **Gardening & Utility**: `sprout`, `leaf`, `flower`, `tree`, `pot`, `sprinkler`, `pump`
+
+*Note: Any other string in the `icon` configuration field will fall back to standard Home Assistant/MDI icons (e.g. `mdi:water`).*
