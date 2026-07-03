@@ -4,7 +4,6 @@ import os
 import signal
 import sys
 import time
-from datetime import datetime
 
 import config
 from dht_sensor import DHTSensorManager
@@ -52,7 +51,7 @@ class GardenControllerApp:
                 )
                 self.initialize_default_schedules()
         else:
-            logger.info(f"No schedules file found. Initializing defaults.")
+            logger.info("No schedules file found. Initializing defaults.")
             self.initialize_default_schedules()
 
         # Ensure all relays exist in schedules
@@ -267,7 +266,7 @@ class GardenControllerApp:
             for i in range(1, self.num_relays + 1):
                 try:
                     self.gpio_mgr.turn_off(i)
-                except Exception:
+                except Exception:  # nosec B110
                     pass
             self.gpio_mgr.cleanup()
 

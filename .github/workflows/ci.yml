@@ -2,13 +2,34 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
+    paths-ignore:
+      - 'assets/**'
+      - 'README.md'
+      - 'info.md'
+      - 'LICENSE'
+      - 'hacs.json'
+      - '.gitignore'
+      - '.env.example'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'assets/**'
+      - 'README.md'
+      - 'info.md'
+      - 'LICENSE'
+      - 'hacs.json'
+      - '.gitignore'
+      - '.env.example'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   test:
-    name: Run Unit Tests
+    name: Test & Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -21,22 +42,31 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
 
       - name: Install Dependencies
         run: |
           uv sync --frozen
 
-      - name: Run Import Sort Check (isort)
+      - name: Run Ruff Linter & Formatter Check
         run: |
-          uv run isort --check src tests
+          uv run ruff check src tests
+          uv run ruff format --check src tests
 
-      - name: Run Code Style Check (black)
+      - name: Run Static Type Check (mypy)
         run: |
-          uv run black --check src tests
+          uv run mypy src tests
+
+      - name: Run Python Security Scan (bandit)
+        run: |
+          uv run bandit -r src/
+
+      - name: Audit Dependencies for Known Vulnerabilities
+        run: |
+          uv audit
 
       - name: Run Unit Tests
         run: |
@@ -47,6 +77,18 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Install Linting & Formatting tools for JS
+        run: |
+          npm install eslint @eslint/js prettier --no-save
+
       - name: Verify JavaScript syntax of BloomBot card
         run: |
           node -c dist/bloombot-card.js
+
+      - name: Run ESLint check on Lovelace card
+        run: |
+          npx eslint dist/bloombot-card.js
+
+      - name: Run Prettier check on Lovelace card
+        run: |
+          npx prettier --check dist/bloombot-card.js

@@ -38,7 +38,7 @@ class MQTTHandler:
         if config.MQTT_USERNAME and config.MQTT_PASSWORD:
             self.client.username_pw_set(config.MQTT_USERNAME, config.MQTT_PASSWORD)
 
-        availability_topic = f"garden/availability"
+        availability_topic = "garden/availability"
         self.client.will_set(availability_topic, payload="offline", qos=1, retain=True)
 
         self.client.on_connect = self._on_connect
@@ -132,11 +132,9 @@ class MQTTHandler:
             "sw_version": "1.0.0",
         }
 
-        availability_topic = f"garden/availability"
+        availability_topic = "garden/availability"
 
         for i in range(1, len(config.RELAY_PINS) + 1):
-            base_node = f"relay_{i}"
-
             relay_config = {
                 "name": f"Relay {i}",
                 "unique_id": f"{config.DEVICE_ID}_relay_{i}",
