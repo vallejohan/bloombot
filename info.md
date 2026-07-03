@@ -53,6 +53,9 @@ relays:
 | `type` | string | **Required** | Must be `custom:bloombot-card` (or `custom:bloombot-card-secondary`). | |
 | `name` | string | Optional | Header title of the card. | `BloomBot` |
 | `columns` | number | Optional | Number of grid columns for the relays list. | `2` |
+| `logo_size` | number | Optional | Size of the animated BloomBot logo SVG in pixels. | `44` |
+| `show_logo` | boolean | Optional | Enable or disable the animated BloomBot logo SVG header. | `true` |
+| `icon` | string | Optional | Material Design Icon to use when `show_logo` is disabled (e.g. `mdi:sprinkler-variant`). | `mdi:sprinkler-variant` |
 | `temp_entity` | string | Optional | Temperature sensor entity (e.g., `sensor.bloombot_temperature`). | `sensor.bloombot_temperature` |
 | `humidity_entity` | string | Optional | Humidity sensor entity (e.g., `sensor.bloombot_humidity`). | `sensor.bloombot_humidity` |
 | `system_status_entity` | string | Optional | System connectivity binary sensor (e.g., `binary_sensor.bloombot_status`). | `binary_sensor.bloombot_status` |

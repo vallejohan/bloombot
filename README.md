@@ -306,26 +306,17 @@ If you do not have a Home Assistant instance running yet, follow these steps to 
 
 ### Installation via HACS (Home Assistant Community Store)
 
-#### Option A: Manual Installation (As a Custom Repository)
-Before the integration is officially merged into the HACS default store, or for beta testing new releases:
 1. Go to **HACS** in your Home Assistant dashboard.
 2. Click the **three dots** in the top right corner and select **Custom repositories**.
 3. Add the repository URL: `https://github.com/vallejohan/bloombot`
-4. Select the category **Lovelace** and click **Add**.
+4. Select the category **Dashboard** and click **Add**.
 5. The **BloomBot Card** will now appear in your list. Click **Download** in the bottom right corner.
-
-#### Option B: Default Installation (Once Merged)
-Once the repository is officially included in the HACS default index:
-1. Go to **HACS** in your Home Assistant dashboard.
-2. Select **Lovelace** (or search all categories).
-3. Search for **BloomBot Card**.
-4. Click **Download** in the bottom right corner.
 
 ### Dashboard Configuration
 
 Once installed, you can add the card to your dashboard using the Custom UI card selector. 
 
-For the complete configuration options table, list of custom icons, and configuration examples, refer to the [Floraflow card configuration guide (info.md)](info.md).
+For the complete configuration options table, list of custom icons, and configuration examples, refer to the [BloomBot card configuration guide (info.md)](info.md).
 
 You can also view a complete dashboard configuration example in [bloombot-card-example.yaml](home-assistant/dashboard-examples/bloombot-card-example.yaml).
 

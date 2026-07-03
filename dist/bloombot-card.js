@@ -133,6 +133,9 @@ class BloomBotCardSecondary extends HTMLElement {
         this.tempEntity = config.temperature_entity || "sensor.bloombot_temperature";
         this.humidityEntity = config.humidity_entity || "sensor.bloombot_humidity";
         this.columns = config.columns || 2;
+        this.logoSize = config.logo_size || 44;
+        this.showLogo = config.show_logo !== false;
+        this.icon = config.icon || "mdi:sprinkler-variant";
 
         // Default relays 1 to 8 if not defined
         this.relays = config.relays || Array.from({ length: 8 }, (_, i) => ({
@@ -222,6 +225,56 @@ class BloomBotCardSecondary extends HTMLElement {
                     align-items: center;
                     gap: 8px;
                 }
+
+                .logo-container {
+                    width: ${this.logoSize}px;
+                    height: ${this.logoSize}px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                @keyframes sway {
+                    0% { transform: rotate(0deg); }
+                    50% { transform: rotate(6deg); }
+                    100% { transform: rotate(0deg); }
+                }
+                @keyframes fall {
+                    0% { transform: translate(15px, -40px); opacity: 0; }
+                    15% { opacity: 0.8; }
+                    85% { opacity: 0.8; }
+                    100% { transform: translate(-25px, 160px); opacity: 0; }
+                }
+                .swaying-flower {
+                    animation: sway 2.5s ease-in-out infinite;
+                    transform-origin: 168px 95px;
+                }
+                .rain-drop {
+                    stroke: #38bdf8;
+                    stroke-width: 3;
+                    stroke-linecap: round;
+                    opacity: 0;
+                    display: none;
+                }
+                .logo-container.is-watering .rain-drop {
+                    display: block;
+                }
+                .drop-1 {
+                    animation: fall 0.8s linear infinite;
+                }
+                .drop-2 {
+                    animation: fall 1.0s linear infinite;
+                    animation-delay: 0.25s;
+                }
+                .drop-3 {
+                    animation: fall 0.7s linear infinite;
+                    animation-delay: 0.45s;
+                }
+                .drop-4 {
+                    animation: fall 0.9s linear infinite;
+                    animation-delay: 0.7s;
+                }
+
 
                 .sensor-values {
                     display: flex;
@@ -559,7 +612,44 @@ class BloomBotCardSecondary extends HTMLElement {
                 <div class="card-header">
                     <div class="header-left">
                         <div class="card-title">
-                            <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
+                            ${this.showLogo ? `
+                                <div class="logo-container" id="card-logo-container">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${this.logoSize}" height="${this.logoSize}">
+                                      <line class="rain-drop drop-1" x1="45" y1="20" x2="40" y2="35" />
+                                      <line class="rain-drop drop-2" x1="85" y1="10" x2="80" y2="25" />
+                                      <line class="rain-drop drop-3" x1="135" y1="30" x2="130" y2="45" />
+                                      <line class="rain-drop drop-4" x1="180" y1="15" x2="175" y2="30" />
+                                      <g>
+                                        <path d="M 142 120 C 165 125, 168 105, 168 95" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                                        <g class="swaying-flower">
+                                          <path d="M 168 95 L 168 70" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
+                                          <path d="M 168 82 C 180 82, 180 72, 168 72" fill="#10b981" stroke="#334155" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                          <path d="M 168 88 C 156 88, 156 78, 168 78" fill="#10b981" stroke="#334155" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                          <circle cx="168" cy="57" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+                                          <circle cx="168" cy="79" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+                                          <circle cx="157" cy="68" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+                                          <circle cx="179" cy="68" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+                                          <circle cx="168" cy="68" r="7" fill="#fbbf24" stroke="#334155" stroke-width="3" />
+                                        </g>
+                                        <rect x="52" y="72" width="96" height="84" rx="22" fill="#f8fafc" stroke="#334155" stroke-width="6" />
+                                        <rect x="46" y="106" width="6" height="16" rx="3" fill="#64748b" stroke="#334155" stroke-width="4" />
+                                        <rect x="148" y="106" width="6" height="16" rx="3" fill="#64748b" stroke="#334155" stroke-width="4" />
+                                        <path d="M 74 113 Q 84 97 94 113" fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round">
+                                          <animate attributeName="d" dur="4s" repeatCount="indefinite" values="M 74 113 Q 84 97 94 113; M 74 113 Q 84 97 94 113; M 74 113 Q 84 113 94 113; M 74 113 Q 84 97 94 113" keyTimes="0; 0.9; 0.93; 1" />
+                                        </path>
+                                        <path d="M 106 113 Q 116 97 126 113" fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round">
+                                          <animate attributeName="d" dur="4s" repeatCount="indefinite" values="M 106 113 Q 116 97 126 113; M 106 113 Q 116 97 126 113; M 106 113 Q 116 113 126 113; M 106 113 Q 116 97 126 113" keyTimes="0; 0.9; 0.93; 1" />
+                                        </path>
+                                        <path d="M 94 72 L 106 72" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+                                        <line x1="100" y1="72" x2="100" y2="52" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+                                        <circle cx="100" cy="46" r="8" fill="#10b981" stroke="#334155" stroke-width="4" />
+                                        <path d="M 90 135 C 94 141, 106 141, 110 135" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round" />
+                                      </g>
+                                    </svg>
+                                </div>
+                            ` : `
+                                <ha-icon icon="${this.icon}"></ha-icon>
+                            `}
                             <span>${this.title}</span>
                         </div>
                         <div class="sensor-values" id="sensor-values" style="display: none;">
@@ -912,6 +1002,7 @@ class BloomBotCardSecondary extends HTMLElement {
         if (!this._hass) return;
 
         let systemOnline = false;
+        let anyRelayOn = false;
 
         this.relays.forEach(relay => {
             const id = relay.id;
@@ -934,6 +1025,9 @@ class BloomBotCardSecondary extends HTMLElement {
             }
 
             const isOn = relayStateObj ? (relayStateObj.state === 'on') : false;
+            if (isOn) {
+                anyRelayOn = true;
+            }
             const schedEnabled = schedStateObj ? (schedStateObj.state === 'on') : false;
 
             if (!this.manualWateringStarted) {
@@ -1038,6 +1132,16 @@ class BloomBotCardSecondary extends HTMLElement {
                 }
             }
         });
+
+        // Update Card Logo Watering Animation state
+        const logoContainer = this.shadowRoot.getElementById('card-logo-container');
+        if (logoContainer) {
+            if (anyRelayOn) {
+                logoContainer.classList.add('is-watering');
+            } else {
+                logoContainer.classList.remove('is-watering');
+            }
+        }
 
         // Update Overall Card Status Dot
         const statusDot = this.shadowRoot.getElementById('status-dot');

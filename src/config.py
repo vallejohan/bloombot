@@ -9,7 +9,7 @@ MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 MQTT_USERNAME = os.getenv("MQTT_USERNAME", "")
 MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", "")
 
-CLIENT_ID = os.getenv("MQTT_CLIENT_ID", "rpi_relay_controller")
+CLIENT_ID = os.getenv("MQTT_CLIENT_ID", "bloombot_controller")
 DEVICE_NAME = "BloomBot"
 DEVICE_MODEL = "Raspberry Pi Zero W"
 DEVICE_MANUFACTURER = "Custom Integration"
