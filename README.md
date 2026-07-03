@@ -5,7 +5,7 @@
 <h1 align="center">BloomBot</h1>
 
 <p align="center">
-  <strong>A lightweight irrigation controller.</strong><br>
+  <strong>Your friendly garden irrigation controller.</strong><br>
   Using a Raspberry Pi, with home assistant integration.
 </p>
 
