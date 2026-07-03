@@ -38,8 +38,8 @@ class DHTSensorManager:
     def read(self):
         """Reads temperature and humidity. Returns (temperature, humidity) tuple or (None, None) on failure."""
         if self.is_mock:
-            temp = round(random.uniform(19.0, 23.0), 1)
-            humidity = round(random.uniform(50.0, 60.0), 1)
+            temp = round(random.uniform(19.0, 23.0), 1)  # nosec B311
+            humidity = round(random.uniform(50.0, 60.0), 1)  # nosec B311
             logger.debug(f"[DHT-MOCK] Read temperature={temp}°C, humidity={humidity}%")
             return temp, humidity
 

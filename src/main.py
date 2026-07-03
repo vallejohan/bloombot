@@ -266,7 +266,7 @@ class GardenControllerApp:
             for i in range(1, self.num_relays + 1):
                 try:
                     self.gpio_mgr.turn_off(i)
-                except Exception:
+                except Exception:  # nosec B110
                     pass
             self.gpio_mgr.cleanup()
 
