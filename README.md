@@ -10,6 +10,10 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/vallejohan/bloombot/actions/workflows/ci.yml">
+    <img src="https://github.com/vallejohan/bloombot/actions/workflows/ci.yml/badge.svg" alt="CI Build Status" />
+  </a>
+  <img src="https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue?style=flat-square&logo=python" alt="Python Versions" />
   <a href="https://github.com/vallejohan/bloombot/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="MIT License" />
   </a>
@@ -322,30 +326,66 @@ You can also view a complete dashboard configuration example in [bloombot-card-e
 
 ---
 
-## Local Unit Testing & Formatting Checks
+## Local Unit Testing & Quality Checks
 
-To verify code functionality and format compliance locally:
+To ensure code health, safety, and format compliance, you can run the following validation tools.
 
-### 1. Run Formatting & Import Checks
-BloomBot uses `isort` and `black` to enforce style guidelines.
+### Python Backend Checks
 
-To check without modifying files:
+All Python code quality tools are managed via `uv` in the project's development group.
+
+#### 1. Code Style & Linting (Ruff)
+To check for formatting issues and lint warnings:
 ```bash
-# Check import sort ordering
-uv run isort --check src tests
-
-# Check code style formatting
-uv run black --check src tests
+uv run ruff check src tests
+uv run ruff format --check src tests
 ```
 
-To automatically format the code and sort imports:
+To automatically format the code and fix auto-fixable lint errors:
 ```bash
-uv run isort .
-uv run black .
+uv run ruff check --fix src tests
+uv run ruff format src tests
 ```
 
-### 2. Run the Unit Test Suite
-To run the full suite of tests:
+#### 2. Static Type Checks (Mypy)
+Verify static types and prevent type errors:
+```bash
+uv run mypy src tests
+```
+
+#### 3. Security Audits (Bandit & Dependency Audit)
+Scan for common security vulnerabilities and audit dependencies:
+```bash
+uv run bandit -r src/
+uv pip audit
+```
+
+#### 4. Run the Unit Test Suite
+To run the full suite of unit tests:
 ```bash
 uv run python -m unittest discover -s tests
 ```
+
+---
+
+### BloomBot Home Assistant Card Checks
+
+To run quality checks on the BloomBot Home Assistant card (`dist/bloombot-card.js`), ensure you have Node.js installed, then install the dev dependencies:
+
+```bash
+npm install --no-save eslint @eslint/js prettier
+```
+
+#### 1. Static Analysis (ESLint)
+Verify JavaScript syntax, unresolved variables, and runtime safety:
+```bash
+npx eslint dist/bloombot-card.js
+```
+
+#### 2. Code Formatting (Prettier)
+Check and write formatting:
+```bash
+npx prettier --check dist/bloombot-card.js
+npx prettier --write dist/bloombot-card.js
+```
+

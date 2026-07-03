@@ -38,49 +38,61 @@ const FLORA_ICONS = {
     watermelon: "mdi:fruit-watermelon",
     melon: "mdi:fruit-watermelon",
     berry: "mdi:fruit-cherries",
-    berries: "mdi:fruit-cherries"
+    berries: "mdi:fruit-cherries",
 };
 
 const FLORA_SVGS = {
     tomato: '<circle cx="12" cy="13" r="7" /><path d="M12 3v3 M9 4.5l3 1.5 3-1.5 M10 6.5h4" />',
-    cucumber: '<path d="M6 17c-1.5-1.5-1.5-4 0-5.5l8.5-8.5c1.5-1.5 4-1.5 5.5 0s1.5 4 0 5.5L11.5 17c-1.5 1.5-4 1.5-5.5 0z" /><path d="M9.5 13.5h.01 M12 11h.01 M14.5 8.5h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
+    cucumber:
+        '<path d="M6 17c-1.5-1.5-1.5-4 0-5.5l8.5-8.5c1.5-1.5 4-1.5 5.5 0s1.5 4 0 5.5L11.5 17c-1.5 1.5-4 1.5-5.5 0z" /><path d="M9.5 13.5h.01 M12 11h.01 M14.5 8.5h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
     carrot: '<path d="M18 4l2 2L10 18l-6 2 2-6Z" /><path d="M13 9l1-1 M10 12l1-1 M7 15l1-1" /><path d="M19 5l3-3 M19 5l1 3 M19 5l-3-1" />',
     corn: '<path d="M8 9c0-4 2-6 4-6s4 2 4 6v6c0 4-2 6-4 6s-4-2-4-6V9z" /><path d="M5 21c0-4 1-9 4-12" /><path d="M19 21c0-4-1-9-4-12" /><path d="M12 3v18 M10 6h4 M10 10h4 M10 14h4 M10 18h4" />',
     chili: '<path d="M17 4c-3 0-6 3-9 7-2 3-4 7-5 11 0 1 .5 1.5 1.5 1.5 4-1 8-3 11-5 4-3 7-6 7-9 0-3-2.5-5.5-5.5-5.5z" /><path d="M17 4l1.5-1.5" />',
-    pumpkin: '<path d="M12 21c-4.42 0-8-3.13-8-7s3.58-7 8-7 8 3.13 8 7-3.58 7-8 7z" /><path d="M12 7c-2 0-4 3-4 7s2 7 4 7 M12 7c2 0 4 3 4 7s-2 7-4 7" /><path d="M12 7V4 M12 4l2-1" />',
+    pumpkin:
+        '<path d="M12 21c-4.42 0-8-3.13-8-7s3.58-7 8-7 8 3.13 8 7-3.58 7-8 7z" /><path d="M12 7c-2 0-4 3-4 7s2 7 4 7 M12 7c2 0 4 3 4 7s-2 7-4 7" /><path d="M12 7V4 M12 4l2-1" />',
     sprout: '<path d="M12 22V10" /><path d="M12 14c-4 0-6-2-6-5s3-4 6-1" /><path d="M12 12c4 0 6-2 6-5s-3-4-6-1" />',
     potato: '<path d="M12 5c4 0 7 2 8 5s0 6-3 8-6 2-9 1-4-3-3-6 3-8 7-8z" /><path d="M9 10h.01 M15 9h.01 M8 14h.01 M13 15h.01 M16 13h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
     pot: '<path d="M4 8h16v2H4z" /><path d="M5 10l2 11h10l2-11" />',
-    sprinkler: '<path d="M12 22v-6 M8 16h8v-3H8z M10 13l2-3 2 3" /><path d="M6 8A9 9 0 0 1 18 8 M3 11a12 12 0 0 1 18 0 M12 5V2" />',
+    sprinkler:
+        '<path d="M12 22v-6 M8 16h8v-3H8z M10 13l2-3 2 3" /><path d="M6 8A9 9 0 0 1 18 8 M3 11a12 12 0 0 1 18 0 M12 5V2" />',
     pump: '<path d="M18 4H10v4M10 8H6v2h4v8 M10 10h6v3" /><path d="M16 17a2 2 0 0 1-4 0c0-1.5 2-3 2-3s2 1.5 2 3z" />',
     pepper: '<path d="M12 5c-2.5 0-4.5 1.5-4.5 4.5 0 3.5 2 6 3.5 7 1.5.8 1.5 2.5 1 3.5a1 1 0 0 0 1.5 1.2c1.5-1 2-2.7 2-4.2c0-3.5-2-6.5-3.5-7.5" /><path d="M12 5c2.5 0 4.5 1.5 4.5 4.5 0 3.5-2 6-3.5 7" /><path d="M12 5V3c0-.6-.4-1-1-1" />',
-    eggplant: '<path d="M18.5 5.5c-2.3-2.3-6.5-.7-8.5 1.3C8 8.8 6.5 12 6.5 15.5c0 3.3 2.7 6 6 6 3.5 0 6.7-1.5 8.7-3.5 2-2 3.6-6.2 1.3-8.5" /><path d="M10 6.8l-4-4" /><path d="M8.5 5.5c.3 1.5 1.2 2.7 2.5 3.3" />',
-    broccoli: '<path d="M12 6a3.5 3.5 0 0 0-3.5 3.5c0 .3.05.6.15.9A3.5 3.5 0 0 0 6 13.5a3.5 3.5 0 0 0 3.5 3.5h5a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-2.65-3.4c.1-.3.15-.6.15-.9A3.5 3.5 0 0 0 12 6z" /><path d="M10 17v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4" />',
+    eggplant:
+        '<path d="M18.5 5.5c-2.3-2.3-6.5-.7-8.5 1.3C8 8.8 6.5 12 6.5 15.5c0 3.3 2.7 6 6 6 3.5 0 6.7-1.5 8.7-3.5 2-2 3.6-6.2 1.3-8.5" /><path d="M10 6.8l-4-4" /><path d="M8.5 5.5c.3 1.5 1.2 2.7 2.5 3.3" />',
+    broccoli:
+        '<path d="M12 6a3.5 3.5 0 0 0-3.5 3.5c0 .3.05.6.15.9A3.5 3.5 0 0 0 6 13.5a3.5 3.5 0 0 0 3.5 3.5h5a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-2.65-3.4c.1-.3.15-.6.15-.9A3.5 3.5 0 0 0 12 6z" /><path d="M10 17v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4" />',
     pea: '<path d="M3 12c3-4 7-6 11-4s7 5 7 5-3 4-7 4-8-1-11-5z" /><circle cx="8" cy="11" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="16" cy="12" r="2" />',
     radish: '<path d="M12 8c-3 0-5 2-5 5.5C7 17 9.5 21 12 22c2.5-1 5-5 5-8.5c0-3.5-2-5.5-5-5.5z" /><path d="M12 8V2 M9 5c1-1.5 2-3 3-3 M15 5c-1-1.5-2-3-3-3" />',
-    cabbage: '<circle cx="12" cy="14" r="7" /><path d="M12 7c-3 0-5 2-5 5 0 2 1.5 3.5 3 4 M12 7c3 0 5 2 5 5 0 2-1.5 3.5-3 4 M9 10a5 5 0 0 1 6 0 M12 7v14" />',
+    cabbage:
+        '<circle cx="12" cy="14" r="7" /><path d="M12 7c-3 0-5 2-5 5 0 2 1.5 3.5 3 4 M12 7c3 0 5 2 5 5 0 2-1.5 3.5-3 4 M9 10a5 5 0 0 1 6 0 M12 7v14" />',
     onion: '<path d="M12 3c-1.5 3-5 5.5-5 9.5a5 5 0 1 0 10 0C17 8.5 13.5 6 12 3z" /><path d="M10 12c.5 2 1.5 4.5 2 5 M14 12c-.5 2-1.5 4.5-2 5 M12 3v14" /><path d="M10 20l2 2 2-2" />',
     garlic: '<path d="M12 2c-.5 2-3 4.5-5 7.5a6 6 0 1 0 10 0c-2-3-4.5-5.5-5-7.5z" /><path d="M12 8c-1 2-2 4-2 7 M12 8c1 2 2 4 2 7 M12 2v15" />',
-    mushroom: '<path d="M4 12c0-4.4 3.6-8 8-8s8 3.6 8 8H4z" /><path d="M9 12v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-7" />',
+    mushroom:
+        '<path d="M4 12c0-4.4 3.6-8 8-8s8 3.6 8 8H4z" /><path d="M9 12v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-7" />',
     leaf: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />',
     flower: '<circle cx="12" cy="12" r="3" /><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" /><path d="M12 7.5V9 M7.5 12H9 M16.5 12H15 M12 16.5V15" /><path d="m8 8 1.88 1.88 M14.12 9.88 16 8 M8 16 1.88 14.12 M14.12 14.12 16 16" />',
     tree: '<path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" /><path d="M12 22v-3" />',
     apple: '<path d="M12 20.94c1.5 0 2.75-.75 4-1.94 1.25 1.19 2.5 1.94 4 1.94 1.5 0 3-1.5 3-4 0-4-3.5-5.5-5.5-5.5-1.5 0-2.5.5-3 .5s-1.5-.5-3-.5c-2 0-5.5 1.5-5.5 5.5 0 2.5 1.5 4 3 4 1.5 0 2.75-.75 4-1.94Z" /><path d="M12 2s2 2 2 5.5-2 5.5-2 5.5-2-2-2-5.5 2-5.5 2-5.5z" />',
     banana: '<path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5" /><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z" />',
     cherry: '<path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" /><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z" />',
-    cherries: '<path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" /><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z" />',
+    cherries:
+        '<path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" /><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z" />',
     grape: '<path d="M22 5V2l-5.89 5.89" /><circle cx="16.6" cy="15.89" r="3" /><circle cx="8.11" cy="7.4" r="3" /><circle cx="12.35" cy="11.65" r="3" /><circle cx="13.91" cy="5.85" r="3" /><circle cx="18.15" cy="10.09" r="3" /><circle cx="6.56" cy="13.2" r="3" /><circle cx="10.8" cy="17.44" r="3" /><circle cx="5" cy="19" r="3" />',
     grapes: '<path d="M22 5V2l-5.89 5.89" /><circle cx="16.6" cy="15.89" r="3" /><circle cx="8.11" cy="7.4" r="3" /><circle cx="12.35" cy="11.65" r="3" /><circle cx="13.91" cy="5.85" r="3" /><circle cx="18.15" cy="10.09" r="3" /><circle cx="6.56" cy="13.2" r="3" /><circle cx="10.8" cy="17.44" r="3" /><circle cx="5" cy="19" r="3" />',
-    strawberry: '<path d="m17 7 3.5-3.5" /><path d="M17 2v5h5" /><path d="M2.1 17.1a4 4 0 0 0 4.8 4.8l9-2.1a6.32 6.32 0 0 0 2.9-10.9L15 5.2A6.5 6.5 0 0 0 4.1 8.3Z" /><path d="M8.5 9.5h.01 M12.5 8.5h.01 M7.5 13.5h.01 M11.5 12.5h.01 M15.5 11.5h.01 M6.5 17.5h.01 M10.5 16.5h.01 M14.5 15.5h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
+    strawberry:
+        '<path d="m17 7 3.5-3.5" /><path d="M17 2v5h5" /><path d="M2.1 17.1a4 4 0 0 0 4.8 4.8l9-2.1a6.32 6.32 0 0 0 2.9-10.9L15 5.2A6.5 6.5 0 0 0 4.1 8.3Z" /><path d="M8.5 9.5h.01 M12.5 8.5h.01 M7.5 13.5h.01 M11.5 12.5h.01 M15.5 11.5h.01 M6.5 17.5h.01 M10.5 16.5h.01 M14.5 15.5h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
     pear: '<path d="M22 7a4.95 4.95 0 0 0-8.6-3.4c-1.5 1.6-1.6 1.8-5 2.6a8 8 0 1 0 9.4 9.5c.7-3.4 1-3.6 2.6-5 1-1 1.6-2.3 1.6-3.7" /><path d="m19 5 3-3" />',
     citrus: '<path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" /><path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" /><path d="m14 10-5.5 5.5" /><path d="M14 17.85V10H6.15" />',
     orange: '<path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" /><path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" /><path d="m14 10-5.5 5.5" /><path d="M14 17.85V10H6.15" />',
     lemon: '<path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" /><path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" /><path d="m14 10-5.5 5.5" /><path d="M14 17.85V10H6.15" />',
-    pineapple: '<path d="M12 2c1-1 2 .5 2 2 0 1.5-2 3-2 3s-2-1.5-2-3c0-1.5 1-3 2-2z M8 6c0-1.5 1.5-1 1.5 1 0 1-1.5 2-1.5 2s-1-.5-1-1.5 M16 6c0-1.5-1.5-1-1.5 1 0 1 1.5 2 1.5 2s1-.5 1-1.5" /><path d="M12 22c4 0 7-3 7-8 0-4-3-6-7-6s-7 2-7 6c0 5 3 8 7 8z" /><path d="M8 11l8 6 M6 14l6 6 M10 9l6 4 M16 11l-8 6 M18 14l-6 6 M14 9l-6 4" />',
-    watermelon: '<path d="M21.7 17.7a1.08 1.08 0 0 1-.08 1.57A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04Z" /><path d="M19.7 15.7A8 8 0 0 1 8.35 4.34" /><path d="M10 11h.01 M13 14h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
+    pineapple:
+        '<path d="M12 2c1-1 2 .5 2 2 0 1.5-2 3-2 3s-2-1.5-2-3c0-1.5 1-3 2-2z M8 6c0-1.5 1.5-1 1.5 1 0 1-1.5 2-1.5 2s-1-.5-1-1.5 M16 6c0-1.5-1.5-1-1.5 1 0 1 1.5 2 1.5 2s1-.5 1-1.5" /><path d="M12 22c4 0 7-3 7-8 0-4-3-6-7-6s-7 2-7 6c0 5 3 8 7 8z" /><path d="M8 11l8 6 M6 14l6 6 M10 9l6 4 M16 11l-8 6 M18 14l-6 6 M14 9l-6 4" />',
+    watermelon:
+        '<path d="M21.7 17.7a1.08 1.08 0 0 1-.08 1.57A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04Z" /><path d="M19.7 15.7A8 8 0 0 1 8.35 4.34" /><path d="M10 11h.01 M13 14h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
     melon: '<circle cx="12" cy="12" r="10" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10" />',
     berry: '<circle cx="9" cy="15" r="4" /><circle cx="15" cy="15" r="4" /><circle cx="12" cy="9" r="4" /><path d="M9 11c0-2-1-3-2-3 M15 11c0-2 1-3 2-3 M12 5V2" />',
-    berries: '<circle cx="9" cy="15" r="4" /><circle cx="15" cy="15" r="4" /><circle cx="12" cy="9" r="4" /><path d="M9 11c0-2-1-3-2-3 M15 11c0-2 1-3 2-3 M12 5V2" />'
+    berries:
+        '<circle cx="9" cy="15" r="4" /><circle cx="15" cy="15" r="4" /><circle cx="12" cy="9" r="4" /><path d="M9 11c0-2-1-3-2-3 M15 11c0-2 1-3 2-3 M12 5V2" />',
 };
 
 class BloomBotCardSecondary extends HTMLElement {
@@ -113,36 +125,45 @@ class BloomBotCardSecondary extends HTMLElement {
         const now = new Date();
         const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-        const parts = startT.split(':');
+        const parts = startT.split(":");
         if (parts.length < 2) return false;
         const startMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
 
         const endMinutes = startMinutes + durationMin;
 
         if (endMinutes <= 1440) {
-            return currentMinutes >= startMinutes && currentMinutes < endMinutes;
+            return (
+                currentMinutes >= startMinutes && currentMinutes < endMinutes
+            );
         } else {
             const wrappedEndMinutes = endMinutes - 1440;
-            return currentMinutes >= startMinutes || currentMinutes < wrappedEndMinutes;
+            return (
+                currentMinutes >= startMinutes ||
+                currentMinutes < wrappedEndMinutes
+            );
         }
     }
 
     setConfig(config) {
         this._config = config;
         this.title = config.title || "BloomBot Controller";
-        this.tempEntity = config.temperature_entity || "sensor.bloombot_temperature";
-        this.humidityEntity = config.humidity_entity || "sensor.bloombot_humidity";
+        this.tempEntity =
+            config.temperature_entity || "sensor.bloombot_temperature";
+        this.humidityEntity =
+            config.humidity_entity || "sensor.bloombot_humidity";
         this.columns = config.columns || 2;
         this.logoSize = config.logo_size || 44;
         this.showLogo = config.show_logo !== false;
         this.icon = config.icon || "mdi:sprinkler-variant";
 
         // Default relays 1 to 8 if not defined
-        this.relays = config.relays || Array.from({ length: 8 }, (_, i) => ({
-            id: i + 1,
-            name: `Relay ${i + 1}`,
-            icon: "mdi:water-pump"
-        }));
+        this.relays =
+            config.relays ||
+            Array.from({ length: 8 }, (_, i) => ({
+                id: i + 1,
+                name: `Relay ${i + 1}`,
+                icon: "mdi:water-pump",
+            }));
 
         this.renderSkeleton();
     }
@@ -154,20 +175,23 @@ class BloomBotCardSecondary extends HTMLElement {
 
     renderSkeleton() {
         // Build relay box elements
-        let relayBoxes = this.relays.map(relay => {
-            const id = relay.id;
-            const name = relay.name || `Relay ${id}`;
-            const rawIcon = relay.icon || "mdi:water-pump";
+        let relayBoxes = this.relays
+            .map((relay) => {
+                const id = relay.id;
+                const name = relay.name || `Relay ${id}`;
+                const rawIcon = relay.icon || "mdi:water-pump";
 
-            const iconColor = relay.icon_color || relay.color || '';
-            const customStyles = iconColor ? `
+                const iconColor = relay.icon_color || relay.color || "";
+                const customStyles = iconColor
+                    ? `
                 --custom-icon-color: ${iconColor};
                 --custom-bg-color: color-mix(in srgb, ${iconColor} 15%, transparent);
                 --custom-inactive-bg-color: color-mix(in srgb, ${iconColor} 8%, transparent);
                 --custom-pulse-color: color-mix(in srgb, ${iconColor} 40%, transparent);
-            ` : '';
+            `
+                    : "";
 
-            return `
+                return `
                 <div class="relay-box" id="relay-box-${id}" data-id="${id}" style="${customStyles}">
                     <div class="status-indicator" id="status-indicator-${id}">
                         <span id="status-icon-${id}" class="icon-wrapper">
@@ -178,7 +202,8 @@ class BloomBotCardSecondary extends HTMLElement {
                     <div class="relay-status" id="status-text-${id}">Loading...</div>
                 </div>
             `;
-        }).join("");
+            })
+            .join("");
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -612,7 +637,9 @@ class BloomBotCardSecondary extends HTMLElement {
                 <div class="card-header">
                     <div class="header-left">
                         <div class="card-title">
-                            ${this.showLogo ? `
+                            ${
+                                this.showLogo
+                                    ? `
                                 <div class="logo-container" id="card-logo-container">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${this.logoSize}" height="${this.logoSize}">
                                       <line class="rain-drop drop-1" x1="45" y1="20" x2="40" y2="35" />
@@ -647,9 +674,11 @@ class BloomBotCardSecondary extends HTMLElement {
                                       </g>
                                     </svg>
                                 </div>
-                            ` : `
+                            `
+                                    : `
                                 <ha-icon icon="${this.icon}"></ha-icon>
-                            `}
+                            `
+                            }
                             <span>${this.title}</span>
                         </div>
                         <div class="sensor-values" id="sensor-values" style="display: none;">
@@ -723,23 +752,23 @@ class BloomBotCardSecondary extends HTMLElement {
         `;
 
         // Register event listeners for each grid tile box
-        this.relays.forEach(relay => {
+        this.relays.forEach((relay) => {
             const id = relay.id;
             const box = this.shadowRoot.getElementById(`relay-box-${id}`);
             if (box) {
-                box.addEventListener('click', () => this.openDialog(id));
+                box.addEventListener("click", () => this.openDialog(id));
             }
         });
 
         // Register modal closing events
-        const closeBtn = this.shadowRoot.getElementById('modal-close-btn');
+        const closeBtn = this.shadowRoot.getElementById("modal-close-btn");
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.closeDialog());
+            closeBtn.addEventListener("click", () => this.closeDialog());
         }
 
-        const modalOverlay = this.shadowRoot.getElementById('config-modal');
+        const modalOverlay = this.shadowRoot.getElementById("config-modal");
         if (modalOverlay) {
-            modalOverlay.addEventListener('click', (e) => {
+            modalOverlay.addEventListener("click", (e) => {
                 if (e.target === modalOverlay) {
                     this.closeDialog();
                 }
@@ -747,48 +776,64 @@ class BloomBotCardSecondary extends HTMLElement {
         }
 
         // Register action event listeners for modal controls
-        const manualSwitch = this.shadowRoot.getElementById('modal-manual-switch');
+        const manualSwitch = this.shadowRoot.getElementById(
+            "modal-manual-switch",
+        );
         if (manualSwitch) {
-            manualSwitch.addEventListener('change', (e) => {
+            manualSwitch.addEventListener("change", (e) => {
                 if (this.activeRelayId !== null) {
                     this.handleManualSwitch(this.activeRelayId, e);
                 }
             });
         }
 
-        const scheduleSwitch = this.shadowRoot.getElementById('modal-schedule-switch');
+        const scheduleSwitch = this.shadowRoot.getElementById(
+            "modal-schedule-switch",
+        );
         if (scheduleSwitch) {
-            scheduleSwitch.addEventListener('change', (e) => {
+            scheduleSwitch.addEventListener("change", (e) => {
                 if (this.activeRelayId !== null) {
                     this.handleScheduleSwitch(this.activeRelayId, e);
                 }
             });
         }
 
-        const addTimeBtn = this.shadowRoot.getElementById('modal-add-time-btn');
+        const addTimeBtn = this.shadowRoot.getElementById("modal-add-time-btn");
         if (addTimeBtn) {
-            addTimeBtn.addEventListener('click', () => {
+            addTimeBtn.addEventListener("click", () => {
                 if (this.activeRelayId !== null) {
                     if (!this._tempStartTimes) {
-                        this._tempStartTimes = [{ "time": "12:00:00", "enabled": true }];
+                        this._tempStartTimes = [
+                            { time: "12:00:00", enabled: true },
+                        ];
                     } else {
-                        this._tempStartTimes.push({ "time": "12:00:00", "enabled": true });
+                        this._tempStartTimes.push({
+                            time: "12:00:00",
+                            enabled: true,
+                        });
                     }
-                    this.renderStartTimesList(this.activeRelayId, this._tempStartTimes);
+                    this.renderStartTimesList(
+                        this.activeRelayId,
+                        this._tempStartTimes,
+                    );
                     this.saveStartTimes(this.activeRelayId);
                 }
             });
         }
 
-        const durationSlider = this.shadowRoot.getElementById('modal-duration-slider');
-        const durationValue = this.shadowRoot.getElementById('modal-duration-value');
+        const durationSlider = this.shadowRoot.getElementById(
+            "modal-duration-slider",
+        );
+        const durationValue = this.shadowRoot.getElementById(
+            "modal-duration-value",
+        );
         if (durationSlider) {
-            durationSlider.addEventListener('input', (e) => {
+            durationSlider.addEventListener("input", (e) => {
                 if (durationValue) {
                     durationValue.textContent = `${e.target.value} min`;
                 }
             });
-            durationSlider.addEventListener('change', (e) => {
+            durationSlider.addEventListener("change", (e) => {
                 if (this.activeRelayId !== null) {
                     this.handleDurationChange(this.activeRelayId, e);
                 }
@@ -800,13 +845,15 @@ class BloomBotCardSecondary extends HTMLElement {
         this.activeRelayId = id;
 
         // Find configuration info
-        const relay = this.relays.find(r => r.id === id);
+        const relay = this.relays.find((r) => r.id === id);
         if (!relay) return;
 
         // Set title and icon of the modal header
-        const modalTitle = this.shadowRoot.getElementById('modal-title');
-        const modalIconContainer = this.shadowRoot.getElementById('modal-icon-container');
-        const modalContent = this.shadowRoot.querySelector('.modal-content');
+        const modalTitle = this.shadowRoot.getElementById("modal-title");
+        const modalIconContainer = this.shadowRoot.getElementById(
+            "modal-icon-container",
+        );
+        const modalContent = this.shadowRoot.querySelector(".modal-content");
 
         if (modalTitle) modalTitle.textContent = relay.name || `Relay ${id}`;
 
@@ -817,31 +864,52 @@ class BloomBotCardSecondary extends HTMLElement {
 
         // Apply custom colors to modal content styling if specified
         if (modalContent) {
-            const iconColor = relay.icon_color || relay.color || '';
+            const iconColor = relay.icon_color || relay.color || "";
             if (iconColor) {
-                modalContent.style.setProperty('--custom-icon-color', iconColor);
-                modalContent.style.setProperty('--custom-bg-color', `color-mix(in srgb, ${iconColor} 15%, transparent)`);
-                modalContent.style.setProperty('--custom-inactive-bg-color', `color-mix(in srgb, ${iconColor} 8%, transparent)`);
-                modalContent.style.setProperty('--custom-pulse-color', `color-mix(in srgb, ${iconColor} 40%, transparent)`);
+                modalContent.style.setProperty(
+                    "--custom-icon-color",
+                    iconColor,
+                );
+                modalContent.style.setProperty(
+                    "--custom-bg-color",
+                    `color-mix(in srgb, ${iconColor} 15%, transparent)`,
+                );
+                modalContent.style.setProperty(
+                    "--custom-inactive-bg-color",
+                    `color-mix(in srgb, ${iconColor} 8%, transparent)`,
+                );
+                modalContent.style.setProperty(
+                    "--custom-pulse-color",
+                    `color-mix(in srgb, ${iconColor} 40%, transparent)`,
+                );
             } else {
-                modalContent.style.removeProperty('--custom-icon-color');
-                modalContent.style.removeProperty('--custom-bg-color');
-                modalContent.style.removeProperty('--custom-inactive-bg-color');
-                modalContent.style.removeProperty('--custom-pulse-color');
+                modalContent.style.removeProperty("--custom-icon-color");
+                modalContent.style.removeProperty("--custom-bg-color");
+                modalContent.style.removeProperty("--custom-inactive-bg-color");
+                modalContent.style.removeProperty("--custom-pulse-color");
             }
         }
 
         // Show dialog
-        const modal = this.shadowRoot.getElementById('config-modal');
+        const modal = this.shadowRoot.getElementById("config-modal");
         if (modal) {
-            modal.classList.add('active');
+            modal.classList.add("active");
         }
 
         // Fetch current start times from HA state and render
-        const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.bloombot_relay_${id}_start_times`);
+        const startTimesEnt = this.getEntityName(
+            id,
+            "start_times_entity",
+            `sensor.bloombot_relay_${id}_start_times`,
+        );
         const startTimesStateObj = this._hass.states[startTimesEnt];
-        let startTimes = [{ "time": "08:00:00", "enabled": true }];
-        if (startTimesStateObj && startTimesStateObj.state && startTimesStateObj.state !== 'unknown' && startTimesStateObj.state !== 'unavailable') {
+        let startTimes = [{ time: "08:00:00", enabled: true }];
+        if (
+            startTimesStateObj &&
+            startTimesStateObj.state &&
+            startTimesStateObj.state !== "unknown" &&
+            startTimesStateObj.state !== "unavailable"
+        ) {
             try {
                 startTimes = JSON.parse(startTimesStateObj.state);
             } catch (e) {
@@ -855,40 +923,51 @@ class BloomBotCardSecondary extends HTMLElement {
     }
 
     closeDialog() {
-        const modal = this.shadowRoot.getElementById('config-modal');
+        const modal = this.shadowRoot.getElementById("config-modal");
         if (modal) {
-            modal.classList.remove('active');
+            modal.classList.remove("active");
         }
         this.activeRelayId = null;
     }
 
     handleManualSwitch(id, event) {
-        const entity = this.getEntityName(id, 'relay_entity', `switch.bloombot_relay_${id}`);
-        const service = event.target.checked ? 'turn_on' : 'turn_off';
+        const entity = this.getEntityName(
+            id,
+            "relay_entity",
+            `switch.bloombot_relay_${id}`,
+        );
+        const service = event.target.checked ? "turn_on" : "turn_off";
 
         if (!this.manualWateringStarted) {
             this.manualWateringStarted = {};
         }
         this.manualWateringStarted[id] = event.target.checked;
 
-        this._hass.callService('switch', service, { entity_id: entity });
+        this._hass.callService("switch", service, { entity_id: entity });
     }
 
     handleScheduleSwitch(id, event) {
-        const entity = this.getEntityName(id, 'schedule_enabled_entity', `switch.bloombot_relay_${id}_schedule_enabled`);
-        const service = event.target.checked ? 'turn_on' : 'turn_off';
-        this._hass.callService('switch', service, { entity_id: entity });
+        const entity = this.getEntityName(
+            id,
+            "schedule_enabled_entity",
+            `switch.bloombot_relay_${id}_schedule_enabled`,
+        );
+        const service = event.target.checked ? "turn_on" : "turn_off";
+        this._hass.callService("switch", service, { entity_id: entity });
     }
 
     renderStartTimesList(id, startTimes) {
-        const container = this.shadowRoot.getElementById('start-times-container');
+        const container = this.shadowRoot.getElementById(
+            "start-times-container",
+        );
         if (!container) return;
 
         this._tempStartTimes = JSON.parse(JSON.stringify(startTimes));
 
-        container.innerHTML = this._tempStartTimes.map((item, index) => {
-            const timeVal = item.time.substring(0, 5); // Format HH:MM
-            return `
+        container.innerHTML = this._tempStartTimes
+            .map((item, index) => {
+                const timeVal = item.time.substring(0, 5); // Format HH:MM
+                return `
                 <div class="control-row" style="padding: 4px 0; border-bottom: none;" data-index="${index}">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <ha-switch class="time-enabled-switch"></ha-switch>
@@ -902,31 +981,32 @@ class BloomBotCardSecondary extends HTMLElement {
                     </div>
                 </div>
             `;
-        }).join("");
+            })
+            .join("");
 
         // Register dynamic event listeners and set initial properties
-        const rows = container.querySelectorAll('.control-row');
+        const rows = container.querySelectorAll(".control-row");
         rows.forEach((row) => {
-            const index = parseInt(row.getAttribute('data-index'));
+            const index = parseInt(row.getAttribute("data-index"));
             const item = this._tempStartTimes[index];
 
-            const switchEl = row.querySelector('.time-enabled-switch');
+            const switchEl = row.querySelector(".time-enabled-switch");
             if (switchEl) {
                 switchEl.checked = item.enabled;
-                switchEl.addEventListener('change', (e) => {
+                switchEl.addEventListener("change", (e) => {
                     this._tempStartTimes[index].enabled = e.target.checked;
-                    const timeInput = row.querySelector('.list-time-input');
+                    const timeInput = row.querySelector(".list-time-input");
                     if (timeInput) timeInput.disabled = !e.target.checked;
                     this.saveStartTimes(id);
                 });
             }
 
-            const inputEl = row.querySelector('.list-time-input');
+            const inputEl = row.querySelector(".list-time-input");
             if (inputEl) {
                 inputEl.disabled = !item.enabled;
-                inputEl.addEventListener('change', (e) => {
+                inputEl.addEventListener("change", (e) => {
                     let val = e.target.value;
-                    if (val && val.split(':').length === 2) {
+                    if (val && val.split(":").length === 2) {
                         val = `${val}:00`;
                     }
                     this._tempStartTimes[index].time = val;
@@ -934,12 +1014,12 @@ class BloomBotCardSecondary extends HTMLElement {
                 });
             }
 
-            const deleteBtn = row.querySelector('.time-delete-btn');
+            const deleteBtn = row.querySelector(".time-delete-btn");
             if (deleteBtn) {
                 const isOnlyOne = this._tempStartTimes.length === 1;
                 deleteBtn.disabled = isOnlyOne;
                 if (!isOnlyOne) {
-                    deleteBtn.addEventListener('click', () => {
+                    deleteBtn.addEventListener("click", () => {
                         this._tempStartTimes.splice(index, 1);
                         this.renderStartTimesList(id, this._tempStartTimes);
                         this.saveStartTimes(id);
@@ -951,28 +1031,28 @@ class BloomBotCardSecondary extends HTMLElement {
 
     saveStartTimes(id) {
         const payload = JSON.stringify(this._tempStartTimes);
-        this._hass.callService('mqtt', 'publish', {
+        this._hass.callService("mqtt", "publish", {
             topic: `garden/relay/${id}/start_times/set`,
-            payload: payload
+            payload: payload,
         });
     }
 
     getNextStartTime(startTimes) {
-        const activeTimes = startTimes.filter(item => item.enabled);
+        const activeTimes = startTimes.filter((item) => item.enabled);
         if (activeTimes.length === 0) return null;
 
         const now = new Date();
         const currentMin = now.getHours() * 60 + now.getMinutes();
 
         const parseToMin = (tStr) => {
-            const parts = tStr.split(':');
+            const parts = tStr.split(":");
             return parseInt(parts[0]) * 60 + parseInt(parts[1]);
         };
 
         let nextTime = null;
         let minDiff = 2880;
 
-        activeTimes.forEach(item => {
+        activeTimes.forEach((item) => {
             const min = parseToMin(item.time);
             const diff = (min - currentMin + 1440) % 1440;
             if (diff < minDiff) {
@@ -985,17 +1065,21 @@ class BloomBotCardSecondary extends HTMLElement {
     }
 
     handleDurationChange(id, event) {
-        const entity = this.getEntityName(id, 'duration_entity', `number.bloombot_relay_${id}_duration`);
+        const entity = this.getEntityName(
+            id,
+            "duration_entity",
+            `number.bloombot_relay_${id}_duration`,
+        );
         const value = parseInt(event.target.value);
-        this._hass.callService('number', 'set_value', {
+        this._hass.callService("number", "set_value", {
             entity_id: entity,
-            value: value
+            value: value,
         });
     }
 
     getEntityName(id, configKey, defaultVal) {
-        const rConf = this.relays.find(r => r.id === id);
-        return (rConf && rConf[configKey]) ? rConf[configKey] : defaultVal;
+        const rConf = this.relays.find((r) => r.id === id);
+        return rConf && rConf[configKey] ? rConf[configKey] : defaultVal;
     }
 
     updateState() {
@@ -1004,14 +1088,30 @@ class BloomBotCardSecondary extends HTMLElement {
         let systemOnline = false;
         let anyRelayOn = false;
 
-        this.relays.forEach(relay => {
+        this.relays.forEach((relay) => {
             const id = relay.id;
 
             // Resolve actual entity IDs
-            const relayEnt = this.getEntityName(id, 'relay_entity', `switch.bloombot_relay_${id}`);
-            const schedEnt = this.getEntityName(id, 'schedule_enabled_entity', `switch.bloombot_relay_${id}_schedule_enabled`);
-            const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.bloombot_relay_${id}_start_times`);
-            const durEnt = this.getEntityName(id, 'duration_entity', `number.bloombot_relay_${id}_duration`);
+            const relayEnt = this.getEntityName(
+                id,
+                "relay_entity",
+                `switch.bloombot_relay_${id}`,
+            );
+            const schedEnt = this.getEntityName(
+                id,
+                "schedule_enabled_entity",
+                `switch.bloombot_relay_${id}_schedule_enabled`,
+            );
+            const startTimesEnt = this.getEntityName(
+                id,
+                "start_times_entity",
+                `sensor.bloombot_relay_${id}_start_times`,
+            );
+            const durEnt = this.getEntityName(
+                id,
+                "duration_entity",
+                `number.bloombot_relay_${id}_duration`,
+            );
 
             // Read states from HA db
             const relayStateObj = this._hass.states[relayEnt];
@@ -1020,15 +1120,17 @@ class BloomBotCardSecondary extends HTMLElement {
             const durStateObj = this._hass.states[durEnt];
 
             // If at least one entity is available and not in "unavailable" state, consider system online
-            if (relayStateObj && relayStateObj.state !== 'unavailable') {
+            if (relayStateObj && relayStateObj.state !== "unavailable") {
                 systemOnline = true;
             }
 
-            const isOn = relayStateObj ? (relayStateObj.state === 'on') : false;
+            const isOn = relayStateObj ? relayStateObj.state === "on" : false;
             if (isOn) {
                 anyRelayOn = true;
             }
-            const schedEnabled = schedStateObj ? (schedStateObj.state === 'on') : false;
+            const schedEnabled = schedStateObj
+                ? schedStateObj.state === "on"
+                : false;
 
             if (!this.manualWateringStarted) {
                 this.manualWateringStarted = {};
@@ -1038,8 +1140,13 @@ class BloomBotCardSecondary extends HTMLElement {
             }
 
             // Parse start times list
-            let startTimes = [{ "time": "08:00:00", "enabled": true }];
-            if (startTimesStateObj && startTimesStateObj.state && startTimesStateObj.state !== 'unknown' && startTimesStateObj.state !== 'unavailable') {
+            let startTimes = [{ time: "08:00:00", enabled: true }];
+            if (
+                startTimesStateObj &&
+                startTimesStateObj.state &&
+                startTimesStateObj.state !== "unknown" &&
+                startTimesStateObj.state !== "unavailable"
+            ) {
                 try {
                     startTimes = JSON.parse(startTimesStateObj.state);
                 } catch (e) {
@@ -1052,107 +1159,139 @@ class BloomBotCardSecondary extends HTMLElement {
 
             // 1. Update Grid Box and Status Indicator CSS
             const box = this.shadowRoot.getElementById(`relay-box-${id}`);
-            const indicator = this.shadowRoot.getElementById(`status-indicator-${id}`);
+            const indicator = this.shadowRoot.getElementById(
+                `status-indicator-${id}`,
+            );
             if (box) {
                 if (isOn) {
-                    box.classList.add('active');
+                    box.classList.add("active");
                 } else {
-                    box.classList.remove('active');
+                    box.classList.remove("active");
                 }
             }
             if (indicator) {
                 if (isOn) {
-                    indicator.classList.add('active');
+                    indicator.classList.add("active");
                 } else {
-                    indicator.classList.remove('active');
+                    indicator.classList.remove("active");
                 }
             }
 
             // 2. Update Box Status Text
-            const statusLabel = this.shadowRoot.getElementById(`status-text-${id}`);
+            const statusLabel = this.shadowRoot.getElementById(
+                `status-text-${id}`,
+            );
             if (statusLabel) {
                 if (isOn) {
-                    const isScheduledActive = schedEnabled && !this.manualWateringStarted[id] &&
-                        startTimes.some(item => item.enabled && this.isScheduledWateringActive(item.time.substring(0, 5), durVal));
+                    const isScheduledActive =
+                        schedEnabled &&
+                        !this.manualWateringStarted[id] &&
+                        startTimes.some(
+                            (item) =>
+                                item.enabled &&
+                                this.isScheduledWateringActive(
+                                    item.time.substring(0, 5),
+                                    durVal,
+                                ),
+                        );
                     if (isScheduledActive) {
                         statusLabel.textContent = `Watering (${durVal} m)`;
                     } else {
                         statusLabel.textContent = "Watering";
                     }
-                    statusLabel.style.color = '#38bdf8'; // Sky blue
+                    statusLabel.style.color = "#38bdf8"; // Sky blue
                 } else if (schedEnabled) {
                     const nextTime = this.getNextStartTime(startTimes);
                     if (nextTime) {
                         statusLabel.textContent = `At ${nextTime}`;
-                        statusLabel.style.color = '#34d399'; // Mint green
+                        statusLabel.style.color = "#34d399"; // Mint green
                     } else {
                         statusLabel.textContent = "No Schedule Time";
-                        statusLabel.style.color = '#cbd5e1';
+                        statusLabel.style.color = "#cbd5e1";
                     }
                 } else {
                     statusLabel.textContent = "Manual";
-                    statusLabel.style.color = '#94a3b8'; // Slate grey
+                    statusLabel.style.color = "#94a3b8"; // Slate grey
                 }
             }
 
             // 3. Update Modal Dialog controls if this relay is currently active in the modal
             if (this.activeRelayId === id) {
-                const manualSwitch = this.shadowRoot.getElementById('modal-manual-switch');
+                const manualSwitch = this.shadowRoot.getElementById(
+                    "modal-manual-switch",
+                );
                 if (manualSwitch && document.activeElement !== manualSwitch) {
                     manualSwitch.checked = isOn;
-                    manualSwitch.disabled = !relayStateObj || relayStateObj.state === 'unavailable';
+                    manualSwitch.disabled =
+                        !relayStateObj || relayStateObj.state === "unavailable";
                 }
 
-                const schedSwitch = this.shadowRoot.getElementById('modal-schedule-switch');
+                const schedSwitch = this.shadowRoot.getElementById(
+                    "modal-schedule-switch",
+                );
                 if (schedSwitch && document.activeElement !== schedSwitch) {
                     schedSwitch.checked = schedEnabled;
-                    schedSwitch.disabled = !schedStateObj || schedStateObj.state === 'unavailable';
+                    schedSwitch.disabled =
+                        !schedStateObj || schedStateObj.state === "unavailable";
                 }
 
                 // Start times list is rendered once when the modal is opened, or updated locally on actions.
                 // We do not overwrite it here to avoid race conditions with HA states.
 
-                const durationSlider = this.shadowRoot.getElementById('modal-duration-slider');
-                const durationValue = this.shadowRoot.getElementById('modal-duration-value');
-                if (durationSlider && document.activeElement !== durationSlider && !isNaN(durVal)) {
+                const durationSlider = this.shadowRoot.getElementById(
+                    "modal-duration-slider",
+                );
+                const durationValue = this.shadowRoot.getElementById(
+                    "modal-duration-value",
+                );
+                if (
+                    durationSlider &&
+                    document.activeElement !== durationSlider &&
+                    !isNaN(durVal)
+                ) {
                     durationSlider.value = durVal;
                     if (durationValue) {
                         durationValue.textContent = `${durVal} min`;
                     }
-                    durationSlider.disabled = !durStateObj || durStateObj.state === 'unavailable';
+                    durationSlider.disabled =
+                        !durStateObj || durStateObj.state === "unavailable";
                 }
 
-                const modalIconContainer = this.shadowRoot.getElementById('modal-icon-container');
+                const modalIconContainer = this.shadowRoot.getElementById(
+                    "modal-icon-container",
+                );
                 if (modalIconContainer) {
                     if (isOn) {
-                        modalIconContainer.classList.add('active');
+                        modalIconContainer.classList.add("active");
                     } else {
-                        modalIconContainer.classList.remove('active');
+                        modalIconContainer.classList.remove("active");
                     }
                 }
             }
         });
 
         // Update Card Logo Watering Animation state
-        const logoContainer = this.shadowRoot.getElementById('card-logo-container');
+        const logoContainer = this.shadowRoot.getElementById(
+            "card-logo-container",
+        );
         if (logoContainer) {
             if (anyRelayOn) {
-                logoContainer.classList.add('is-watering');
+                logoContainer.classList.add("is-watering");
             } else {
-                logoContainer.classList.remove('is-watering');
+                logoContainer.classList.remove("is-watering");
             }
         }
 
         // Update Overall Card Status Dot
-        const statusDot = this.shadowRoot.getElementById('status-dot');
-        const statusText = this.shadowRoot.getElementById('connection-text');
+        const statusDot = this.shadowRoot.getElementById("status-dot");
+        const statusText = this.shadowRoot.getElementById("connection-text");
         if (statusDot && statusText) {
             if (systemOnline) {
-                statusDot.classList.add('online');
+                statusDot.classList.add("online");
                 statusText.textContent = "Online";
                 statusText.style.color = "#10b981";
             } else {
-                statusDot.classList.remove('online');
+                statusDot.classList.remove("online");
                 statusText.textContent = "Offline";
                 statusText.style.color = "#ef4444";
             }
@@ -1161,20 +1300,27 @@ class BloomBotCardSecondary extends HTMLElement {
         // Update temperature and humidity display
         const tempStateObj = this._hass.states[this.tempEntity];
         const humidityStateObj = this._hass.states[this.humidityEntity];
-        const tempElement = this.shadowRoot.getElementById('temp-value');
-        const humidityElement = this.shadowRoot.getElementById('humidity-value');
-        const sensorContainer = this.shadowRoot.getElementById('sensor-values');
+        const tempElement = this.shadowRoot.getElementById("temp-value");
+        const humidityElement =
+            this.shadowRoot.getElementById("humidity-value");
+        const sensorContainer = this.shadowRoot.getElementById("sensor-values");
 
         if (sensorContainer) {
-            if (systemOnline && tempStateObj && humidityStateObj &&
-                tempStateObj.state !== 'unavailable' && tempStateObj.state !== 'unknown' &&
-                humidityStateObj.state !== 'unavailable' && humidityStateObj.state !== 'unknown') {
-
-                sensorContainer.style.display = 'flex';
+            if (
+                systemOnline &&
+                tempStateObj &&
+                humidityStateObj &&
+                tempStateObj.state !== "unavailable" &&
+                tempStateObj.state !== "unknown" &&
+                humidityStateObj.state !== "unavailable" &&
+                humidityStateObj.state !== "unknown"
+            ) {
+                sensorContainer.style.display = "flex";
                 if (tempElement) tempElement.textContent = tempStateObj.state;
-                if (humidityElement) humidityElement.textContent = humidityStateObj.state;
+                if (humidityElement)
+                    humidityElement.textContent = humidityStateObj.state;
             } else {
-                sensorContainer.style.display = 'none';
+                sensorContainer.style.display = "none";
             }
         }
     }
@@ -1185,14 +1331,15 @@ class BloomBotCardSecondary extends HTMLElement {
 }
 
 customElements.define("bloombot-card-secondary", BloomBotCardSecondary);
-customElements.define("bloombot-card", class extends BloomBotCardSecondary { });
+customElements.define("bloombot-card", class extends BloomBotCardSecondary {});
 
 // Add preview information in Home Assistant custom card selector
 window.customCards = window.customCards || [];
 window.customCards.push({
     type: "bloombot-card-secondary",
     name: "BloomBot Irrigation Card (Grid Layout)",
-    description: "A premium grid-based dashboard card to control scheduled and manual irrigation valves with configuration dialogs.",
+    description:
+        "A premium grid-based dashboard card to control scheduled and manual irrigation valves with configuration dialogs.",
     preview: false,
 });
 window.customCards.push({

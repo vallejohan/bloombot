@@ -2,14 +2,39 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
+    paths-ignore:
+      - 'assets/**'
+      - 'README.md'
+      - 'info.md'
+      - 'LICENSE'
+      - 'hacs.json'
+      - '.gitignore'
+      - '.env.example'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'assets/**'
+      - 'README.md'
+      - 'info.md'
+      - 'LICENSE'
+      - 'hacs.json'
+      - '.gitignore'
+      - '.env.example'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   test:
-    name: Run Unit Tests
+    name: Test & Lint (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+      fail-fast: false
 
     steps:
       - name: Checkout Code
@@ -21,22 +46,32 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
 
-      - name: Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install Dependencies
         run: |
           uv sync --frozen
 
-      - name: Run Import Sort Check (isort)
+      - name: Run Ruff Linter & Formatter Check
         run: |
-          uv run isort --check src tests
+          uv run ruff check src tests
+          uv run ruff format --check src tests
 
-      - name: Run Code Style Check (black)
+      - name: Run Static Type Check (mypy)
         run: |
-          uv run black --check src tests
+          uv run mypy src tests
+
+      - name: Run Python Security Scan (bandit)
+        run: |
+          uv run bandit -r src/
+
+      - name: Audit Dependencies for Known Vulnerabilities
+        run: |
+          uv pip audit
+        if: matrix.python-version == '3.10'
 
       - name: Run Unit Tests
         run: |
@@ -46,7 +81,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+        if: matrix.python-version == '3.10'
+
+      - name: Install Linting & Formatting tools for JS
+        run: |
+          npm install eslint @eslint/js prettier --no-save
+        if: matrix.python-version == '3.10'
 
       - name: Verify JavaScript syntax of BloomBot card
         run: |
           node -c dist/bloombot-card.js
+        if: matrix.python-version == '3.10'
+
+      - name: Run ESLint check on Lovelace card
+        run: |
+          npx eslint dist/bloombot-card.js
+        if: matrix.python-version == '3.10'
+
+      - name: Run Prettier check on Lovelace card
+        run: |
+          npx prettier --check dist/bloombot-card.js
+        if: matrix.python-version == '3.10'
