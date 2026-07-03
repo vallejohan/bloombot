@@ -47,6 +47,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Verify JavaScript syntax of FloraFlow card
+      - name: Verify JavaScript syntax of BloomBot card
         run: |
-          node -c dist/floraflow-card.js
+          node -c dist/bloombot-card.js

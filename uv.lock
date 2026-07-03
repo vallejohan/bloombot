@@ -68,7 +68,7 @@ wheels = [
 ]
 
 [[package]]
-name = "floraflow"
+name = "bloombot"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

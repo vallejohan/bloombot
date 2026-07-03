@@ -5,7 +5,7 @@
 	(uuid "f8ca57fe-b4ec-4658-84e8-4883faa41e21")
 	(paper "A4")
 	(title_block
-		(title "Floraflow wiring schematic")
+		(title "BloomBot wiring schematic")
 		(date "2026-06-30")
 		(rev "1.0")
 	)
@@ -4986,7 +4986,7 @@
 			(uuid "4042f435-f35a-45de-abfa-bcee7ec7d30d")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR05")
 					(unit 1)
@@ -5067,7 +5067,7 @@
 			(uuid "59f686b1-71ca-43e7-8ee9-afa3973e33aa")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M3")
 					(unit 1)
@@ -5145,7 +5145,7 @@
 			(uuid "72f988f5-796f-4e9c-95d5-c548a46cc4c7")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR018")
 					(unit 1)
@@ -5223,7 +5223,7 @@
 			(uuid "efc8be49-416a-42bb-a87c-aabb5ea265b4")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR01")
 					(unit 1)
@@ -5301,7 +5301,7 @@
 			(uuid "9a675eca-9e24-4145-9619-9cbc2c3e44e7")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR09")
 					(unit 1)
@@ -5379,7 +5379,7 @@
 			(uuid "a81b96f2-bdb6-47c7-b3a8-64593cae4922")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR016")
 					(unit 1)
@@ -5457,7 +5457,7 @@
 			(uuid "78fd8327-08db-4fc8-b225-9de2cad0d3cb")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR013")
 					(unit 1)
@@ -5761,7 +5761,7 @@
 			(uuid "67815877-d5ae-4928-90a6-5c98ad59c405")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "U4")
 					(unit 1)
@@ -5839,7 +5839,7 @@
 			(uuid "f0241fa3-088f-4549-b4b6-00164821a7d8")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR06")
 					(unit 1)
@@ -5924,7 +5924,7 @@
 			(uuid "b0fb933f-0a94-48dc-a0b5-cab7ed624d24")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "U2")
 					(unit 1)
@@ -6002,7 +6002,7 @@
 			(uuid "f37432bd-0ef6-422c-8115-fe902ba4b9b8")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR02")
 					(unit 1)
@@ -6080,7 +6080,7 @@
 			(uuid "b3917681-31b7-4f0e-81c7-c902f1079166")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR017")
 					(unit 1)
@@ -6158,7 +6158,7 @@
 			(uuid "252ae8de-22ad-42e4-94c6-4e613548ff2b")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR07")
 					(unit 1)
@@ -6236,7 +6236,7 @@
 			(uuid "13174c4f-2709-4878-be24-78d23837dc54")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR08")
 					(unit 1)
@@ -6324,7 +6324,7 @@
 			(uuid "afea39b6-d615-444e-a10d-390416a0ea4d")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "U6")
 					(unit 1)
@@ -6405,7 +6405,7 @@
 			(uuid "230bd036-d24f-4400-b914-c6709fc1a99a")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M5")
 					(unit 1)
@@ -6486,7 +6486,7 @@
 			(uuid "fca426e9-2a35-439d-bf53-9b50cf3af733")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M7")
 					(unit 1)
@@ -6567,7 +6567,7 @@
 			(uuid "79c0f44b-adc5-4598-a3cd-6b03f9e212ec")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M8")
 					(unit 1)
@@ -6652,7 +6652,7 @@
 			(uuid "0658ec78-2faa-4bf7-abe3-fe6d886e35cf")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "U3")
 					(unit 1)
@@ -6730,7 +6730,7 @@
 			(uuid "2a02c8ce-0aff-4d67-934b-b3b601976824")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR04")
 					(unit 1)
@@ -6808,7 +6808,7 @@
 			(uuid "282cb1e7-69f7-4e0e-92a6-a5e0aba80c35")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR020")
 					(unit 1)
@@ -6889,7 +6889,7 @@
 			(uuid "2d599a76-784f-489e-b6ba-81ea093289ad")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M6")
 					(unit 1)
@@ -6967,7 +6967,7 @@
 			(uuid "6c079ed9-62f0-4d97-9a41-e19801f328ad")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR019")
 					(unit 1)
@@ -7045,7 +7045,7 @@
 			(uuid "6e47dc4b-b73f-4eaf-b29f-8bb5278a0b0e")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR012")
 					(unit 1)
@@ -7126,7 +7126,7 @@
 			(uuid "42e5fc17-eae0-4f3d-8c93-6ba67dd627f1")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M2")
 					(unit 1)
@@ -7207,7 +7207,7 @@
 			(uuid "cead666d-c4d5-4417-9209-4671557d231d")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M4")
 					(unit 1)
@@ -7392,7 +7392,7 @@
 			(uuid "0747316e-aa9a-4fe1-8341-751668d273ef")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "U5")
 					(unit 1)
@@ -7470,7 +7470,7 @@
 			(uuid "0a4bc0f4-e956-46db-8282-b04249fa9596")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR014")
 					(unit 1)
@@ -7548,7 +7548,7 @@
 			(uuid "b0ea0a62-448a-40d9-aeae-11b2aa7f70d4")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR03")
 					(unit 1)
@@ -7629,7 +7629,7 @@
 			(uuid "ec154607-7a7f-4306-a678-a5f3767c93e3")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "M1")
 					(unit 1)
@@ -7707,7 +7707,7 @@
 			(uuid "8dbdf22a-270f-4604-a901-c5202a4d764f")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR015")
 					(unit 1)
@@ -7785,7 +7785,7 @@
 			(uuid "04c2c8c1-bc5e-4514-a79b-ee2c49fc6d46")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR011")
 					(unit 1)
@@ -7870,7 +7870,7 @@
 			(uuid "d058cdfc-ad3c-4916-9771-7aee4165f426")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "U1")
 					(unit 1)
@@ -7948,7 +7948,7 @@
 			(uuid "531c692c-0db9-4c61-9522-cdbfe1c22902")
 		)
 		(instances
-			(project "floraflow"
+			(project "bloombot"
 				(path "/f8ca57fe-b4ec-4658-84e8-4883faa41e21"
 					(reference "#PWR010")
 					(unit 1)

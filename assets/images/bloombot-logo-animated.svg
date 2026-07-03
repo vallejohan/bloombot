@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Stylized modern vector art of BloomBot (Squircle head, lowered flower, happy ^^ eyes, animated float, blink & sway) -->
+  
+  <style>
+    @keyframes sway {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(6deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .swaying-flower {
+      animation: sway 2.5s ease-in-out infinite;
+      transform-origin: 168px 95px;
+    }
+  </style>
+
+  <g>
+    <!-- Left Robotic Arm holding the flower -->
+    <path d="M 142 120 C 165 125, 168 105, 168 95" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Swaying Flower Group -->
+    <g class="swaying-flower">
+      <!-- Flower Stem -->
+      <path d="M 168 95 L 168 70" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
+      
+      <!-- Green Leaves -->
+      <path d="M 168 82 C 180 82, 180 72, 168 72" fill="#10b981" stroke="#334155" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 168 88 C 156 88, 156 78, 168 78" fill="#10b981" stroke="#334155" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      
+      <!-- Flower Petals (Simplistic Geometric Flower) -->
+      <!-- Top Petal -->
+      <circle cx="168" cy="57" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+      <!-- Bottom Petal -->
+      <circle cx="168" cy="79" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+      <!-- Left Petal -->
+      <circle cx="157" cy="68" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+      <!-- Right Petal -->
+      <circle cx="179" cy="68" r="8" fill="#3b82f6" stroke="#334155" stroke-width="3" />
+      <!-- Center Bulb -->
+      <circle cx="168" cy="68" r="7" fill="#fbbf24" stroke="#334155" stroke-width="3" />
+    </g>
+
+    <!-- Robot Head Base (Cute Squircle/Rounded Rect) -->
+    <rect x="52" y="72" width="96" height="84" rx="22" fill="#f8fafc" stroke="#334155" stroke-width="6" />
+
+    <!-- Side Bolts/Ears -->
+    <rect x="46" y="106" width="6" height="16" rx="3" fill="#64748b" stroke="#334155" stroke-width="4" />
+    <rect x="148" y="106" width="6" height="16" rx="3" fill="#64748b" stroke="#334155" stroke-width="4" />
+
+    <!-- Happy Squinting "^^" Eyes with SMIL blinking animation -->
+    <path d="M 74 113 Q 84 97 94 113" fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round">
+      <animate attributeName="d" 
+               dur="4s" 
+               repeatCount="indefinite"
+               values="M 74 113 Q 84 97 94 113; M 74 113 Q 84 97 94 113; M 74 113 Q 84 113 94 113; M 74 113 Q 84 97 94 113"
+               keyTimes="0; 0.9; 0.93; 1" />
+    </path>
+    <path d="M 106 113 Q 116 97 126 113" fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round">
+      <animate attributeName="d" 
+               dur="4s" 
+               repeatCount="indefinite"
+               values="M 106 113 Q 116 97 126 113; M 106 113 Q 116 97 126 113; M 106 113 Q 116 113 126 113; M 106 113 Q 116 97 126 113"
+               keyTimes="0; 0.9; 0.93; 1" />
+    </path>
+
+    <!-- Cute Antenna on Top -->
+    <!-- Base connection -->
+    <path d="M 94 72 L 106 72" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+    <!-- Antenna Stem -->
+    <line x1="100" y1="72" x2="100" y2="52" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+    <!-- Tip Bulb -->
+    <circle cx="100" cy="46" r="8" fill="#10b981" stroke="#334155" stroke-width="4" />
+
+    <!-- Friendly Smiling Mouth -->
+    <path d="M 90 135 C 94 141, 106 141, 110 135" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round" />
+  </g>
+</svg>
