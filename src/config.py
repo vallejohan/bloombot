@@ -20,7 +20,7 @@ DISCOVERY_PREFIX = os.getenv("MQTT_DISCOVERY_PREFIX", "homeassistant")
 RELAY_PINS = [5, 6, 13, 19, 26, 16, 20, 21]
 
 # Set to True for Active-Low relays (common 5V 8-channel relay boards turn ON when pin is pulled LOW)
-# Set to False for Active-High relays (turn ON when pin is driven HIGH).
+# Set to False for Active-High relays (turn ON when pin is driven HIGH)
 ACTIVE_LOW = True
 
 PERSISTENCE_FILE = os.getenv("PERSISTENCE_FILE", "schedules.json")
