@@ -135,8 +135,6 @@ class MQTTHandler:
         availability_topic = "garden/availability"
 
         for i in range(1, len(config.RELAY_PINS) + 1):
-            base_node = f"relay_{i}"
-
             relay_config = {
                 "name": f"Relay {i}",
                 "unique_id": f"{config.DEVICE_ID}_relay_{i}",
