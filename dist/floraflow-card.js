@@ -1,4 +1,4 @@
-const VEGETABLE_ICONS = {
+const FLORA_ICONS = {
     tomato: "mdi:tomato",
     cucumber: "mdi:pickled-cucumber",
     carrot: "mdi:carrot",
@@ -18,10 +18,30 @@ const VEGETABLE_ICONS = {
     tree: "mdi:tree",
     pot: "mdi:pot",
     sprinkler: "mdi:sprinkler",
-    pump: "mdi:water-pump"
+    pump: "mdi:water-pump",
+    eggplant: "mdi:eggplant",
+    broccoli: "mdi:broccoli",
+    pea: "mdi:pea",
+    radish: "mdi:sprout",
+    apple: "mdi:apple",
+    banana: "mdi:banana",
+    cherry: "mdi:fruit-cherries",
+    cherries: "mdi:fruit-cherries",
+    grape: "mdi:fruit-grapes",
+    grapes: "mdi:fruit-grapes",
+    strawberry: "mdi:fruit-cherries",
+    pear: "mdi:fruit-pear",
+    citrus: "mdi:fruit-citrus",
+    orange: "mdi:fruit-citrus",
+    lemon: "mdi:fruit-citrus",
+    pineapple: "mdi:fruit-pineapple",
+    watermelon: "mdi:fruit-watermelon",
+    melon: "mdi:fruit-watermelon",
+    berry: "mdi:fruit-cherries",
+    berries: "mdi:fruit-cherries"
 };
 
-const VEGETABLE_SVGS = {
+const FLORA_SVGS = {
     tomato: '<circle cx="12" cy="13" r="7" /><path d="M12 3v3 M9 4.5l3 1.5 3-1.5 M10 6.5h4" />',
     cucumber: '<path d="M6 17c-1.5-1.5-1.5-4 0-5.5l8.5-8.5c1.5-1.5 4-1.5 5.5 0s1.5 4 0 5.5L11.5 17c-1.5 1.5-4 1.5-5.5 0z" /><path d="M9.5 13.5h.01 M12 11h.01 M14.5 8.5h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
     carrot: '<path d="M18 4l2 2L10 18l-6 2 2-6Z" /><path d="M13 9l1-1 M10 12l1-1 M7 15l1-1" /><path d="M19 5l3-3 M19 5l1 3 M19 5l-3-1" />',
@@ -32,7 +52,35 @@ const VEGETABLE_SVGS = {
     potato: '<path d="M12 5c4 0 7 2 8 5s0 6-3 8-6 2-9 1-4-3-3-6 3-8 7-8z" /><path d="M9 10h.01 M15 9h.01 M8 14h.01 M13 15h.01 M16 13h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
     pot: '<path d="M4 8h16v2H4z" /><path d="M5 10l2 11h10l2-11" />',
     sprinkler: '<path d="M12 22v-6 M8 16h8v-3H8z M10 13l2-3 2 3" /><path d="M6 8A9 9 0 0 1 18 8 M3 11a12 12 0 0 1 18 0 M12 5V2" />',
-    pump: '<path d="M18 4H10v4M10 8H6v2h4v8 M10 10h6v3" /><path d="M16 17a2 2 0 0 1-4 0c0-1.5 2-3 2-3s2 1.5 2 3z" />'
+    pump: '<path d="M18 4H10v4M10 8H6v2h4v8 M10 10h6v3" /><path d="M16 17a2 2 0 0 1-4 0c0-1.5 2-3 2-3s2 1.5 2 3z" />',
+    pepper: '<path d="M12 5c-2.5 0-4.5 1.5-4.5 4.5 0 3.5 2 6 3.5 7 1.5.8 1.5 2.5 1 3.5a1 1 0 0 0 1.5 1.2c1.5-1 2-2.7 2-4.2c0-3.5-2-6.5-3.5-7.5" /><path d="M12 5c2.5 0 4.5 1.5 4.5 4.5 0 3.5-2 6-3.5 7" /><path d="M12 5V3c0-.6-.4-1-1-1" />',
+    eggplant: '<path d="M18.5 5.5c-2.3-2.3-6.5-.7-8.5 1.3C8 8.8 6.5 12 6.5 15.5c0 3.3 2.7 6 6 6 3.5 0 6.7-1.5 8.7-3.5 2-2 3.6-6.2 1.3-8.5" /><path d="M10 6.8l-4-4" /><path d="M8.5 5.5c.3 1.5 1.2 2.7 2.5 3.3" />',
+    broccoli: '<path d="M12 6a3.5 3.5 0 0 0-3.5 3.5c0 .3.05.6.15.9A3.5 3.5 0 0 0 6 13.5a3.5 3.5 0 0 0 3.5 3.5h5a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-2.65-3.4c.1-.3.15-.6.15-.9A3.5 3.5 0 0 0 12 6z" /><path d="M10 17v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4" />',
+    pea: '<path d="M3 12c3-4 7-6 11-4s7 5 7 5-3 4-7 4-8-1-11-5z" /><circle cx="8" cy="11" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="16" cy="12" r="2" />',
+    radish: '<path d="M12 8c-3 0-5 2-5 5.5C7 17 9.5 21 12 22c2.5-1 5-5 5-8.5c0-3.5-2-5.5-5-5.5z" /><path d="M12 8V2 M9 5c1-1.5 2-3 3-3 M15 5c-1-1.5-2-3-3-3" />',
+    cabbage: '<circle cx="12" cy="14" r="7" /><path d="M12 7c-3 0-5 2-5 5 0 2 1.5 3.5 3 4 M12 7c3 0 5 2 5 5 0 2-1.5 3.5-3 4 M9 10a5 5 0 0 1 6 0 M12 7v14" />',
+    onion: '<path d="M12 3c-1.5 3-5 5.5-5 9.5a5 5 0 1 0 10 0C17 8.5 13.5 6 12 3z" /><path d="M10 12c.5 2 1.5 4.5 2 5 M14 12c-.5 2-1.5 4.5-2 5 M12 3v14" /><path d="M10 20l2 2 2-2" />',
+    garlic: '<path d="M12 2c-.5 2-3 4.5-5 7.5a6 6 0 1 0 10 0c-2-3-4.5-5.5-5-7.5z" /><path d="M12 8c-1 2-2 4-2 7 M12 8c1 2 2 4 2 7 M12 2v15" />',
+    mushroom: '<path d="M4 12c0-4.4 3.6-8 8-8s8 3.6 8 8H4z" /><path d="M9 12v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-7" />',
+    leaf: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />',
+    flower: '<circle cx="12" cy="12" r="3" /><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" /><path d="M12 7.5V9 M7.5 12H9 M16.5 12H15 M12 16.5V15" /><path d="m8 8 1.88 1.88 M14.12 9.88 16 8 M8 16 1.88 14.12 M14.12 14.12 16 16" />',
+    tree: '<path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" /><path d="M12 22v-3" />',
+    apple: '<path d="M12 20.94c1.5 0 2.75-.75 4-1.94 1.25 1.19 2.5 1.94 4 1.94 1.5 0 3-1.5 3-4 0-4-3.5-5.5-5.5-5.5-1.5 0-2.5.5-3 .5s-1.5-.5-3-.5c-2 0-5.5 1.5-5.5 5.5 0 2.5 1.5 4 3 4 1.5 0 2.75-.75 4-1.94Z" /><path d="M12 2s2 2 2 5.5-2 5.5-2 5.5-2-2-2-5.5 2-5.5 2-5.5z" />',
+    banana: '<path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5" /><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z" />',
+    cherry: '<path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" /><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z" />',
+    cherries: '<path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" /><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" /><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z" />',
+    grape: '<path d="M22 5V2l-5.89 5.89" /><circle cx="16.6" cy="15.89" r="3" /><circle cx="8.11" cy="7.4" r="3" /><circle cx="12.35" cy="11.65" r="3" /><circle cx="13.91" cy="5.85" r="3" /><circle cx="18.15" cy="10.09" r="3" /><circle cx="6.56" cy="13.2" r="3" /><circle cx="10.8" cy="17.44" r="3" /><circle cx="5" cy="19" r="3" />',
+    grapes: '<path d="M22 5V2l-5.89 5.89" /><circle cx="16.6" cy="15.89" r="3" /><circle cx="8.11" cy="7.4" r="3" /><circle cx="12.35" cy="11.65" r="3" /><circle cx="13.91" cy="5.85" r="3" /><circle cx="18.15" cy="10.09" r="3" /><circle cx="6.56" cy="13.2" r="3" /><circle cx="10.8" cy="17.44" r="3" /><circle cx="5" cy="19" r="3" />',
+    strawberry: '<path d="m17 7 3.5-3.5" /><path d="M17 2v5h5" /><path d="M2.1 17.1a4 4 0 0 0 4.8 4.8l9-2.1a6.32 6.32 0 0 0 2.9-10.9L15 5.2A6.5 6.5 0 0 0 4.1 8.3Z" /><path d="M8.5 9.5h.01 M12.5 8.5h.01 M7.5 13.5h.01 M11.5 12.5h.01 M15.5 11.5h.01 M6.5 17.5h.01 M10.5 16.5h.01 M14.5 15.5h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
+    pear: '<path d="M22 7a4.95 4.95 0 0 0-8.6-3.4c-1.5 1.6-1.6 1.8-5 2.6a8 8 0 1 0 9.4 9.5c.7-3.4 1-3.6 2.6-5 1-1 1.6-2.3 1.6-3.7" /><path d="m19 5 3-3" />',
+    citrus: '<path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" /><path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" /><path d="m14 10-5.5 5.5" /><path d="M14 17.85V10H6.15" />',
+    orange: '<path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" /><path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" /><path d="m14 10-5.5 5.5" /><path d="M14 17.85V10H6.15" />',
+    lemon: '<path d="M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z" /><path d="M19.65 15.66A8 8 0 0 1 8.35 4.34" /><path d="m14 10-5.5 5.5" /><path d="M14 17.85V10H6.15" />',
+    pineapple: '<path d="M12 2c1-1 2 .5 2 2 0 1.5-2 3-2 3s-2-1.5-2-3c0-1.5 1-3 2-2z M8 6c0-1.5 1.5-1 1.5 1 0 1-1.5 2-1.5 2s-1-.5-1-1.5 M16 6c0-1.5-1.5-1-1.5 1 0 1 1.5 2 1.5 2s1-.5 1-1.5" /><path d="M12 22c4 0 7-3 7-8 0-4-3-6-7-6s-7 2-7 6c0 5 3 8 7 8z" /><path d="M8 11l8 6 M6 14l6 6 M10 9l6 4 M16 11l-8 6 M18 14l-6 6 M14 9l-6 4" />',
+    watermelon: '<path d="M21.7 17.7a1.08 1.08 0 0 1-.08 1.57A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04Z" /><path d="M19.7 15.7A8 8 0 0 1 8.35 4.34" /><path d="M10 11h.01 M13 14h.01" stroke-dasharray="0 0" stroke-width="3" stroke-linecap="round" />',
+    melon: '<circle cx="12" cy="12" r="10" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10" />',
+    berry: '<circle cx="9" cy="15" r="4" /><circle cx="15" cy="15" r="4" /><circle cx="12" cy="9" r="4" /><path d="M9 11c0-2-1-3-2-3 M15 11c0-2 1-3 2-3 M12 5V2" />',
+    berries: '<circle cx="9" cy="15" r="4" /><circle cx="15" cy="15" r="4" /><circle cx="12" cy="9" r="4" /><path d="M9 11c0-2-1-3-2-3 M15 11c0-2 1-3 2-3 M12 5V2" />'
 };
 
 class FloraFlowCardSecondary extends HTMLElement {
@@ -45,7 +93,7 @@ class FloraFlowCardSecondary extends HTMLElement {
 
     getIconHTML(iconName) {
         const raw = iconName.toLowerCase();
-        const svgContent = VEGETABLE_SVGS[raw];
+        const svgContent = FLORA_SVGS[raw];
         if (svgContent) {
             return `
                 <svg viewBox="0 0 24 24" class="custom-svg-icon">
@@ -55,7 +103,7 @@ class FloraFlowCardSecondary extends HTMLElement {
         }
 
         // Fallback to standard Home Assistant ha-icon
-        const resolvedMdi = VEGETABLE_ICONS[raw] || iconName;
+        const resolvedMdi = FLORA_ICONS[raw] || iconName;
         return `<ha-icon icon="${resolvedMdi}"></ha-icon>`;
     }
 
@@ -632,7 +680,7 @@ class FloraFlowCardSecondary extends HTMLElement {
             addTimeBtn.addEventListener('click', () => {
                 if (this.activeRelayId !== null) {
                     if (!this._tempStartTimes) {
-                        this._tempStartTimes = [{"time": "12:00:00", "enabled": true}];
+                        this._tempStartTimes = [{ "time": "12:00:00", "enabled": true }];
                     } else {
                         this._tempStartTimes.push({ "time": "12:00:00", "enabled": true });
                     }
@@ -771,7 +819,7 @@ class FloraFlowCardSecondary extends HTMLElement {
         rows.forEach((row) => {
             const index = parseInt(row.getAttribute('data-index'));
             const item = this._tempStartTimes[index];
-            
+
             const switchEl = row.querySelector('.time-enabled-switch');
             if (switchEl) {
                 switchEl.checked = item.enabled;
@@ -1033,7 +1081,7 @@ class FloraFlowCardSecondary extends HTMLElement {
 }
 
 customElements.define("floraflow-card-secondary", FloraFlowCardSecondary);
-customElements.define("floraflow-card", class extends FloraFlowCardSecondary {});
+customElements.define("floraflow-card", class extends FloraFlowCardSecondary { });
 
 // Add preview information in Home Assistant custom card selector
 window.customCards = window.customCards || [];

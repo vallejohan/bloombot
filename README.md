@@ -140,7 +140,7 @@ The wiring schematic image below shows how the hardware components can be wired 
 
 ### Enclosure box
 
-There is an enclosure box that can be 3d-printed to fit the hardware components. The box has holdings for the Raspberry Pi, relay board, and DHT22 sensor, as well as hole for input power and water valve cables. STL files can be found [here](#).
+There is an enclosure box that can be 3d-printed to fit the hardware components. The box has holdings for the Raspberry Pi, relay board, and DHT22 sensor, as well as hole for input power and water valve cables. STL files (and 3mf file) can be found in the [assets/3d-models](assets/3d-models) directory.
 
 ---
 
@@ -323,7 +323,11 @@ Once the repository is officially included in the HACS default index:
 
 ### Dashboard Configuration
 
-Once installed, you can add the card to your dashboard using the Custom UI card selector. See [garden-relay-card-example.yaml](home-assistant/dashboard-examples/garden-relay-card-example.yaml) for an example on how the card is set up in Home Assistant.
+Once installed, you can add the card to your dashboard using the Custom UI card selector. 
+
+For the complete configuration options table, list of custom icons, and configuration examples, refer to the [Floraflow card configuration guide (info.md)](info.md).
+
+You can also view a complete dashboard configuration example in [floraflow-card-example.yaml](home-assistant/dashboard-examples/floraflow-card-example.yaml).
 
 ---
 
