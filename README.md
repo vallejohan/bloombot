@@ -13,7 +13,7 @@
   <a href="https://github.com/vallejohan/bloombot/actions/workflows/ci.yml">
     <img src="https://github.com/vallejohan/bloombot/actions/workflows/ci.yml/badge.svg" alt="CI Build Status" />
   </a>
-  <img src="https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue?style=flat-square&logo=python" alt="Python Versions" />
+  <img src="https://img.shields.io/badge/python-3.12-blue?style=flat-square&logo=python" alt="Python Version" />
   <a href="https://github.com/vallejohan/bloombot/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="MIT License" />
   </a>
@@ -357,7 +357,7 @@ uv run mypy src tests
 Scan for common security vulnerabilities and audit dependencies:
 ```bash
 uv run bandit -r src/
-uv pip audit
+uv audit
 ```
 
 #### 4. Run the Unit Test Suite

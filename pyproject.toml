@@ -3,7 +3,7 @@ name = "bloombot"
 version = "0.1.0"
 description = "A lightweight irrigation controller using a Raspberry Pi, with Home Assistant integration."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 dependencies = [
     "paho-mqtt==2.1.0",
     "lgpio; platform_system == 'Linux'",
@@ -20,7 +20,7 @@ dev = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py310"
+target-version = "py312"
 lint.select = ["E", "F", "I", "W"]
 lint.ignore = ["E501"]
 
