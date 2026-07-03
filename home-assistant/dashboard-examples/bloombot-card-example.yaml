@@ -1,5 +1,5 @@
-type: custom:floraflow-card
-title: FloraFlow Irrigation Control
+type: custom:bloombot-card
+title: BloomBot Irrigation Control
 columns: 3
 relays:
   - id: 1

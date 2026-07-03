@@ -256,7 +256,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "floraflow.kicad_pro",
+    "filename": "bloombot.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -411,7 +411,7 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "floraflow.kicad_sch",
+        "filename": "bloombot.kicad_sch",
         "name": "Root",
         "uuid": "f8ca57fe-b4ec-4658-84e8-4883faa41e21"
       }

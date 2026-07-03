@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="/assets/images/floraflow-logo.png" width="200"/>
+  <img src="/assets/images/bloombot-logo.svg" width="200"/>
 </p>
 
-<h1 align="center">FloraFlow</h1>
+<h1 align="center">BloomBot</h1>
 
 <p align="center">
   <strong>A lightweight irrigation controller.</strong><br>
@@ -10,17 +10,17 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/vallejohan/floraflow/blob/main/LICENSE">
+  <a href="https://github.com/vallejohan/bloombot/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="MIT License" />
   </a>
-  <a href="https://github.com/vallejohan/floraflow/releases">
-    <img src="https://img.shields.io/github/v/release/vallejohan/floraflow?style=flat-square" alt="Latest Release" />
+  <a href="https://github.com/vallejohan/bloombot/releases">
+    <img src="https://img.shields.io/github/v/release/vallejohan/bloombot?style=flat-square" alt="Latest Release" />
   </a>
 </p>
 
 ---
 
-## What is FloraFlow?
+## What is BloomBot?
 A lightweight garden and greenhouse irrigation controller running on a **Raspberry Pi Zero W** (or any other Raspberry Pi) to control a 5V relay board. It integrates with **Home Assistant** over **MQTT** using automatic discovery, and supports both scheduled watering (by time-of-day and duration) and manual overrides.
 
 ## Features
@@ -42,7 +42,7 @@ Before starting there are some limitations with this project that are good to co
 - **WiFi Range Outdoors:** The onboard PCB antenna of the Raspberry Pi Zero W has limited range, which is further reduced when placed inside an enclosure. If the Pi is far from your router, you may experience intermittent MQTT disconnections.
    * *Tip:* Consider planning where the hardware should be placed and if any additional WiFi range extenders are needed.
 - **Power Consumption:** Unlike low-power microcontrollers (such as the ESP32) which can enter deep-sleep mode and draw microamps, a Raspberry Pi Zero W consumes quite substantially more power.
-  * *Tip:* Running FloraFlow purely on batteries is doable, but much less efficient compared to for example an ESP32 device. One option could be to use a larger solar panel setup (e.g., 10W+ solar panel, with a larger 12V LiFePO4 battery, and a step-down converter). A mains-powered supply is highly recommended, if possible.
+  * *Tip:* Running BloomBot purely on batteries is doable, but much less efficient compared to for example an ESP32 device. One option could be to use a larger solar panel setup (e.g., 10W+ solar panel, with a larger 12V LiFePO4 battery, and a step-down converter). A mains-powered supply is highly recommended, if possible.
 - **No Native Analog Inputs:** The Raspberry Pi lacks analog-to-digital converters (ADC), in case that you'd like to add analog devices. 
    * *Tip:* If you plan to expand the hardware to read analog soil moisture sensors, or utilize other sensors, you will need to add an external ADC device.
 
@@ -57,12 +57,12 @@ Before starting there are some limitations with this project that are good to co
 
 ## System Architecture
 
-FloraFlow uses a modular architecture to bridge physical hardware with Home Assistant over an MQTT interface. The main components are detailed below, followed by a system diagram showing how they connect.
+BloomBot uses a modular architecture to bridge physical hardware with Home Assistant over an MQTT interface. The main components are detailed below, followed by a system diagram showing how they connect.
 
-1. **FloraFlow Core (Raspberry Pi):** A Python application running as a system service. It reads ambient temperature and humidity sensors (via a Linux kernel overlay driver) and manages GPIO outputs to trigger relays.
+1. **BloomBot Core (Raspberry Pi):** A Python application running as a system service. It reads ambient temperature and humidity sensors (via a Linux kernel overlay driver) and manages GPIO outputs to trigger relays.
 2. **Local Scheduler & Persistence:** The scheduler runs directly on the Pi and relies on a local JSON file (`schedules.json`) for persistence, ensuring that schedules persist and trigger even during network outages.
 3. **MQTT Discovery Layer:** On startup, the script registers all switches, sensors, numbers, and system status configuration topics to the Home Assistant MQTT broker automatically.
-4. **Home Assistant Control:** A custom companion frontend card (`floraflow-card`) displays status information and allows the user to easily configure watering schedules, durations, and trigger manual overrides.
+4. **Home Assistant Control:** A custom companion frontend card (`bloombot-card`) displays status information and allows the user to easily configure watering schedules, durations, and trigger manual overrides.
 
 ```mermaid
 graph TD
@@ -75,7 +75,7 @@ graph TD
 
     %% Nodes
     subgraph HA ["Home Assistant"]
-        Card["FloraFlow Lovelace Card"]:::haStyle
+        Card["BloomBot Lovelace Card"]:::haStyle
         HASwitches["Entities (Switches, Sensors, Inputs)"]:::haStyle
     end
 
@@ -84,7 +84,7 @@ graph TD
     end
 
     subgraph Pi ["Raspberry Pi Zero W"]
-        Core["FloraFlow App (main.py)"]:::rpiStyle
+        Core["BloomBot App (main.py)"]:::rpiStyle
         Sched["Scheduler & Persistence (schedules.json)"]:::rpiStyle
         GPIO["GPIO Manager (gpio_manager.py)"]:::rpiStyle
         DHT["DHT Sensor Module (dht_sensor.py)"]:::rpiStyle
@@ -113,7 +113,7 @@ graph TD
 
 ## Hardware Setup
 
-To build the FloraFlow controller, you will need the hardware components listed in the Bill of Materials section below. The setup is not restricted to the specific models listed, you can choose various components and scale the number of relays (valves) as needed to fit your garden zones.
+To build the BloomBot controller, you will need the hardware components listed in the Bill of Materials section below. The setup is not restricted to the specific models listed, you can choose various components and scale the number of relays (valves) as needed to fit your garden zones.
 
 ### Bill of Materials (BOM)
 
@@ -135,7 +135,7 @@ The wiring schematic image below shows how the hardware components can be wired 
 - **Isolating power to relay and Rpi:** To isolate the Raspberry Pi from relay noise and ensure the 5V relay coils have sufficient power, the usage of two 5V DC-DC converters is recommended (as shown in the schematic). However, using a single 5V DC-DC converter is fully functional as well.
 
 <picture>
-  <img alt="FloraFlow wiring schematic" src="/assets/images/floraflow-schematic.svg">
+  <img alt="BloomBot wiring schematic" src="/assets/images/bloombot-schematic.svg">
 </picture>
 
 ### Enclosure box
@@ -172,7 +172,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Navigate to your workspace directory and synchronize the dependencies to set up a virtual environment:
 
 ```bash
-cd /path/to/your/workspace/floraflow
+cd /path/to/your/workspace/bloombot
 uv sync
 ```
 
@@ -198,7 +198,7 @@ To enable the kernel driver:
 
 ### 4. Configuration
 
-To configure FloraFlow, you can copy the `.env.example` template to `.env` and adjust the variables to fit your network and system:
+To configure BloomBot, you can copy the `.env.example` template to `.env` and adjust the variables to fit your network and system:
 
 ```bash
 cp .env.example .env
@@ -233,20 +233,20 @@ To run the daemon automatically when the Pi boots and ensure it restarts on cras
 
 1. Create a systemd service file:
    ```bash
-   sudo nano /etc/systemd/system/floraflow.service
+   sudo nano /etc/systemd/system/bloombot.service
    ```
 
 2. Paste the following configuration:
    ```ini
    [Unit]
-   Description=FloraFlow Irrigation Controller Daemon
+   Description=BloomBot Irrigation Controller Daemon
    After=network.target mqtt.service
 
    [Service]
    Type=simple
    User=pi
-   WorkingDirectory=/home/pi/floraflow
-   ExecStart=/home/pi/floraflow/.venv/bin/python src/main.py
+   WorkingDirectory=/home/pi/bloombot
+   ExecStart=/home/pi/bloombot/.venv/bin/python src/main.py
    Restart=always
    RestartSec=5
 
@@ -262,13 +262,13 @@ To run the daemon automatically when the Pi boots and ensure it restarts on cras
 3. Enable and start the service:
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable floraflow.service
-   sudo systemctl start floraflow.service
+   sudo systemctl enable bloombot.service
+   sudo systemctl start bloombot.service
    ```
 
 4. View service logs to monitor execution:
    ```bash
-   sudo journalctl -u floraflow.service -f
+   sudo journalctl -u bloombot.service -f
    ```
 
 ---
@@ -295,14 +295,14 @@ If you are developing or testing on a laptop/desktop computer (e.g. Windows/Mac)
 This project includes a Lovelace card designed to control scheduled and manual irrigation valves with configuration dialogs.
 
 <p align="center">
-  <img src="/assets/gifs/floraflow-ha-card-example.gif" alt="FloraFlow Home Assistant Card Preview" width="600"/>
+  <img src="/assets/gifs/bloombot-ha-card-example.gif" alt="BloomBot Home Assistant Card Preview" width="600"/>
 </p>
 
 ### New to Home Assistant?
 
 If you do not have a Home Assistant instance running yet, follow these steps to get started:
 1. **Installation:** Refer to the official [Home Assistant Installation Guide](https://www.home-assistant.io/installation/) to learn how to install Home Assistant OS or Core on a Raspberry Pi 4/5, dedicated computer, or virtual machine.
-2. **HACS Installation:** To install the FloraFlow card directly, you need the **Home Assistant Community Store (HACS)**. Follow the official [HACS Download & Setup Guide](https://hacs.xyz/docs/setup/prerequisites) to enable HACS on your instance.
+2. **HACS Installation:** To install the BloomBot card directly, you need the **Home Assistant Community Store (HACS)**. Follow the official [HACS Download & Setup Guide](https://hacs.xyz/docs/setup/prerequisites) to enable HACS on your instance.
 
 ### Installation via HACS (Home Assistant Community Store)
 
@@ -310,15 +310,15 @@ If you do not have a Home Assistant instance running yet, follow these steps to 
 Before the integration is officially merged into the HACS default store, or for beta testing new releases:
 1. Go to **HACS** in your Home Assistant dashboard.
 2. Click the **three dots** in the top right corner and select **Custom repositories**.
-3. Add the repository URL: `https://github.com/vallejohan/floraflow`
+3. Add the repository URL: `https://github.com/vallejohan/bloombot`
 4. Select the category **Lovelace** and click **Add**.
-5. The **FloraFlow Card** will now appear in your list. Click **Download** in the bottom right corner.
+5. The **BloomBot Card** will now appear in your list. Click **Download** in the bottom right corner.
 
 #### Option B: Default Installation (Once Merged)
 Once the repository is officially included in the HACS default index:
 1. Go to **HACS** in your Home Assistant dashboard.
 2. Select **Lovelace** (or search all categories).
-3. Search for **FloraFlow Card**.
+3. Search for **BloomBot Card**.
 4. Click **Download** in the bottom right corner.
 
 ### Dashboard Configuration
@@ -327,7 +327,7 @@ Once installed, you can add the card to your dashboard using the Custom UI card 
 
 For the complete configuration options table, list of custom icons, and configuration examples, refer to the [Floraflow card configuration guide (info.md)](info.md).
 
-You can also view a complete dashboard configuration example in [floraflow-card-example.yaml](home-assistant/dashboard-examples/floraflow-card-example.yaml).
+You can also view a complete dashboard configuration example in [bloombot-card-example.yaml](home-assistant/dashboard-examples/bloombot-card-example.yaml).
 
 ---
 
@@ -336,7 +336,7 @@ You can also view a complete dashboard configuration example in [floraflow-card-
 To verify code functionality and format compliance locally:
 
 ### 1. Run Formatting & Import Checks
-FloraFlow uses `isort` and `black` to enforce style guidelines.
+BloomBot uses `isort` and `black` to enforce style guidelines.
 
 To check without modifying files:
 ```bash

@@ -83,7 +83,7 @@ const FLORA_SVGS = {
     berries: '<circle cx="9" cy="15" r="4" /><circle cx="15" cy="15" r="4" /><circle cx="12" cy="9" r="4" /><path d="M9 11c0-2-1-3-2-3 M15 11c0-2 1-3 2-3 M12 5V2" />'
 };
 
-class FloraFlowCardSecondary extends HTMLElement {
+class BloomBotCardSecondary extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -129,9 +129,9 @@ class FloraFlowCardSecondary extends HTMLElement {
 
     setConfig(config) {
         this._config = config;
-        this.title = config.title || "FloraFlow Controller";
-        this.tempEntity = config.temperature_entity || "sensor.floraflow_temperature";
-        this.humidityEntity = config.humidity_entity || "sensor.floraflow_humidity";
+        this.title = config.title || "BloomBot Controller";
+        this.tempEntity = config.temperature_entity || "sensor.bloombot_temperature";
+        this.humidityEntity = config.humidity_entity || "sensor.bloombot_humidity";
         this.columns = config.columns || 2;
 
         // Default relays 1 to 8 if not defined
@@ -748,7 +748,7 @@ class FloraFlowCardSecondary extends HTMLElement {
         }
 
         // Fetch current start times from HA state and render
-        const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.floraflow_relay_${id}_start_times`);
+        const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.bloombot_relay_${id}_start_times`);
         const startTimesStateObj = this._hass.states[startTimesEnt];
         let startTimes = [{ "time": "08:00:00", "enabled": true }];
         if (startTimesStateObj && startTimesStateObj.state && startTimesStateObj.state !== 'unknown' && startTimesStateObj.state !== 'unavailable') {
@@ -773,7 +773,7 @@ class FloraFlowCardSecondary extends HTMLElement {
     }
 
     handleManualSwitch(id, event) {
-        const entity = this.getEntityName(id, 'relay_entity', `switch.floraflow_relay_${id}`);
+        const entity = this.getEntityName(id, 'relay_entity', `switch.bloombot_relay_${id}`);
         const service = event.target.checked ? 'turn_on' : 'turn_off';
 
         if (!this.manualWateringStarted) {
@@ -785,7 +785,7 @@ class FloraFlowCardSecondary extends HTMLElement {
     }
 
     handleScheduleSwitch(id, event) {
-        const entity = this.getEntityName(id, 'schedule_enabled_entity', `switch.floraflow_relay_${id}_schedule_enabled`);
+        const entity = this.getEntityName(id, 'schedule_enabled_entity', `switch.bloombot_relay_${id}_schedule_enabled`);
         const service = event.target.checked ? 'turn_on' : 'turn_off';
         this._hass.callService('switch', service, { entity_id: entity });
     }
@@ -895,7 +895,7 @@ class FloraFlowCardSecondary extends HTMLElement {
     }
 
     handleDurationChange(id, event) {
-        const entity = this.getEntityName(id, 'duration_entity', `number.floraflow_relay_${id}_duration`);
+        const entity = this.getEntityName(id, 'duration_entity', `number.bloombot_relay_${id}_duration`);
         const value = parseInt(event.target.value);
         this._hass.callService('number', 'set_value', {
             entity_id: entity,
@@ -917,10 +917,10 @@ class FloraFlowCardSecondary extends HTMLElement {
             const id = relay.id;
 
             // Resolve actual entity IDs
-            const relayEnt = this.getEntityName(id, 'relay_entity', `switch.floraflow_relay_${id}`);
-            const schedEnt = this.getEntityName(id, 'schedule_enabled_entity', `switch.floraflow_relay_${id}_schedule_enabled`);
-            const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.floraflow_relay_${id}_start_times`);
-            const durEnt = this.getEntityName(id, 'duration_entity', `number.floraflow_relay_${id}_duration`);
+            const relayEnt = this.getEntityName(id, 'relay_entity', `switch.bloombot_relay_${id}`);
+            const schedEnt = this.getEntityName(id, 'schedule_enabled_entity', `switch.bloombot_relay_${id}_schedule_enabled`);
+            const startTimesEnt = this.getEntityName(id, 'start_times_entity', `sensor.bloombot_relay_${id}_start_times`);
+            const durEnt = this.getEntityName(id, 'duration_entity', `number.bloombot_relay_${id}_duration`);
 
             // Read states from HA db
             const relayStateObj = this._hass.states[relayEnt];
@@ -1080,20 +1080,20 @@ class FloraFlowCardSecondary extends HTMLElement {
     }
 }
 
-customElements.define("floraflow-card-secondary", FloraFlowCardSecondary);
-customElements.define("floraflow-card", class extends FloraFlowCardSecondary { });
+customElements.define("bloombot-card-secondary", BloomBotCardSecondary);
+customElements.define("bloombot-card", class extends BloomBotCardSecondary { });
 
 // Add preview information in Home Assistant custom card selector
 window.customCards = window.customCards || [];
 window.customCards.push({
-    type: "floraflow-card-secondary",
-    name: "FloraFlow Irrigation Card (Grid Layout)",
+    type: "bloombot-card-secondary",
+    name: "BloomBot Irrigation Card (Grid Layout)",
     description: "A premium grid-based dashboard card to control scheduled and manual irrigation valves with configuration dialogs.",
     preview: false,
 });
 window.customCards.push({
-    type: "floraflow-card",
-    name: "FloraFlow Irrigation Card (Grid Layout) Alias",
-    description: "Alias for FloraFlow Irrigation Card.",
+    type: "bloombot-card",
+    name: "BloomBot Irrigation Card (Grid Layout) Alias",
+    description: "Alias for BloomBot Irrigation Card.",
     preview: false,
 });

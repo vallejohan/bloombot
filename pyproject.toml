@@ -1,5 +1,5 @@
 [project]
-name = "floraflow"
+name = "bloombot"
 version = "0.1.0"
 description = "A lightweight irrigation controller using a Raspberry Pi, with Home Assistant integration."
 readme = "README.md"

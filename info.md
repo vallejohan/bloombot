@@ -1,8 +1,8 @@
-# FloraFlow Irrigation Card
+# BloomBot Irrigation Card
 
 A custom gardening card for Home Assistant to control scheduled and manual irrigation valves with configuration dialogs.
 
-![FloraFlow Home Assistant Card Preview](assets/gifs/floraflow-ha-card-example.gif)
+![BloomBot Home Assistant Card Preview](assets/gifs/bloombot-ha-card-example.gif)
 
 ## Features
 - **Vibrant & Responsive Grid Layout**: Card interface designed to control multiple watering zones (relays).
@@ -10,12 +10,12 @@ A custom gardening card for Home Assistant to control scheduled and manual irrig
 - **Interactive Configuration Modals**: Click on any zone to open a modal dialog allowing you to toggle manual watering, configure scheduling, or adjust watering duration.
 - **Embedded Sensors**: Shows current system temperature and humidity metrics if sensors are available.
 
-See [FloraFlow GitHub repository](https://github.com/vallejohan/floraflow) for a full walkthrough of the setup.
+See [BloomBot GitHub repository](https://github.com/vallejohan/bloombot) for a full walkthrough of the setup.
 
 ## Installation
 
 1. Open **HACS** in your Home Assistant dashboard.
-2. Search for **FloraFlow Card**.
+2. Search for **BloomBot Card**.
 3. Click **Download** in the bottom right corner.
 
 ## Dashboard Configuration
@@ -24,7 +24,7 @@ Add the card to your dashboard using the Custom UI card selector.
 
 ### Configuration Example
 ```yaml
-type: custom:floraflow-card
+type: custom:bloombot-card
 name: Garden Irrigation
 columns: 2
 relays:
@@ -50,12 +50,12 @@ relays:
 
 | Name | Type | Requirement | Description | Default |
 |---|---|---|---|---|
-| `type` | string | **Required** | Must be `custom:floraflow-card` (or `custom:floraflow-card-secondary`). | |
-| `name` | string | Optional | Header title of the card. | `FloraFlow` |
+| `type` | string | **Required** | Must be `custom:bloombot-card` (or `custom:bloombot-card-secondary`). | |
+| `name` | string | Optional | Header title of the card. | `BloomBot` |
 | `columns` | number | Optional | Number of grid columns for the relays list. | `2` |
-| `temp_entity` | string | Optional | Temperature sensor entity (e.g., `sensor.floraflow_temperature`). | `sensor.floraflow_temperature` |
-| `humidity_entity` | string | Optional | Humidity sensor entity (e.g., `sensor.floraflow_humidity`). | `sensor.floraflow_humidity` |
-| `system_status_entity` | string | Optional | System connectivity binary sensor (e.g., `binary_sensor.floraflow_status`). | `binary_sensor.floraflow_status` |
+| `temp_entity` | string | Optional | Temperature sensor entity (e.g., `sensor.bloombot_temperature`). | `sensor.bloombot_temperature` |
+| `humidity_entity` | string | Optional | Humidity sensor entity (e.g., `sensor.bloombot_humidity`). | `sensor.bloombot_humidity` |
+| `system_status_entity` | string | Optional | System connectivity binary sensor (e.g., `binary_sensor.bloombot_status`). | `binary_sensor.bloombot_status` |
 | `relays` | list | **Required** | List of relays to display on the grid. | |
 
 #### Relay Options
@@ -64,10 +64,10 @@ relays:
 |---|---|---|---|---|
 | `id` | number | **Required** | The ID of the relay (1-indexed, e.g. `1` to `8`). | |
 | `name` | string | **Required** | Display name for the watering zone. | |
-| `entity` | string | Optional | The switch entity to trigger manual watering (e.g., `switch.floraflow_relay_1`). | `switch.floraflow_relay_<id>` |
-| `schedule_enabled_entity` | string | Optional | Switch entity to toggle scheduling on/off (e.g., `switch.floraflow_relay_<id>_schedule_enabled`). | `switch.floraflow_relay_<id>_schedule_enabled` |
-| `start_times_entity` | string | Optional | Sensor entity containing the schedules array (e.g., `sensor.floraflow_relay_<id>_start_times`). | `sensor.floraflow_relay_<id>_start_times` |
-| `duration_entity` | string | Optional | Number input entity for configuring duration in minutes (e.g., `number.floraflow_relay_<id>_duration`). | `number.floraflow_relay_<id>_duration` |
+| `entity` | string | Optional | The switch entity to trigger manual watering (e.g., `switch.bloombot_relay_1`). | `switch.bloombot_relay_<id>` |
+| `schedule_enabled_entity` | string | Optional | Switch entity to toggle scheduling on/off (e.g., `switch.bloombot_relay_<id>_schedule_enabled`). | `switch.bloombot_relay_<id>_schedule_enabled` |
+| `start_times_entity` | string | Optional | Sensor entity containing the schedules array (e.g., `sensor.bloombot_relay_<id>_start_times`). | `sensor.bloombot_relay_<id>_start_times` |
+| `duration_entity` | string | Optional | Number input entity for configuring duration in minutes (e.g., `number.bloombot_relay_<id>_duration`). | `number.bloombot_relay_<id>_duration` |
 | `icon` | string | Optional | Icon name for the relay (can be a [built-in custom icon name](#built-in-custom-svg-icons) or any standard `mdi:<name>`). | `mdi:water-pump` |
 | `icon_color` | string | Optional | CSS color for the active/configured relay icon (e.g., `#ef4444` or `green`). Can also use `color` as an alias. | |
 
