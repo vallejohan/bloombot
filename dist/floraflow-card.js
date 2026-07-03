@@ -680,7 +680,7 @@ class FloraFlowCardSecondary extends HTMLElement {
             addTimeBtn.addEventListener('click', () => {
                 if (this.activeRelayId !== null) {
                     if (!this._tempStartTimes) {
-                        this._tempStartTimes = [{"time": "12:00:00", "enabled": true}];
+                        this._tempStartTimes = [{ "time": "12:00:00", "enabled": true }];
                     } else {
                         this._tempStartTimes.push({ "time": "12:00:00", "enabled": true });
                     }
@@ -819,7 +819,7 @@ class FloraFlowCardSecondary extends HTMLElement {
         rows.forEach((row) => {
             const index = parseInt(row.getAttribute('data-index'));
             const item = this._tempStartTimes[index];
-            
+
             const switchEl = row.querySelector('.time-enabled-switch');
             if (switchEl) {
                 switchEl.checked = item.enabled;
@@ -1081,7 +1081,7 @@ class FloraFlowCardSecondary extends HTMLElement {
 }
 
 customElements.define("floraflow-card-secondary", FloraFlowCardSecondary);
-customElements.define("floraflow-card", class extends FloraFlowCardSecondary {});
+customElements.define("floraflow-card", class extends FloraFlowCardSecondary { });
 
 // Add preview information in Home Assistant custom card selector
 window.customCards = window.customCards || [];

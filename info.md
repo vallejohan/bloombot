@@ -1,11 +1,11 @@
 # FloraFlow Irrigation Card
 
-A Lovelace card for Home Assistant to control scheduled and manual irrigation valves with configuration dialogs.
+A custom gardening card for Home Assistant to control scheduled and manual irrigation valves with configuration dialogs.
 
 ![FloraFlow Home Assistant Card Preview](assets/gifs/floraflow-ha-card-example.gif)
 
 ## Features
-- **Vibrant & Responsive Grid Layout**: Sleek card interface designed to control multiple watering zones (relays).
+- **Vibrant & Responsive Grid Layout**: Card interface designed to control multiple watering zones (relays).
 - **Visual Status Indicators**: Instant active/inactive states with color-coded status elements (active/manual/schedule details).
 - **Interactive Configuration Modals**: Click on any zone to open a modal dialog allowing you to toggle manual watering, configure scheduling, or adjust watering duration.
 - **Embedded Sensors**: Shows current system temperature and humidity metrics if sensors are available.
@@ -15,9 +15,8 @@ See [FloraFlow GitHub repository](https://github.com/vallejohan/floraflow) for a
 ## Installation
 
 1. Open **HACS** in your Home Assistant dashboard.
-2. Select **Lovelace** (or search all categories).
-3. Search for **FloraFlow Card**.
-4. Click **Download** in the bottom right corner.
+2. Search for **FloraFlow Card**.
+3. Click **Download** in the bottom right corner.
 
 ## Dashboard Configuration
 
